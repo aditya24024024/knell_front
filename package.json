@@ -1,0 +1,24 @@
+{
+  "name": "knell",
+  "version": "1.0.0",
+  "description": "marketplace",
+  "main": "index.js",
+  "scripts": {
+    "build": "if-env TYPE=server && (cd server && npm install) || (cd client && npm install)",
+    "server": "node ./server/index.js",
+    "client": "cd client && npm start"
+  },
+  "author": "MRfounder",
+  "license": "ISC",
+  "dependencies": {
+    "if-env": "^1.0.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aditya24024024/knell_front.git"
+  },
+  "bugs": {
+    "url": "https://github.com/aditya24024024/knell_front/issues"
+  },
+  "homepage": "https://github.com/aditya24024024/knell_front#readme"
+}
