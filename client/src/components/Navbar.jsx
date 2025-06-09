@@ -97,6 +97,7 @@ const Navbar = () => {
 
   useEffect(() => {
     if (cookies.jwt && !userInfo) {
+      console.log("mujhe iss bache ko duniyamai lana hai", req.cookies);
       const getUserInfo = async () => {
         try {
           const {
