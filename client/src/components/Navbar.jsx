@@ -97,6 +97,7 @@ const Navbar = () => {
 
   useEffect(() => {
     if (cookies.jwt && !userInfo) {
+      console.log("bswugvdugvd", cookies.jwt);
       const getUserInfo = async () => {
         try {
           const {
