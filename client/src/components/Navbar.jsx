@@ -107,9 +107,9 @@ const Navbar = () => {
             {},
             {
               withCredentials: true,
-              headers: {
-              Authorization: `Bearer ${cookies.jwt}`,
-              },
+              // headers: {
+              // Authorization: `Bearer ${cookies.jwt}`,
+              // },
             }
           );
 
