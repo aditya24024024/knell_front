@@ -19,7 +19,7 @@ function Requests() {
       }
     };
     if (userInfo) getOrders();
-  }, [userInfo,orders]);
+  }, [userInfo]);
   
   const decline=async(orderid)=>{
     try {
