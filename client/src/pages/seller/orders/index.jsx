@@ -1,5 +1,5 @@
 import { useStateProvider } from "../../../context/StateContext";
-import { GET_SELLER_REQUEST_ORDERS_ROUTE } from "../../../utils/constants";
+import { GET_SELLER_ORDERS_ROUTE } from "../../../utils/constants";
 import axios from "axios";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
@@ -12,7 +12,7 @@ function Orders() {
       try {
         const {
           data: { orders },
-        } = await axios.get(GET_SELLER_REQUEST_ORDERS_ROUTE, { withCredentials: true });
+        } = await axios.get(GET_SELLER_ORDERS_ROUTE, { withCredentials: true });
         setOrders(orders);
       } catch (err) {
         console.error(err);
