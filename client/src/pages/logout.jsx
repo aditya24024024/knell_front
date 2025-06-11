@@ -11,12 +11,15 @@ function Logout() {
 
   const router = useRouter();
   useEffect(() => {
-    const response = await axios.post(
+    const logoutUser = async () => {
+      const response = await axios.post(
       LOGOUT_ROUTE,
       {},
       {
         withCredentials: true // 🔑 sends the cookie
       })
+    }
+    logoutUser();
     removeCookie("jwt");
     dispatch({ type: reducerCases.SET_USER, userInfo: undefined });
     window.location.href = window.location.origin;
