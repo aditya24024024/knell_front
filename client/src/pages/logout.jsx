@@ -11,22 +11,24 @@ function Logout() {
 
   const router = useRouter();
   useEffect(() => {
+  (async () => {
+    try {
+      await axios.post(
+        LOGOUT_ROUTE,
+        {},
+        { withCredentials: true }
+      );
 
-    const logoutUser = async () => {
-      const response = await axios.post(
-      LOGOUT_ROUTE,
-      {},
-      {
-        withCredentials: true // 🔑 sends the cookie
-      });
-    console.log(response);
+      // Clear cookies and state only after successful logout
+      removeCookie("jwt");
+      dispatch({ type: reducerCases.SET_USER, userInfo: undefined });
+      window.location.href = window.location.origin;
+
+    } catch (err) {
+      console.error("Logout failed:", err);
     }
-    logoutUser();
-    console.log("response");
-    removeCookie("jwt");
-    dispatch({ type: reducerCases.SET_USER, userInfo: undefined });
-    window.location.href = window.location.origin;
-  }, [removeCookie, dispatch, router]);
+  })();
+}, [removeCookie, dispatch]);
   return (
     <div className="h-[80vh] flex items-center px-20 pt-20 flex-col">
       <h1 className="text-4xl text-center">
