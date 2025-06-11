@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 import { useCookies } from "react-cookie";
 import { LOGOUT_ROUTE } from "../utils/constants";
+import axios from "axios";
 
 function Logout() {
   const [cookies, setCookies, removeCookie] = useCookies();
