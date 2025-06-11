@@ -16,7 +16,7 @@ function Logout() {
       {},
       {
         withCredentials: true // 🔑 sends the cookie
-      }
+      })
     removeCookie("jwt");
     dispatch({ type: reducerCases.SET_USER, userInfo: undefined });
     window.location.href = window.location.origin;
