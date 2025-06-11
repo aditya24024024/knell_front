@@ -3,6 +3,7 @@ import { reducerCases } from "../context/constants";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 import { useCookies } from "react-cookie";
+import { LOGOUT_ROUTE } from "../utils/constants";
 
 function Logout() {
   const [cookies, setCookies, removeCookie] = useCookies();
@@ -10,6 +11,12 @@ function Logout() {
 
   const router = useRouter();
   useEffect(() => {
+    const response = await axios.post(
+      LOGOUT_ROUTE,
+      {},
+      {
+        withCredentials: true // 🔑 sends the cookie
+      }
     removeCookie("jwt");
     dispatch({ type: reducerCases.SET_USER, userInfo: undefined });
     window.location.href = window.location.origin;
