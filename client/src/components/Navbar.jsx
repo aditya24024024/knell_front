@@ -10,6 +10,7 @@ import { reducerCases } from '../context/constants';
 import { useStateProvider } from '../context/StateContext';
 import img from './unnamed 1.svg'
 import ContextMenu from './ContextMenu';
+import AuthWrapper from './AuthWrapper';
 // import ContextMenu
 
 const Navbar = () => {
@@ -97,7 +98,6 @@ const Navbar = () => {
 
   useEffect(() => {
     if (cookies.jwt && !userInfo) {
-      console.log("bswugvdugvd", cookies.jwt);
       const getUserInfo = async () => {
         try {
           const {
@@ -126,7 +126,6 @@ const Navbar = () => {
             userInfo: projectedUserInfo,
           });
           setIsLoaded(true);
-          console.log({ user });
           if (user.isProfileSet === false) {
             router.push("/profile");
           }
@@ -179,6 +178,8 @@ const Navbar = () => {
 
     return (
     <>
+      {showLoginModal && <AuthWrapper type="login" />}
+      {showSignupModal && <AuthWrapper type="signup" />}
           {isLoaded && (
         <nav
           className={`w-full px-24 flex justify-between items-center py-6  top-0 z-30 transition-all duration-300 ${
