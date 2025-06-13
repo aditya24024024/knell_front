@@ -36,6 +36,7 @@ function Footer() {
       link: "https://twitter.com/knell_co_in",
     },
   ];
+}
 
 
   return (
