@@ -1,69 +1,56 @@
-import Image from "next/image";
-import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
-
 function HeroBanner() {
-    const router = useRouter();
-    const [image, setImage] = useState(3);
+  const [image, setImage] = React.useState(3);
 
-    useEffect(() => {
-        const interval = setInterval(() => {
-            setImage((prevImage) => (prevImage >= 6 ? 1 : prevImage + 1));
-        }, 10000);
-        return () => clearInterval(interval);
-    }, []);
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      setImage((prevImage) => (prevImage >= 6 ? 1 : prevImage + 1));
+    }, 10000);
+    return () => clearInterval(interval);
+  }, []);
 
-    return (
-        <div className="h-[600px] md:h-[680px] relative bg-cover">
-            <div className="absolute top-0 right-0 w-full h-full transition-opacity z-0">
-                {[1, 2, 3, 4, 5, 6].map((num) => (
-                    <Image
-                        key={num}
-                        alt={`hero ${num}`}
-                        src={`/bg-hero${num}.webp`}
-                        className={`${
-                            image === num ? "opacity-100" : "opacity-0"
-                        } transition-all duration-1000`}
-                    />
-                ))}
-            </div>
-            <div className="z-1 relative w-full lg:w-[650px] flex justify-center flex-col h-full gap-4 px-6 md:ml-10 lg:ml-20">
-                <h1 className="text-white text-3xl sm:text-4xl md:text-5xl leading-snug" style={{ fontFamily: 'Bobby Jones', fontWeight: 'bold' }} >
-                FIND THE PERFECT <i><br />PERSON  FOR YOU</i>
-                </h1>
+  return (
+    <div className="relative h-[600px] md:h-[680px] bg-cover">
+      <div className="absolute inset-0 z-0">
+        {[1, 2, 3, 4, 5, 6].map((num) => (
+          <Image
+            key={num}
+            alt={`hero ${num}`}
+            src={`/bg-hero${num}.webp`}
+            fill
+            style={{ objectFit: "cover" }}
+            className={`transition-opacity duration-1000 ${
+              image === num ? "opacity-100" : "opacity-0 pointer-events-none"
+            }`}
+            priority={image === num}
+            sizes="100vw"
+          />
+        ))}
+      </div>
+      <div className="relative z-10 w-full lg:w-[650px] flex flex-col justify-center h-full gap-4 px-6 md:ml-10 lg:ml-20 text-white">
+        <h1
+          className="text-3xl sm:text-4xl md:text-5xl leading-snug font-bold"
+          style={{ fontFamily: "Bobby Jones" }}
+        >
+          FIND THE PERFECT <i><br />PERSON FOR YOU</i>
+        </h1>
 
-                {/* <div className="flex align-middle">
-                    <div className="relative">
-                        <input
-                            type="text"
-                            className="h-14 w-[450px] pl-10 rounded-md rounded-r-none"
-                            placeholder={'Try "building mobile app"'}
-                        />
-                    </div>
-                    <button className="bg-[#1DBF73] text-white px-12 text-lg font-semibold rounded-r-md">
-                        Search
-                    </button>
-                </div> */}
-                <div className="text-white flex gap-4">
-                    Popular:{" "}
-                    <ul className="flex flex-wrap gap-3 sm:gap-5">
-                        <li className="text-sm py-1 px-3 border rounded-full hover:bg-white hover:text-black transition-all duration-300 cursor-pointer">
-                            Social Companion
-                        </li>
-                        <li className="text-sm py-1 px-3 border rounded-full hover:bg-white hover:text-black transition-all duration-300 cursor-pointer">
-                            Dance Companinon
-                        </li>
-                        <li className="text-sm py-1 px-3 border rounded-full hover:bg-white hover:text-black transition-all duration-300 cursor-pointer">
-                            Dog Walker
-                        </li>
-                        <li className="text-sm py-1 px-3 border rounded-full hover:bg-white hover:text-black transition-all duration-300 cursor-pointer">
-                            All Services
-                        </li>
-                    </ul>
-                </div>
-            </div>
+        {/* Popular items */}
+        <div className="flex gap-4">
+          Popular:{" "}
+          <ul className="flex flex-wrap gap-3 sm:gap-5">
+            {["Social Companion", "Dance Companion", "Dog Walker", "All Services"].map(
+              (item) => (
+                <li
+                  key={item}
+                  className="text-sm py-1 px-3 border rounded-full hover:bg-white hover:text-black transition-all duration-300 cursor-pointer"
+                >
+                  {item}
+                </li>
+              )
+            )}
+          </ul>
         </div>
-    );
+      </div>
+    </div>
+  );
 }
-
-export default HeroBanner;
