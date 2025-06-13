@@ -37,67 +37,6 @@ function Footer() {
     },
   ];
 
-  const data = [
-    {
-      headerName: "Categories",
-      links: categories.map(({ name }) => ({
-        name,
-        link: `/search?category=${name}`,
-      })),
-    },
-    {
-      headerName: "About",
-      links: [
-        { name: "Careers", link: "#" },
-        { name: "Press & News", link: "#" },
-        { name: "Partnership", link: "#" },
-        { name: "Privacy Policy", link: "#" },
-        { name: "Terms of Service", link: "#" },
-        { name: "Intellectual Property Claims", link: "#" },
-        { name: "Investor Relations", link: "#" },
-      ],
-    },
-    {
-      headerName: "Support",
-      links: [
-        { name: "Help & Support", link: "#" },
-        { name: "Trust & Safety", link: "#" },
-        { name: "Selling on Fiverr", link: "#" },
-        { name: "Buying on Fiverr", link: "#" },
-      ],
-    },
-    {
-      headerName: "Community",
-      links: [
-        { name: "Community Success Stories", link: "#" },
-        { name: "Community Hub", link: "#" },
-        { name: "Forum", link: "#" },
-        { name: "Events", link: "#" },
-        { name: "Blog", link: "#" },
-        { name: "Influencers", link: "#" },
-        { name: "Affiliates", link: "#" },
-        { name: "Podcast", link: "#" },
-        { name: "Invite a Friend", link: "#" },
-        { name: "Become a Seller", link: "#" },
-        { name: "Community Standards", link: "#" },
-      ],
-    },
-    {
-      headerName: "Move From Fiverr",
-      links: [
-        { name: "Fiverr Business", link: "#" },
-        { name: "Fiverr Pro", link: "#" },
-        { name: "Fiverr Logo Maker", link: "#" },
-        { name: "Fiverr Guides", link: "#" },
-        { name: "Get Inspired", link: "#" },
-        { name: "Fiverr Select", link: "#" },
-        { name: "ClearVoice", link: "#" },
-        { name: "Fiverr Workspace", link: "#" },
-        { name: "Learn", link: "#" },
-        { name: "Working Not Working", link: "#" },
-      ],
-    },
-  ];
 
   return (
     <footer className="w-full mx-auto px-6 md:px-16 lg:px-32 py-10 border-t border-gray-200 bg-gray-100">
