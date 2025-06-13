@@ -97,8 +97,7 @@ const Navbar = () => {
   }, [router.pathname]);
 
   useEffect(() => {
-    // cookies.jwt && 
-    if (!userInfo) {
+    if (cookies.jwt && !userInfo) {
       const getUserInfo = async () => {
         try {
           const {
