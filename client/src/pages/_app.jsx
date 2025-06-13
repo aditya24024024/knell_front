@@ -19,7 +19,8 @@ export default function App({ Component, pageProps }) {
         <title>knell</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
-      <div className="relative flex flex-col min-h-screen">
+      <main className={`flex-grow w-full px-4 sm:px-8 md:px-16 ${router.pathname !== "/" ? "mt-36" : ""}`}>
+
         <Navbar />
         <main
           className={`mb-auto w-full px-4 md:px-10 mx-auto ${
