@@ -7,9 +7,9 @@ import {
   FiLinkedin,
   FiTwitter,
 } from "react-icons/fi";
-import img from "./unnamed 1.svg"
-import { categories } from "../utils/categories";
 import Image from "next/image";
+import { categories } from "../utils/categories";
+import logo from "../public/unnamed 1.svg"; // ✅ Make sure this file exists in /public
 
 function Footer() {
   const socialLinks = [
@@ -35,15 +35,14 @@ function Footer() {
       link: "https://twitter.com/knell_co_in",
     },
   ];
+
   const data = [
     {
       headerName: "Categories",
-      links: [
-        ...categories.map(({ name }) => ({
-          name,
-          link: `/search?category=${name}`,
-        })),
-      ],
+      links: categories.map(({ name }) => ({
+        name,
+        link: `/search?category=${name}`,
+      })),
     },
     {
       headerName: "About",
@@ -98,40 +97,48 @@ function Footer() {
       ],
     },
   ];
+
   return (
     <footer className="w-full mx-auto px-6 md:px-16 lg:px-32 py-10 border-t border-gray-200 bg-gray-100">
-      {/* <ul className="flex justify-between">
-        {data.map(({ headerName, links }) => {
-          return (
-            <li key={headerName} className="flex flex-col gap-2">
-              <span className="font-bold">{headerName}</span>
-              <ul className="flex flex-col gap-2">
-                {links.map(({ name, link }) => (
-                  <li key={name} className="text-[#404145]">
-                    <Link href={link}>{name}</Link>
-                  </li>
-                ))}
-              </ul>
-            </li>
-          );
-        })}
-      </ul> */}
+      {/* Grid footer sections */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+        {data.map(({ headerName, links }) => (
+          <div key={headerName} className="flex flex-col gap-2">
+            <h4 className="font-semibold text-[#333]">{headerName}</h4>
+            <ul className="flex flex-col gap-1 text-sm text-[#404145]">
+              {links.map(({ name, link }) => (
+                <li key={name}>
+                  <Link href={link} className="hover:text-[#1DBF73] transition">
+                    {name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+
+      {/* Bottom row with logo and social */}
       <div className="mt-12 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
-      <Image
-                    src={img}
-                    // className="absolute left-4"
-                    className="rounded-full"
-                    alt = "Knell"
-                    width={50}
-                    height={50}
-                  />
+        <div className="flex items-center gap-2">
+          <Image
+            src={logo}
+            className="rounded-full"
+            alt="Knell Logo"
+            width={50}
+            height={50}
+          />
+          <span className="font-semibold text-[#404145]">Knell</span>
+        </div>
         <ul className="flex gap-5">
           {socialLinks.map(({ icon, link, name }) => (
             <li
               key={name}
               className="text-xl text-[#404145] hover:text-[#1DBF73] transition-all"
             >
-              <Link href={link}>{icon}</Link>
+              <Link href={link} target="_blank" rel="noopener noreferrer">
+                {icon}
+              </Link>
             </li>
           ))}
         </ul>
