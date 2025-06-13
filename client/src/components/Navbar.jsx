@@ -182,13 +182,13 @@ const Navbar = () => {
       {showSignupModal && <AuthWrapper type="signup" />}
           {isLoaded && (
         <nav
-          className={`w-full px-24 flex justify-between items-center py-6  top-0 z-30 transition-all duration-300 ${
-            navFixed || userInfo
-              ? "fixed bg-white border-b border-gray-200"
-              : "absolute bg-transparent border-transparent"
+          className={`w-full px-4 sm:px-8 md:px-16 lg:px-24 flex flex-col sm:flex-row gap-4 sm:gap-0 justify-between items-center py-4 sm:py-6 top-0 z-30 transition-all duration-300 ${
+          navFixed || userInfo
+          ? "fixed bg-white border-b border-gray-200"
+          : "absolute bg-transparent border-transparent"
           }`}
         >
-          <div  className={`ml-6 w-[50px] h-[50px] rounded-full overflow-hidden` }>
+          <div  className={`w-[50px] h-[50px] rounded-full overflow-hidden` }>
             {/* <div> */}
             <button onClick={()=>router.push("/")}>
             <Image
@@ -203,14 +203,14 @@ const Navbar = () => {
 
           </div>
           <div
-            className={`flex ${
+            className={`flex w-full sm:w-auto $ ${
               navFixed || userInfo ? "opacity-100" : "opacity-0"
             }`}
           >
             <input
               type="text"
               placeholder="What service are you looking for today?"
-              className="w-[30rem] py-2.5 px-4 border"
+              className="w-full sm:w-[20rem] md:w-[25rem] lg:w-[30rem] py-2.5 px-4 border"
               value={searchData}
               onChange={(e) => setSearchData(e.target.value)}
               onKeyDown={handler}
@@ -226,7 +226,7 @@ const Navbar = () => {
             </button>
           </div>
           {!userInfo ? (
-            <ul className="flex gap-10 items-center">
+            <ul className="flex flex-wrap justify-center gap-4 sm:gap-6 md:gap-10 items-center text-center">
               {links.map(({ linkName, handler, type }) => {
                 return (
                   <li
@@ -256,7 +256,7 @@ const Navbar = () => {
               })}
             </ul>
           ) : (
-            <ul className="flex gap-10 items-center">
+            <ul className="flex flex-wrap justify-center gap-4 sm:gap-6 md:gap-10 items-center text-center">
               {userInfo?.email=="akshajvasudeva@gmail.com"?
               <li
                 className="cursor-pointer text-[#1DBF73] font-medium"

@@ -5,11 +5,16 @@ import axios from "axios";
 import { ADD_MESSAGE, GET_MESSAGES } from "../../utils/constants";
 import { useRouter } from "next/router";
 import { useStateProvider } from "../../context/StateContext";
+
 function MessageContainer() {
   const router = useRouter();
   const { orderId } = router.query;
   const [{ userInfo }] = useStateProvider();
+
   const [recipentId, setRecipentId] = useState(undefined);
+  const [messageText, setMessageText] = useState("");
+  const [messages, setMessages] = useState([]);
+
   useEffect(() => {
     const getMessages = async () => {
       const {
@@ -31,7 +36,7 @@ function MessageContainer() {
     }
   };
 
-  function formatTime(timestamp) {
+  const formatTime = (timestamp) => {
     const date = new Date(timestamp);
     let hours = date.getHours();
     let minutes = date.getMinutes();
@@ -39,14 +44,11 @@ function MessageContainer() {
     hours %= 12;
     hours = hours || 12;
     minutes = minutes < 10 ? "0" + minutes : minutes;
-    const formattedTime = `${hours}:${minutes} ${ampm}`;
-    return formattedTime;
-  }
+    return `${hours}:${minutes} ${ampm}`;
+  };
 
-  const [messageText, setMessageText] = useState("");
-  const [messages, setMessages] = useState([]);
   const sendMessage = async () => {
-    if (messageText.length) {
+    if (messageText.trim().length) {
       const response = await axios.post(
         `${ADD_MESSAGE}/${orderId}`,
         { message: messageText, recipentId },
@@ -58,56 +60,55 @@ function MessageContainer() {
       }
     }
   };
+
   return (
-    <div className="h-[80vh]">
-      <div className="max-h-[80vh]   flex flex-col justify-center items-center">
-        <div className="bg-white py-8 px-4 shadow-2xl sm:rounded-lg sm:px-10 w-[80vw] border flex flex-col">
-          <div className="mt-8">
-            <div className="space-y-4 h-[50vh] overflow-y-auto pr-4 ">
-              {messages.map((message) => (
+    <div className="h-[80vh] w-full px-2 sm:px-4 md:px-8">
+      <div className="flex justify-center items-center h-full">
+        <div className="bg-white shadow-2xl border w-full max-w-5xl rounded-lg flex flex-col px-4 py-6 sm:px-6 sm:py-8">
+          
+          {/* Messages */}
+          <div className="flex-1 overflow-y-auto space-y-4 pr-2 scrollbar-thin scrollbar-thumb-gray-300">
+            {messages.map((message) => (
+              <div
+                key={message.id}
+                className={`flex ${
+                  message.senderId === userInfo.id
+                    ? "justify-end"
+                    : "justify-start"
+                }`}
+              >
                 <div
-                  key={message.id}
-                  className={`flex ${
+                  className={`inline-block rounded-lg px-4 py-2 max-w-xs sm:max-w-md break-words ${
                     message.senderId === userInfo.id
-                      ? "justify-end"
-                      : "justify-start"
+                      ? "bg-[#1DBF73] text-white"
+                      : "bg-gray-100 text-gray-800"
                   }`}
                 >
-                  <div
-                    className={`inline-block rounded-lg ${
-                      message.senderId === userInfo.id
-                        ? "bg-[#1DBF73] text-white"
-                        : "bg-gray-100 text-gray-800"
-                    } px-4 py-2 max-w-xs break-all`}
-                  >
-                    <p>{message.text}</p>
-                    <span className="text-sm text-gray-600">
-                      {formatTime(message.createdAt)}
-                    </span>
-                    <span>
-                      {message.senderId === userInfo.id && message.isRead && (
-                        <BsCheckAll />
-                      )}
-                    </span>
+                  <p>{message.text}</p>
+                  <div className="text-xs text-gray-600 mt-1 flex items-center gap-1">
+                    <span>{formatTime(message.createdAt)}</span>
+                    {message.senderId === userInfo.id && message.isRead && (
+                      <BsCheckAll className="text-blue-500" />
+                    )}
                   </div>
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
           </div>
 
-          <div className="mt-8 flex">
+          {/* Input Field */}
+          <div className="mt-4 flex items-center gap-2">
             <input
               type="text"
-              className="rounded-full py-2 px-4 mr-2 w-full"
+              className="flex-grow rounded-full border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#1DBF73]"
               placeholder="Type a message..."
-              name="message"
-              onChange={(e) => setMessageText(e.target.value)}
               value={messageText}
+              onChange={(e) => setMessageText(e.target.value)}
               onKeyDown={handleKeyDown}
             />
             <button
-              type="submit"
-              className="bg-[#1DBF73] text-white rounded-full px-4 py-2"
+              type="button"
+              className="bg-[#1DBF73] hover:bg-[#17a863] text-white rounded-full p-3 transition duration-200"
               onClick={sendMessage}
             >
               <FaRegPaperPlane />

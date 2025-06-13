@@ -18,11 +18,11 @@ function Everything() {
         },
     ];
     return (
-        <div className="bg-[#f1fdf7] flex py-20 justify-between px-24">
+        <div className="bg-[#f1fdf7] flex flex-col lg:flex-row gap-10 py-16 px-6 md:px-12 lg:px-24">
             <div>
-                <h2 className="text-4xl mb 5 text-[#404145] font-bold">
+                <div className="relative w-full h-64 md:h-80 lg:h-96">
                     <i>WHY CHOOSE US?</i>
-                </h2>
+                </div>
                 <ul className="flex flex-col gap-10">
                     {everythingData.map(({ title, subtitle}) => {
                         return (

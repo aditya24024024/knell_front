@@ -52,7 +52,7 @@ function AuthWrapper({ type }) {
       ></div>
       <div className="h-[100vh] w-[100vw] flex flex-col justify-center items-center">
         <div
-          className="fixed z-[101] h-max w-max bg-white flex flex-col justify-center items-center"
+          className="fixed z-[101] w-[90vw] max-w-sm bg-white flex flex-col justify-center items-center rounded-md shadow-lg"
           id="auth-modal"
         >
           <div className="flex flex-col justify-center items-center p-8 gap-7">
@@ -80,18 +80,18 @@ function AuthWrapper({ type }) {
                 type="text"
                 name="email"
                 placeholder="Email / Username"
-                className="border border-slate-300 p-3 w-80"
+                className="border border-slate-300 p-3 w-full max-w-xs"
                 onChange={handleChange}
               />
               <input
                 type="password"
                 placeholder="Password"
-                className="border border-slate-300 p-3 w-80"
+                className="border border-slate-300 p-3 w-full max-w-xs"
                 name="password"
                 onChange={handleChange}
               />
               <button
-                className="bg-[#1DBF73] text-white px-12 text-lg font-semibold rounded-r-md p-3 w-80"
+                className="bg-[#1DBF73] text-white px-6 py-3 w-full max-w-xs"
                 onClick={handleClick} // Now defined
                 type="button"
               >

@@ -6,11 +6,11 @@ import { categories } from "../../utils/categories";
 function Services() {
     const router = useRouter();
     return (
-        <div className="mx-20 my-16">
+        <div className="mx-4 sm:mx-8 md:mx-16 lg:mx-20 my-10">
             <h2 className="text-4xl mb-10 text-[#404145] font-bold">
                 You need it, we&apos;ve got it
             </h2>
-            <ul className="grid grid-cols-5 gap-10"> {/* Fixed `grid-col-5` to `grid-cols-5` */}
+            <ul className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 sm:gap-8 md:gap-10"> {/* Fixed `grid-col-5` to `grid-cols-5` */}
                 {categories.map(({ name, logo }) => {
                     if (!name?.trim()) return null; // Skip if name is empty or only whitespace
 

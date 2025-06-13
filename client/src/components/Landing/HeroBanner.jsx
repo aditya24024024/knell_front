@@ -14,22 +14,21 @@ function HeroBanner() {
     }, []);
 
     return (
-        <div className="h-[680px] relative bg-cover">
+        <div className="h-[600px] md:h-[680px] relative bg-cover">
             <div className="absolute top-0 right-0 w-full h-full transition-opacity z-0">
                 {[1, 2, 3, 4, 5, 6].map((num) => (
                     <Image
                         key={num}
                         alt={`hero ${num}`}
                         src={`/bg-hero${num}.webp`}
-                        layout="fill"
                         className={`${
                             image === num ? "opacity-100" : "opacity-0"
                         } transition-all duration-1000`}
                     />
                 ))}
             </div>
-            <div className="z-1 relative w-[650px] flex justify-center flex-col h-full gap-5 ml-20">
-                <h1 className="text-white text-5xl leading-snug" style={{ fontFamily: 'Bobby Jones' ,fontWeight: 'bold'}} >
+            <div className="z-1 relative w-full lg:w-[650px] flex justify-center flex-col h-full gap-4 px-6 md:ml-10 lg:ml-20">
+                <h1 className="text-white text-3xl sm:text-4xl md:text-5xl leading-snug" style={{ fontFamily: 'Bobby Jones', fontWeight: 'bold' }} >
                 FIND THE PERFECT <i><br />PERSON  FOR YOU</i>
                 </h1>
 
@@ -47,7 +46,7 @@ function HeroBanner() {
                 </div> */}
                 <div className="text-white flex gap-4">
                     Popular:{" "}
-                    <ul className="flex gap-5">
+                    <ul className="flex flex-wrap gap-3 sm:gap-5">
                         <li className="text-sm py-1 px-3 border rounded-full hover:bg-white hover:text-black transition-all duration-300 cursor-pointer">
                             Social Companion
                         </li>

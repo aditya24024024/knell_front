@@ -99,7 +99,7 @@ function Footer() {
     },
   ];
   return (
-    <footer className="w-full  mx-auto px-32 py-16 h-max border-t border-gray-200 bg-gray-100">
+    <footer className="w-full mx-auto px-6 md:px-16 lg:px-32 py-10 border-t border-gray-200 bg-gray-100">
       {/* <ul className="flex justify-between">
         {data.map(({ headerName, links }) => {
           return (
@@ -116,7 +116,7 @@ function Footer() {
           );
         })}
       </ul> */}
-      <div className="mt-12 flex items-center justify-between">
+      <div className="mt-12 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
       <Image
                     src={img}
                     // className="absolute left-4"

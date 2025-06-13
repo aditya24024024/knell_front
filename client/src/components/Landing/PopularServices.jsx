@@ -48,11 +48,11 @@ function PopularServices() {
     ];
 
     return (
-        <div className="mx-20 my-16">
+        <div className="mx-4 sm:mx-8 md:mx-16 lg:mx-20 my-10">
             <h2 className="text-4xl mb-10 text-[#404145] font-bold">
                 Popular Services
             </h2>
-            <ul className="grid grid-cols-4 gap-10">
+            <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 sm:gap-8 md:gap-10">
                 {popularServicesData.map(({ name, label, image }) => (
                     <li
                         key={name}
@@ -65,7 +65,7 @@ function PopularServices() {
                             <span>{label}</span>
                             <h6 className="font-extrabold text-2xl">{name}</h6>
                         </div>
-                        <div className="h-80 w-72">
+                        <div className="h-64 w-full relative sm:w-64 md:h-72 lg:h-80">
                             <Image src={image} fill alt="service" className="object-cover" />
                         </div>
                     </li>
