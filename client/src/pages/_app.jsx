@@ -1,4 +1,3 @@
-import Footer from "../components/Footer";
 import "../styles/globals.css";
 import { useEffect } from "react";
 import { StateProvider } from "../context/StateContext";
@@ -6,6 +5,7 @@ import reducer, { initialState } from "../context/StateReducers";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -19,9 +19,12 @@ export default function App({ Component, pageProps }) {
         <title>knell</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
-      <main className={`flex-grow w-full px-4 sm:px-8 md:px-16 ${router.pathname !== "/" ? "mt-36" : ""}`}>
 
+      {/* ✅ Page wrapper */}
+      <div className="flex flex-col min-h-screen">
         <Navbar />
+
+        {/* ✅ Main content */}
         <main
           className={`mb-auto w-full px-4 md:px-10 mx-auto ${
             router.pathname !== "/" ? "mt-20 md:mt-36" : ""
@@ -29,10 +32,11 @@ export default function App({ Component, pageProps }) {
         >
           <Component {...pageProps} />
         </main>
+
+        {/* ✅ Footer and notifications */}
         <Footer />
         <ToastContainer position="top-right" autoClose={3000} />
       </div>
     </StateProvider>
   );
 }
-
