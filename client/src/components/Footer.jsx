@@ -9,7 +9,8 @@ import {
 } from "react-icons/fi";
 import Image from "next/image";
 import { categories } from "../utils/categories";
-import logo from "../public/unnamed 1.svg"; // ✅ Make sure this file exists in /public
+import img from "./unnamed 1.svg"
+
 
 function Footer() {
   const socialLinks = [
@@ -121,13 +122,13 @@ function Footer() {
       {/* Bottom row with logo and social */}
       <div className="mt-12 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
         <div className="flex items-center gap-2">
-          <Image
-            src={logo}
-            className="rounded-full"
-            alt="Knell Logo"
-            width={50}
-            height={50}
-          />
+          < src={img}
+                    // className="absolute left-4"
+                    className="rounded-full"
+                    alt = "Knell"
+                    width={50}
+                    height={50}
+                  />
           <span className="font-semibold text-[#404145]">Knell</span>
         </div>
         <ul className="flex gap-5">
