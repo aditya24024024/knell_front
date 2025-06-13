@@ -122,13 +122,13 @@ function Footer() {
       {/* Bottom row with logo and social */}
       <div className="mt-12 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
         <div className="flex items-center gap-2">
-          < src={img}
-                    // className="absolute left-4"
-                    className="rounded-full"
-                    alt = "Knell"
-                    width={50}
-                    height={50}
-                  />
+          <Image
+            src="/unnamed 1.svg"
+            className="rounded-full"
+            alt="Knell"
+            width={50}
+            height={50}
+          />
           <span className="font-semibold text-[#404145]">Knell</span>
         </div>
         <ul className="flex gap-5">
