@@ -97,50 +97,45 @@ const Navbar = () => {
   }, [router.pathname]);
 
   useEffect(() => {
-    if (cookies.jwt && !userInfo) {
-      console.log(cookies.jwt);
-      const getUserInfo = async () => {
-        try {
-          const {
-            data: { user },
-          } = await axios.post(
-            GET_USER_INFO,
-            {},
-            {
-              withCredentials: true,
-              // headers: {
-              // Authorization: `Bearer ${cookies.jwt}`,
-              // },
-            }
-          );
+  if (!userInfo) {
+    const getUserInfo = async () => {
+      try {
+        const {
+          data: { user },
+        } = await axios.post(
+          GET_USER_INFO,
+          {},
+          {
+            withCredentials: true, // ✅ this sends the jwt cookie
+          }
+        );
 
-          let projectedUserInfo = { ...user };
-          if (user.image) {
-            projectedUserInfo = {
-              ...projectedUserInfo,
-              imageName: HOST + "/" + user.image,
-            };
-          }
-          delete projectedUserInfo.image;
-          dispatch({
-            type: reducerCases.SET_USER,
-            userInfo: projectedUserInfo,
-          });
-          setIsLoaded(true);
-          if (user.isProfileSet === false) {
-            router.push("/profile");
-          }
-        } catch (err) {
-          console.log(err);
+        let projectedUserInfo = { ...user };
+        if (user.image) {
+          projectedUserInfo.imageName = HOST + "/" + user.image;
         }
-      };
 
-      getUserInfo();
-    } else {
-      setIsLoaded(true);
-      console.log("navbar else block");
-    }
-  }, [cookies, userInfo, dispatch]);
+        dispatch({
+          type: reducerCases.SET_USER,
+          userInfo: projectedUserInfo,
+        });
+
+        setIsLoaded(true);
+
+        if (user.isProfileSet === false) {
+          router.push("/profile");
+        }
+      } catch (err) {
+        console.log("Auth check failed", err);
+        setIsLoaded(true); // Even if it fails, set the UI to load
+      }
+    };
+
+    getUserInfo();
+  } else {
+    setIsLoaded(true);
+  }
+}, [userInfo, dispatch]);
 
   useEffect(() => {
     const clickListener = (e) => {
