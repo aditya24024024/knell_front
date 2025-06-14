@@ -30,7 +30,7 @@ function AuthWrapper({ type }) {
           { withCredentials: true }
         );
         // console.log(jwt);
-        setCookies("jwt", { jwt});
+        // setCookies("jwt", { jwt});
         dispatch({ type: reducerCases.CLOSE_AUTH_MODAL });
 
         if (user) {
