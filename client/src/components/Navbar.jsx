@@ -138,6 +138,7 @@ const Navbar = () => {
       getUserInfo();
     } else {
       setIsLoaded(true);
+      console.log("navbar else block");
     }
   }, [cookies, userInfo, dispatch]);
 
