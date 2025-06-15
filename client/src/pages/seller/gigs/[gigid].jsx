@@ -266,7 +266,7 @@ const Editgig = () => {
           </div>
           <div>
             <label htmlFor="price" className={labelClassName}>
-              Gig Price ( $ )
+              Gig Price ( ₹ )
             </label>
             <input
               type="number"
