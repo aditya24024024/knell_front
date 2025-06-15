@@ -70,7 +70,7 @@ const Editgig = () => {
         shortDesc,
       };
       const response = await axios.put(
-        `${EDIT_GIG_DATA}/${data.id}`,
+        `${EDIT_GIG_DATA}/${gigid}`,
         formData,
         {
           withCredentials: true,
