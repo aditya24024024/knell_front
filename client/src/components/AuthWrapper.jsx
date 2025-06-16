@@ -42,11 +42,8 @@ function AuthWrapper({ type }) {
       };
     } catch (err) {
       console.log(err);
-      console.log(err?.response);
-      console.log(err?.response?.data);
-      console.log(err?.response?.data?.message);
-  if (err.response && err.response.data && err.response.data.message) {
-    setErrorMessage(err.response.data.message); // Backend error message
+  if (err?.response && err?.response?.data) {
+    setErrorMessage(err.response.data);
   } else {
     setErrorMessage("Something went wrong. Please try again.");
   }
