@@ -21,11 +21,25 @@ function AuthWrapper({ type }) {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
 
+  const isValidGmail = (email) => {
+  const gmailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+  return gmailRegex.test(email);
+};
+
   const handleClick = async () => {
     try {
       const { email, password } = values;
 
-      // console.log(SIGNUP_ROUTE); 
+      if (!email || !password) {
+      setErrorMessage("Email and password are required.");
+      return;
+    }
+
+    if (!isValidGmail(email)) {
+      setErrorMessage("Please enter a valid Gmail address.");
+      return;
+    }
+      
       if (email && password) {
         const {data : {user, jwt},} = await axios.post(type === "login" ? LOGIN_ROUTE : SIGNUP_ROUTE,
           { email, password },
