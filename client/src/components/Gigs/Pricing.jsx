@@ -1,18 +1,45 @@
 import { useStateProvider } from '../../context/StateContext';
 import { useRouter } from 'next/router';
-import React from 'react'
+import React from 'react';
 import { BsCheckLg } from 'react-icons/bs';
 import { FiClock, FiRefreshCcw } from 'react-icons/fi';
 import { BiRightArrowAlt } from "react-icons/bi";
 import { CREATE_ORDER } from '../../utils/constants';
 import axios from 'axios';
-import {toast} from "react-toastify"
+import {toast} from "react-toastify";
+import { reducerCases } from '../../context/constants';
 
 const Pricing = () => {
-  const [{ gigData, userInfo }, dispatch] = useStateProvider();
+  const [{ gigData, userInfo, showLoginModal, showSignupModal }, dispatch] = useStateProvider();
   const router = useRouter();
   const { gigid } = router.query;
 
+  const handleSignup=()=>{
+    if (showLoginModal) {
+      dispatch({
+        type: reducerCases.TOGGLE_LOGIN_MODAL,
+        showLoginModal: false,
+      });
+    }
+    dispatch({
+      type: reducerCases.TOGGLE_SIGNUP_MODAL,
+      showSignupModal: true,
+    });
+  }
+
+  const handleLogin=()=>{
+    if (showSignupModal) {
+      dispatch({
+        type: reducerCases.TOGGLE_SIGNUP_MODAL,
+        showSignupModal: false,
+      });
+    }
+    dispatch({
+      type: reducerCases.TOGGLE_LOGIN_MODAL,
+      showLoginModal: true,
+    });
+  }
+  
   const handlerequest = async () => {
     // console.log(data);
     try {
@@ -25,11 +52,22 @@ const Pricing = () => {
       router.push('/buyer/orders/');
     } catch (err) {
       const status = err.response?.status;
-      if (status === 401 || status === 403) {
-        window.location.href = 'http://localhost:3000';
-        toast.error("You must log in first.");
+      if (status === 409) {
+        toast.error("Please login again.");
+        handleLogin();
+      }
+      else if (status === 410) {
+        toast.error("You must log in first before ordering.");
+        handleSignup();
+        // window.location.href = 'http://localhost:3000';
+      }
+      else if (status === 411) {
+        // window.location.href = 'http://localhost:3000';
+        toast.error("Your session expired. Please login again");
+        handleLogin();
       } else {
-        console.error("Order creation failed:", err);
+        toast.error("Order creation failed please try again later.");
+        // console.error("Order creation failed:", err);
       }
     }
   }
