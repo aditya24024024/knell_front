@@ -15,6 +15,8 @@ function AuthWrapper({ type }) {
 
   const [values, setValues] = useState({ email: "", password: "" });
 
+  const [errorMessage, setErrorMessage] = useState("");
+
   const handleChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
@@ -40,7 +42,14 @@ function AuthWrapper({ type }) {
       };
     } catch (err) {
       console.log(err);
-      // console.log("errrthjkl");
+      console.log(err?.response);
+      console.log(err?.response?.data);
+      console.log(err?.response?.data?.message);
+  if (err.response && err.response.data && err.response.data.message) {
+    setErrorMessage(err.response.data.message); // Backend error message
+  } else {
+    setErrorMessage("Something went wrong. Please try again.");
+  }
     }
   };
 
@@ -90,6 +99,11 @@ function AuthWrapper({ type }) {
                 name="password"
                 onChange={handleChange}
               />
+              {errorMessage && (
+    <div className="text-red-500 text-sm text-center">
+      {errorMessage}
+    </div>
+  )}
               <button
                 className="bg-[#1DBF73] text-white px-6 py-3 w-full max-w-xs"
                 onClick={handleClick} // Now defined
