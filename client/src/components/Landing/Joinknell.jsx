@@ -16,6 +16,7 @@ function Joinknell() {
   }
   
   return (
+    <>
     {showSignupModal && <AuthWrapper type="signup" />}
     <div className="mx-4 sm:mx-12 md:mx-20 lg:mx-32 my-16 relative">
       <div className="absolute z-10 top-1/4 sm:top-1/3 left-4 sm:left-10 w-[90%] sm:w-auto">
@@ -41,6 +42,7 @@ function Joinknell() {
         />
       </div>
     </div>
+      </>
   );
 }
 
