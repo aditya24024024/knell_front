@@ -8,10 +8,10 @@ function Orders() {
   const [{ userInfo }] = useStateProvider();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [fetched, setFetched] = useState(false); // ensures fetch runs once after userInfo is available
+  const [hasFetched, setHasFetched] = useState(false);
 
   useEffect(() => {
-    if (!userInfo || fetched) return;
+    if (!userInfo || hasFetched) return;
 
     const fetchOrders = async () => {
       try {
@@ -19,22 +19,22 @@ function Orders() {
         const { data } = await axios.get(GET_BUYER_ORDERS_ROUTE, {
           withCredentials: true,
         });
+
         setOrders(data.orders || []);
-        setFetched(true);
+        setHasFetched(true);
       } catch (error) {
         console.error("Error fetching orders:", error);
         setOrders([]);
-        setFetched(true);
       } finally {
         setLoading(false);
       }
     };
 
     fetchOrders();
-  }, [userInfo, fetched]);
+  }, [userInfo, hasFetched]);
 
   return (
-    <div className="min-h-screen pt-32 px-4 sm:px-6 md:px-10 lg:px-20 bg-white dark:bg-gray-900">
+    <div className="min-h-screen pt-28 px-4 sm:px-6 md:px-10 lg:px-20 bg-white dark:bg-gray-900">
       <h3 className="mb-6 text-2xl font-semibold text-center text-gray-800 dark:text-white">
         All Your Orders
       </h3>
