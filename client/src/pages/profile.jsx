@@ -45,6 +45,7 @@ const Profile = () => {
       setIsLoaded(true);
     }}
     populateData();
+      console.log({data});
 
   // Re-populate data on page focus (user returns to profile)
   // window.addEventListener("focus", populateData);
