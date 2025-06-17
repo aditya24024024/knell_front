@@ -27,6 +27,7 @@ const Profile = () => {
       if (userInfo?.description) handleData.description = userInfo?.description;
       if (userInfo?.fullName) handleData.fullName = userInfo?.fullName;
       console.log({ userInfo });
+      console.log({ data });
 
       if (userInfo?.imageName) {
         const fileName = image;
