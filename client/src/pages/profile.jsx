@@ -42,7 +42,7 @@ const Profile = () => {
       setData(handleData);
       setIsLoaded(true);
     }
-  }, [userInfo]);
+  }, [userInfo],router.pathname);
 
   const setProfile = async () => {
     try {
