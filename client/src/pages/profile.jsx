@@ -46,15 +46,13 @@ const Profile = () => {
     }}
     populateData();
       console.log({ data });
-      console.log({data});
 
-  // Re-populate data on page focus (user returns to profile)
-  // window.addEventListener("focus", populateData);
+  window.addEventListener("focus", populateData);
 
-  // return () => {
-  //   window.removeEventListener("focus", populateData);
-  // };
-  }, [userInfo,router.asPath]);
+  return () => {
+    window.removeEventListener("focus", populateData);
+  };
+  }, []);
 
   const setProfile = async () => {
     try {
