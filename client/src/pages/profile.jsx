@@ -47,12 +47,12 @@ const Profile = () => {
     populateData();
       console.log({ data });
 
-  window.addEventListener("focus", populateData);
+  // window.addEventListener("focus", populateData);
 
-  return () => {
-    window.removeEventListener("focus", populateData);
-  };
-  }, []);
+  // return () => {
+  //   window.removeEventListener("focus", populateData);
+  // };
+  }, [userInfo,data]);
 
   const setProfile = async () => {
     try {
