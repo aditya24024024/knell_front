@@ -7,6 +7,7 @@ import React, { useEffect, useState } from "react";
 function Orders() {
   const [orders, setOrders] = useState([]);
   const [{ userInfo }] = useStateProvider();
+
   useEffect(() => {
     const getOrders = async () => {
       try {
@@ -20,69 +21,48 @@ function Orders() {
     };
     if (userInfo) getOrders();
   }, [userInfo]);
+
   return (
-    <div className="min-h-[80vh] my-10 mt-0 px-32">
-      <h3 className="m-5 text-2xl font-semibold">All your Orders</h3>
-      <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-        <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-          <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+    <div className="min-h-[80vh] my-10 mt-0 px-4 md:px-8 lg:px-16">
+      <h3 className="mb-6 text-xl md:text-2xl font-semibold text-center md:text-left">
+        All Your Orders
+      </h3>
+
+      <div className="w-full overflow-x-auto shadow-md sm:rounded-lg">
+        <table className="w-full text-sm text-left text-gray-700 dark:text-gray-300">
+          <thead className="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-300">
             <tr>
-              <th scope="col" className="px-6 py-3">
-                Order Id
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Name
-              </th>
-              {/* <th scope="col" className="px-6 py-3">
-                Category
-              </th> */}
-              <th scope="col" className="px-6 py-3">
-                Price
-              </th>
-              {/* <th scope="col" className="px-6 py-3">
-                Delivery Time
-              </th> */}
-              <th scope="col" className="px-6 py-3">
-                Order Date
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Send Message
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Status
-              </th>
+              <th scope="col" className="px-4 py-3 whitespace-nowrap">Order Id</th>
+              <th scope="col" className="px-4 py-3 whitespace-nowrap">Name</th>
+              <th scope="col" className="px-4 py-3 whitespace-nowrap">Price</th>
+              <th scope="col" className="px-4 py-3 whitespace-nowrap">Order Date</th>
+              <th scope="col" className="px-4 py-3 whitespace-nowrap">Send Message</th>
+              <th scope="col" className="px-4 py-3 whitespace-nowrap">Status</th>
             </tr>
           </thead>
           <tbody>
-            {orders.map((order) => {
-              return (
-                <tr
-                  className="bg-white dark:bg-gray-800 hover:bg-gray-50"
-                  key={order.id}
-                >
-                  <th scope="row" className="px-6 py-4 ">
-                    {order.id}
-                  </th>
-                  <th scope="row" className="px-6 py-4 font-medium">
-                    {order.gig.title}
-                  </th>
-                  {/* <td className="px-6 py-4">{order.gig.category}</td> */}
-                  <td className="px-6 py-4">{order.price}</td>
-                  {/* <td className="px-6 py-4">{order.gig.deliveryTime}</td> */}
-                  <td className="px-6 py-4">{order.createdAt.split("T")[0]}</td>
-
-                  <td className="px-6 py-4 ">
-                    <Link
-                      href={`/buyer/orders/messages/${order.id}`}
-                      className="font-medium text-blue-600  hover:underline"
-                    >
-                      Send
-                    </Link>
-                  </td>
-                  <td className="px-6 py-4">{order.status}</td>
-                </tr>
-              );
-            })}
+            {orders.map((order) => (
+              <tr
+                key={order.id}
+                className="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600 transition"
+              >
+                <td className="px-4 py-4">{order.id}</td>
+                <td className="px-4 py-4 font-medium">{order.gig.title}</td>
+                <td className="px-4 py-4">{order.price}</td>
+                <td className="px-4 py-4">
+                  {order.createdAt?.split("T")[0]}
+                </td>
+                <td className="px-4 py-4">
+                  <Link
+                    href={`/buyer/orders/messages/${order.id}`}
+                    className="text-blue-600 hover:underline"
+                  >
+                    Send
+                  </Link>
+                </td>
+                <td className="px-4 py-4">{order.status}</td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
