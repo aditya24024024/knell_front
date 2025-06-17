@@ -52,7 +52,7 @@ const Profile = () => {
   // return () => {
   //   window.removeEventListener("focus", populateData);
   // };
-  }, [userInfo,data]);
+  }, [userInfo]);
 
   const setProfile = async () => {
     try {
