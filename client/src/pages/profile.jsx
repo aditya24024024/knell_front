@@ -14,7 +14,7 @@ const Profile = () => {
   const [image, setImage] = useState(undefined);
   const [errorMessage, setErrorMessage] = useState("");
   const [data, setData] = useState({
-    userName: "",
+    username: "",
     fullName: "",
     description: "",
   });
@@ -23,7 +23,7 @@ const Profile = () => {
       const populateData = () => {
     const handleData = { ...data };
     if (userInfo) {
-      if (userInfo?.username) handleData.userName = userInfo?.username;
+      if (userInfo?.username) handleData.username = userInfo?.username;
       if (userInfo?.description) handleData.description = userInfo?.description;
       if (userInfo?.fullName) handleData.fullName = userInfo?.fullName;
       console.log({ userInfo });
@@ -61,7 +61,7 @@ const Profile = () => {
         { ...data },
         { withCredentials: true }
       );
-      if (response.data.userNameError) {
+      if (response.data.usernameError) {
         setErrorMessage("Enter a Unique Username");
       } else {
         let imageName = "";
@@ -181,16 +181,16 @@ const Profile = () => {
             </div>
             <div className="flex gap-4 w-[500px]">
               <div>
-                <label className={labelClassName} htmlFor="userName">
+                <label className={labelClassName} htmlFor="username">
                   Please select a username
                 </label>
                 <input
                   className={inputClassName}
                   type="text"
-                  name="userName"
-                  id="userName"
+                  name="username"
+                  id="username"
                   placeholder="Username"
-                  value={data.userName}
+                  value={data.username}
                   onChange={handleChange}
                 />
               </div>
