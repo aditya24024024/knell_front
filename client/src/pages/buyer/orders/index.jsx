@@ -28,8 +28,8 @@ function Orders() {
         All Your Orders
       </h3>
 
-      <div className="w-full overflow-x-auto shadow-md sm:rounded-lg">
-        <table className="min-w-full text-sm text-left text-gray-700 dark:text-gray-300">
+      <div className="w-full overflow-x-auto">
+        <table className="min-w-[600px] text-sm text-left text-gray-700 dark:text-gray-300">
           <thead className="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-300">
             <tr>
               <th className="px-4 py-3 whitespace-nowrap">Order Id</th>
@@ -41,28 +41,39 @@ function Orders() {
             </tr>
           </thead>
           <tbody>
-            {orders.map((order) => (
-              <tr
-                key={order.id}
-                className="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600 transition"
-              >
-                <td className="px-4 py-4">{order.id}</td>
-                <td className="px-4 py-4 font-medium">{order.gig.title}</td>
-                <td className="px-4 py-4">{order.price}</td>
-                <td className="px-4 py-4">
-                  {order.createdAt?.split("T")[0]}
+            {orders.length === 0 ? (
+              <tr>
+                <td
+                  colSpan="6"
+                  className="text-center px-4 py-6 text-gray-500 dark:text-gray-400"
+                >
+                  No orders found.
                 </td>
-                <td className="px-4 py-4">
-                  <Link
-                    href={`/buyer/orders/messages/${order.id}`}
-                    className="text-blue-600 hover:underline"
-                  >
-                    Send
-                  </Link>
-                </td>
-                <td className="px-4 py-4">{order.status}</td>
               </tr>
-            ))}
+            ) : (
+              orders.map((order) => (
+                <tr
+                  key={order.id}
+                  className="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600 transition"
+                >
+                  <td className="px-4 py-4">{order.id}</td>
+                  <td className="px-4 py-4 font-medium">{order.gig.title}</td>
+                  <td className="px-4 py-4">₹{order.price}</td>
+                  <td className="px-4 py-4">
+                    {order.createdAt?.split("T")[0]}
+                  </td>
+                  <td className="px-4 py-4">
+                    <Link
+                      href={`/buyer/orders/messages/${order.id}`}
+                      className="text-blue-600 hover:underline"
+                    >
+                      Send
+                    </Link>
+                  </td>
+                  <td className="px-4 py-4">{order.status}</td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
       </div>
