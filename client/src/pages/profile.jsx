@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react'
 import axios from "axios"
+import {toast} from "react-toastify";
 
 const Profile = () => {
     const router=useRouter()
@@ -26,8 +27,8 @@ const Profile = () => {
       if (userInfo?.username) handleData.username = userInfo?.username;
       if (userInfo?.description) handleData.description = userInfo?.description;
       if (userInfo?.fullName) handleData.fullName = userInfo?.fullName;
-      console.log({ userInfo });
-      console.log({ data });
+      // console.log({ userInfo });
+      // console.log({ data });
 
       if (userInfo?.imageName) {
         const fileName = image;
@@ -45,7 +46,7 @@ const Profile = () => {
       setIsLoaded(true);
     }}
     populateData();
-      console.log({ data });
+      // console.log({ data });
 
   // window.addEventListener("focus", populateData);
 
@@ -87,11 +88,12 @@ const Profile = () => {
             image: imageName.length ? HOST + "/" + imageName : false,
           },
         });
-
+          toast.success("Profile setted up successfully");
         router.push("/");
       }
     } catch (err) {
       console.error(err);
+          toast.error("Some error occurred");
     }
   };
 
