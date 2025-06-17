@@ -6,27 +6,32 @@ import React, { useEffect, useState } from "react";
 
 function Orders() {
   const [{ userInfo }] = useStateProvider();
-  const [orders, setOrders] = useState(null); // null = loading, [] = empty
+  const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [fetched, setFetched] = useState(false); // ensures fetch runs once after userInfo is available
 
   useEffect(() => {
+    if (!userInfo || fetched) return;
+
     const fetchOrders = async () => {
       try {
-        if (!userInfo) return;
-        const response = await axios.get(GET_BUYER_ORDERS_ROUTE, {
+        setLoading(true);
+        const { data } = await axios.get(GET_BUYER_ORDERS_ROUTE, {
           withCredentials: true,
         });
-        setOrders(response.data.orders);
+        setOrders(data.orders || []);
+        setFetched(true);
       } catch (error) {
-        console.error("Failed to fetch orders:", error);
-        setOrders([]); // To avoid null → blank screen
+        console.error("Error fetching orders:", error);
+        setOrders([]);
+        setFetched(true);
       } finally {
         setLoading(false);
       }
     };
 
     fetchOrders();
-  }, [userInfo]);
+  }, [userInfo, fetched]);
 
   return (
     <div className="min-h-screen pt-32 px-4 sm:px-6 md:px-10 lg:px-20 bg-white dark:bg-gray-900">
@@ -36,19 +41,19 @@ function Orders() {
 
       {loading ? (
         <p className="text-center text-gray-500 dark:text-gray-400">Loading...</p>
-      ) : !orders || orders.length === 0 ? (
+      ) : orders.length === 0 ? (
         <p className="text-center text-gray-500 dark:text-gray-400">No orders found.</p>
       ) : (
         <div className="w-full overflow-x-auto shadow-md rounded-lg border border-gray-200 dark:border-gray-700">
           <table className="w-full min-w-[700px] text-sm text-left text-gray-700 dark:text-gray-300">
             <thead className="text-xs uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-300">
               <tr>
-                <th className="px-4 py-3 whitespace-nowrap">Order Id</th>
-                <th className="px-4 py-3 whitespace-nowrap">Name</th>
-                <th className="px-4 py-3 whitespace-nowrap">Price</th>
-                <th className="px-4 py-3 whitespace-nowrap">Order Date</th>
-                <th className="px-4 py-3 whitespace-nowrap">Send Message</th>
-                <th className="px-4 py-3 whitespace-nowrap">Status</th>
+                <th className="px-4 py-3">Order Id</th>
+                <th className="px-4 py-3">Name</th>
+                <th className="px-4 py-3">Price</th>
+                <th className="px-4 py-3">Order Date</th>
+                <th className="px-4 py-3">Send Message</th>
+                <th className="px-4 py-3">Status</th>
               </tr>
             </thead>
             <tbody>
