@@ -20,6 +20,7 @@ const Profile = () => {
   });
 
   useEffect(() => {
+      const populateData = () => {
     const handleData = { ...data };
     if (userInfo) {
       if (userInfo?.username) handleData.userName = userInfo?.username;
@@ -41,8 +42,16 @@ const Profile = () => {
 
       setData(handleData);
       setIsLoaded(true);
-    }
-  }, [userInfo],router.asPath);
+    }}
+    populateData();
+
+  // Re-populate data on page focus (user returns to profile)
+  // window.addEventListener("focus", populateData);
+
+  // return () => {
+  //   window.removeEventListener("focus", populateData);
+  // };
+  }, [userInfo,router.asPath]);
 
   const setProfile = async () => {
     try {
