@@ -23,21 +23,21 @@ function Orders() {
   }, [userInfo]);
 
   return (
-    <div className="min-h-[80vh] my-10 mt-0 px-4 md:px-8 lg:px-16">
+    <div className="min-h-[80vh] px-4 md:px-8 lg:px-16 pt-24 pb-12 bg-white dark:bg-gray-900">
       <h3 className="mb-6 text-xl md:text-2xl font-semibold text-center md:text-left">
         All Your Orders
       </h3>
 
       <div className="w-full overflow-x-auto shadow-md sm:rounded-lg">
-        <table className="w-full text-sm text-left text-gray-700 dark:text-gray-300">
+        <table className="min-w-full text-sm text-left text-gray-700 dark:text-gray-300">
           <thead className="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-300">
             <tr>
-              <th scope="col" className="px-4 py-3 whitespace-nowrap">Order Id</th>
-              <th scope="col" className="px-4 py-3 whitespace-nowrap">Name</th>
-              <th scope="col" className="px-4 py-3 whitespace-nowrap">Price</th>
-              <th scope="col" className="px-4 py-3 whitespace-nowrap">Order Date</th>
-              <th scope="col" className="px-4 py-3 whitespace-nowrap">Send Message</th>
-              <th scope="col" className="px-4 py-3 whitespace-nowrap">Status</th>
+              <th className="px-4 py-3 whitespace-nowrap">Order Id</th>
+              <th className="px-4 py-3 whitespace-nowrap">Name</th>
+              <th className="px-4 py-3 whitespace-nowrap">Price</th>
+              <th className="px-4 py-3 whitespace-nowrap">Order Date</th>
+              <th className="px-4 py-3 whitespace-nowrap">Send Message</th>
+              <th className="px-4 py-3 whitespace-nowrap">Status</th>
             </tr>
           </thead>
           <tbody>
