@@ -70,13 +70,13 @@ const Details = () => {
       <div className="flex flex-col gap-4">
         <div className="w-full max-w-[800px] overflow-hidden rounded">
           <Image
-            src={`${HOST.trim()}/uploads/${currentImage?.trim().replace(/\s+/g, '-').replace(/\.{2,}/g, '.')}`}
+            src={`${HOST}/uploads/${currentImage}`}
             alt="Gig"
             height={800}
             width={800}
             className="w-full h-auto rounded-lg hover:scale-105 transition-transform duration-500 object-cover"
           />
-          {`${HOST.trim()}/uploads/${currentImage.trim()}`}
+          {`${HOST}/uploads/${currentImage}`}
         </div>
         <div className="flex gap-3 flex-wrap">
           {gigData.images.map((img) => (
