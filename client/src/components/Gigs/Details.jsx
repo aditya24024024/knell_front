@@ -70,7 +70,7 @@ const Details = () => {
       <div className="flex flex-col gap-4">
         <div className="w-full max-w-[800px] overflow-hidden rounded">
           <Image
-            src={HOST + '/uploads/' + ${currentImage.trim()}}
+            src={`${HOST}/uploads/${currentImage.trim()}`}
             alt="Gig"
             height={800}
             width={800}
@@ -81,7 +81,7 @@ const Details = () => {
           {gigData.images.map((img) => (
             <Image
               key={img}
-              src={HOST + '/uploads/' + img}
+              src={`${HOST}/uploads/${currentImage.trim()}`}
               alt="Thumbnail"
               height={100}
               width={100}
