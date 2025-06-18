@@ -66,7 +66,7 @@ const Pricing = () => {
         <div className="text-[#62646a] font-semibold text-sm flex flex-wrap gap-4">
           <div className="flex items-center gap-2">
             <FiClock className="text-xl" />
-            <span>{gigData.deliveryTime} Days Delivery</span>
+            <span>{gigData.deliveryTime} Days ETA </span>
           </div>
           <div className="flex items-center gap-2">
             <FiRefreshCcw className="text-xl" />
