@@ -76,6 +76,7 @@ const Details = () => {
             width={800}
             className="w-full h-auto rounded-lg hover:scale-105 transition-transform duration-500 object-cover"
           />
+          {`${HOST}/uploads/${currentImage.trim()}`}
         </div>
         <div className="flex gap-3 flex-wrap">
           {gigData.images.map((img) => (
