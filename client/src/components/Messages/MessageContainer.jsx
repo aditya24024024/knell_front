@@ -31,9 +31,7 @@ function MessageContainer() {
   }, [orderId, userInfo]);
 
   const handleKeyDown = (event) => {
-    if (event.key === "Enter") {
-      sendMessage();
-    }
+    if (event.key === "Enter") sendMessage();
   };
 
   const formatTime = (timestamp) => {
@@ -62,12 +60,12 @@ function MessageContainer() {
   };
 
   return (
-    <div className="h-[80vh] w-full px-2 sm:px-4 md:px-8">
+    <div className="h-[calc(100vh-5rem)] w-full px-2 sm:px-4 md:px-8 pt-4 sm:pt-10">
       <div className="flex justify-center items-center h-full">
-        <div className="bg-white shadow-2xl border w-full max-w-5xl rounded-lg flex flex-col px-4 py-6 sm:px-6 sm:py-8">
+        <div className="bg-white dark:bg-gray-800 shadow-lg border w-full max-w-5xl rounded-lg flex flex-col px-3 py-4 sm:px-6 sm:py-6">
           
           {/* Messages */}
-          <div className="flex-1 overflow-y-auto space-y-4 pr-2 scrollbar-thin scrollbar-thumb-gray-300">
+          <div className="flex-1 overflow-y-auto space-y-4 pr-2 mb-4 scrollbar-thin scrollbar-thumb-gray-300 max-h-[65vh] sm:max-h-[70vh]">
             {messages.map((message) => (
               <div
                 key={message.id}
@@ -78,14 +76,14 @@ function MessageContainer() {
                 }`}
               >
                 <div
-                  className={`inline-block rounded-lg px-4 py-2 max-w-xs sm:max-w-md break-words ${
+                  className={`inline-block rounded-lg px-4 py-2 break-words max-w-[75%] sm:max-w-[60%] ${
                     message.senderId === userInfo.id
                       ? "bg-[#1DBF73] text-white"
-                      : "bg-gray-100 text-gray-800"
+                      : "bg-gray-100 dark:bg-gray-700 dark:text-white text-gray-800"
                   }`}
                 >
                   <p>{message.text}</p>
-                  <div className="text-xs text-gray-600 mt-1 flex items-center gap-1">
+                  <div className="text-xs text-gray-600 dark:text-gray-300 mt-1 flex items-center gap-1">
                     <span>{formatTime(message.createdAt)}</span>
                     {message.senderId === userInfo.id && message.isRead && (
                       <BsCheckAll className="text-blue-500" />
@@ -97,10 +95,10 @@ function MessageContainer() {
           </div>
 
           {/* Input Field */}
-          <div className="mt-4 flex items-center gap-2">
+          <div className="flex items-center gap-2 w-full">
             <input
               type="text"
-              className="flex-grow rounded-full border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#1DBF73]"
+              className="flex-grow rounded-full border border-gray-300 dark:border-gray-600 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#1DBF73] bg-white dark:bg-gray-700 dark:text-white"
               placeholder="Type a message..."
               value={messageText}
               onChange={(e) => setMessageText(e.target.value)}
