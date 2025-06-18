@@ -70,7 +70,7 @@ const Details = () => {
       <div className="flex flex-col gap-4">
         <div className="w-full max-w-[800px] overflow-hidden rounded">
           <Image
-            src={HOST + '/uploads/' + currentImage}
+            src={HOST + '/uploads/' + ${currentImage.trim()}}
             alt="Gig"
             height={800}
             width={800}
