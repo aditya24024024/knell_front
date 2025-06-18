@@ -70,19 +70,19 @@ const Details = () => {
       <div className="flex flex-col gap-4">
         <div className="w-full max-w-[800px] overflow-hidden rounded">
           <Image
-            src={`${HOST}/uploads/${currentImage.trim()}`}
+            src={`${HOST.trim()}/uploads/${currentImage.trim()}`}
             alt="Gig"
             height={800}
             width={800}
             className="w-full h-auto rounded-lg hover:scale-105 transition-transform duration-500 object-cover"
           />
-          {`${HOST}/uploads/${currentImage.trim()}`}
+          {`${HOST.trim()}/uploads/${currentImage.trim()}`}
         </div>
         <div className="flex gap-3 flex-wrap">
           {gigData.images.map((img) => (
             <Image
               key={img}
-              src={`${HOST}/uploads/${currentImage.trim()}`}
+              src={`${HOST.trim()}/uploads/${currentImage.trim()}`}
               alt="Thumbnail"
               height={100}
               width={100}
@@ -107,7 +107,7 @@ const Details = () => {
         <div className="flex gap-4 items-center">
           {gigData.createdBy.profileImage ? (
             <Image
-              src={`${HOST}/uploads/${currentImage.trim()}`}
+              src={`${HOST.trim()}/uploads/${currentImage.trim()}`}
               alt="profile"
               height={100}
               width={100}
