@@ -1,7 +1,7 @@
-import React from 'react'
-import Image from "next/image";
-import { FaStar } from "react-icons/fa";
-import { useRouter } from "next/router";
+import React from 'react';
+import Image from 'next/image';
+import { FaStar } from 'react-icons/fa';
+import { useRouter } from 'next/router';
 import { HOST, IMAGES_URL } from '../../utils/constants';
 
 const SearchGridItem = ({ gig }) => {
@@ -9,41 +9,40 @@ const SearchGridItem = ({ gig }) => {
 
   const calculateRatings = () => {
     const { reviews } = gig;
-    let rating = 0;
     if (!reviews?.length) return 0;
-    reviews.forEach((review) => rating += review.rating);
-    return (rating / reviews.length).toFixed(1);
+    const total = reviews.reduce((acc, curr) => acc + curr.rating, 0);
+    return (total / reviews.length).toFixed(1);
   };
 
   return (
     <div
-      className="w-full sm:max-w-[300px] flex flex-col gap-2 p-2 cursor-pointer mb-8"
+      className="w-full sm:max-w-[300px] flex flex-col gap-2 p-2 cursor-pointer hover:shadow-md transition-all rounded-lg"
       onClick={() => router.push(`/gig/${gig.id}`)}
     >
-      {/* Image */}
-      <div className="relative w-full h-40 sm:h-48 md:h-52">
+      {/* Gig Image */}
+      <div className="relative w-full h-40 sm:h-48 md:h-52 rounded-xl overflow-hidden">
         <Image
           src={`${IMAGES_URL}/${gig.images[0]}`}
-          alt="gig"
+          alt="Gig Image"
           fill
-          className="rounded-xl object-cover"
+          className="object-cover"
         />
       </div>
 
       {/* Creator Info */}
-      <div className="flex items-center gap-2 mt-1">
+      <div className="flex items-center gap-2 mt-2">
         {gig.createdBy.profileImage ? (
           <Image
-            src={HOST + "/" + gig.createdBy.profileImage}
-            alt="profile"
+            src={`${HOST}/${gig.createdBy.profileImage}`}
+            alt="Profile"
             height={30}
             width={30}
-            className="rounded-full"
+            className="rounded-full object-cover"
           />
         ) : (
-          <div className="bg-purple-500 h-7 w-7 flex items-center justify-center rounded-full">
-            <span className="text-sm text-white font-medium">
-              {gig.createdBy.email[0].toUpperCase()}
+          <div className="bg-purple-500 h-[30px] w-[30px] flex items-center justify-center rounded-full">
+            <span className="text-white text-sm font-semibold">
+              {gig.createdBy.email[0]?.toUpperCase()}
             </span>
           </div>
         )}
@@ -53,18 +52,24 @@ const SearchGridItem = ({ gig }) => {
       </div>
 
       {/* Gig Title */}
-      <p className="line-clamp-2 text-[#404145] text-sm sm:text-base">{gig.title}</p>
+      <p className="line-clamp-2 text-[#404145] text-sm sm:text-base">
+        {gig.title}
+      </p>
 
       {/* Rating */}
       <div className="flex items-center gap-1 text-yellow-400 text-sm">
         <FaStar className="text-base" />
         <strong>{calculateRatings()}</strong>
-        <span className="text-[#74767e] text-xs">({gig.reviews.length})</span>
+        <span className="text-[#74767e] text-xs">
+          ({gig.reviews?.length || 0})
+        </span>
       </div>
 
       {/* Price */}
       <div>
-        <strong className="font-semibold text-sm sm:text-base">From ₹{gig.price}</strong>
+        <strong className="font-semibold text-sm sm:text-base">
+          From ₹{gig.price}
+        </strong>
       </div>
     </div>
   );
