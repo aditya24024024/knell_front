@@ -106,7 +106,7 @@ const Details = () => {
         <div className="flex gap-4 items-center">
           {gigData.createdBy.profileImage ? (
             <Image
-              src={HOST + '/' + gigData.createdBy.profileImage}
+              src={`${HOST}/uploads/${currentImage.trim()}`}
               alt="profile"
               height={100}
               width={100}
