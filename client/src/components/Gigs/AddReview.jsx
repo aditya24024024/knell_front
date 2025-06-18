@@ -1,8 +1,7 @@
 import { useStateProvider } from "../../context/StateContext";
 import { reducerCases } from "../../context/constants";
 import { ADD_REVIEW } from "../../utils/constants";
-// import axios from "axios";
-import axios from "axios"
+import axios from "axios";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { FaStar } from "react-icons/fa";
@@ -12,11 +11,9 @@ function AddReview() {
   const [data, setData] = useState({ reviewText: "", rating: 0 });
   const router = useRouter();
   const { gigid } = router.query;
-  // console.log(gigId)
+
   const addReview = async () => {
     try {
-      console.log(data)
-      console.log(gigid)
       const response = await axios.post(
         `${ADD_REVIEW}/${gigid}`,
         { ...data },
@@ -30,39 +27,47 @@ function AddReview() {
         });
       }
     } catch (err) {
-      console.error(err);
+      console.error("Error adding review:", err);
     }
   };
+
   return (
-    <div className="mb-10">
-      <h3 className="text-2xl my-5 font-normal   text-[#404145]">
-        Give him a Review
+    <div className="mb-10 w-full">
+      <h3 className="text-xl sm:text-2xl my-5 font-semibold text-[#404145]">
+        Leave a Review
       </h3>
-      <div className="flex  flex-col  items-start justify-start gap-3">
+      <div className="flex flex-col gap-4 w-full max-w-3xl">
+        {/* Review Text */}
         <textarea
           name="reviewText"
           id="reviewText"
+          rows="4"
           onChange={(e) => setData({ ...data, reviewText: e.target.value })}
           value={data.reviewText}
-          className="block p-2.5 w-4/6 text-sm text-gray-900 bg-gray-50 rounded border border-gray-300 focus:ring-blue-500 focus:border-blue-500 "
-          placeholder="Add Review"
+          className="p-3 w-full text-sm text-gray-900 bg-gray-50 border border-gray-300 rounded focus:ring-blue-500 focus:border-blue-500"
+          placeholder="Write your review here..."
         ></textarea>
+
+        {/* Star Rating */}
         <div className="flex gap-1">
           {[1, 2, 3, 4, 5].map((num) => (
             <FaStar
               key={num}
-              className={`cursor-pointer ${
+              className={`cursor-pointer transition-colors ${
                 data.rating >= num ? "text-yellow-400" : "text-gray-300"
               }`}
               onClick={() => setData({ ...data, rating: num })}
+              title={`${num} Star${num > 1 ? "s" : ""}`}
             />
           ))}
         </div>
+
+        {/* Submit Button */}
         <button
-          className="flex items-center bg-[#1DBF73] text-white py-2 justify-center text-md relative rounded px-5"
           onClick={addReview}
+          className="bg-[#1DBF73] text-white px-6 py-2 rounded font-medium hover:bg-[#17a865] transition-colors w-fit"
         >
-          Add Review
+          Submit Review
         </button>
       </div>
     </div>
