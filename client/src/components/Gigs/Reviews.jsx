@@ -6,85 +6,80 @@ import { FaStar } from "react-icons/fa";
 
 function Reviews() {
   const [{ gigData }] = useStateProvider();
-//   console.log("gigData")
-//   console.log(gigData)
-  const [averageRatings, setAverageRatings] = useState("0");
+  const [averageRating, setAverageRating] = useState("0.0");
+
   useEffect(() => {
-    if (gigData && gigData.reviews?.length) {
-      let avgRating = 0;
-      gigData.reviews.forEach(({ rating }) => (avgRating += rating));
-      setAverageRatings((avgRating / gigData.reviews.length).toFixed(1));
+    if (gigData?.reviews?.length) {
+      const total = gigData.reviews.reduce((acc, { rating }) => acc + rating, 0);
+      setAverageRating((total / gigData.reviews.length).toFixed(1));
     }
   }, [gigData]);
 
+  if (!gigData) return null;
+
   return (
-    <>
-      {gigData && (
-        <div className="mb-10">
-          <h3 className="text-2xl my-5 font-normal text-[#404145] ">Reviews</h3>
-          <div className="flex gap-3 mb-5">
-            <h5>{gigData.reviews?.length} reviews for this Gig</h5>
-            <div className="flex text-yellow-500 items-center gap-2">
-              <div className="flex gap-1">
-                {[1, 2, 3, 4, 5].map((star) => (
-                  <FaStar
-                    key={star}
-                    className={`cursor-pointer ${
-                      Math.ceil(averageRatings) >= star
-                        ? "text-yellow-400"
-                        : "text-gray-300"
-                    }`}
-                  />
-                ))}
-              </div>
-              <span>{averageRatings}</span>
-            </div>
-          </div>
-          <div className="flex flex-col gap-6">
-            {gigData.reviews?.map((review) => (
-              <div className="flex gap-3 border-t pt-6" key={review.id}>
-                <div>
-                  {review.reviewer.profileImage ? (
-                    <Image
-                      src={HOST + "/" + review.reviewer.profileImage}
-                      alt="Profile"
-                      width={40}
-                      height={40}
-                      className="rounded-full"
-                    />
-                  ) : (
-                    <div className="bg-purple-500 h-10 w-10 flex items-center justify-center rounded-full relative">
-                      <span className="text-xl text-white">
-                        {review.reviewer.email[0].toUpperCase()}
-                      </span>
-                    </div>
-                  )}
-                </div>
-                <div className="flex flex-col gap-2">
-                  <h4>{review.reviewer.fullName}</h4>
-                  <div className="flex text-yellow-500 items-center gap-2">
-                    <div className="flex gap-1">
-                      {[1, 2, 3, 4, 5].map((star) => (
-                        <FaStar
-                          key={star}
-                          className={`cursor-pointer ${
-                            review.rating >= star
-                              ? "text-yellow-400"
-                              : "text-gray-300"
-                          }`}
-                        />
-                      ))}
-                    </div>
-                    <span>{review.rating}</span>
-                  </div>
-                  <p className="text-[#404145] pr-20">{review.reviewText}</p>
-                </div>
-              </div>
+    <div className="mb-12">
+      <h3 className="text-2xl font-medium text-[#404145] mb-6">Reviews</h3>
+
+      {/* Header Info */}
+      <div className="flex items-center flex-wrap gap-3 mb-6">
+        <p className="text-[#62646a] text-md">{gigData.reviews?.length} reviews for this Gig</p>
+        <div className="flex items-center gap-2">
+          <div className="flex gap-1 text-yellow-400">
+            {[1, 2, 3, 4, 5].map((star) => (
+              <FaStar
+                key={star}
+                className={Math.ceil(averageRating) >= star ? "text-yellow-400" : "text-gray-300"}
+              />
             ))}
           </div>
+          <span className="text-sm text-[#62646a]">{averageRating}</span>
         </div>
-      )}
-    </>
+      </div>
+
+      {/* Individual Reviews */}
+      <div className="flex flex-col gap-8">
+        {gigData.reviews?.map((review) => (
+          <div className="flex gap-4 border-t pt-6" key={review.id}>
+            {/* Reviewer Profile */}
+            <div className="min-w-[40px]">
+              {review.reviewer.profileImage ? (
+                <Image
+                  src={`${HOST}/${review.reviewer.profileImage}`}
+                  alt="Profile"
+                  width={40}
+                  height={40}
+                  className="rounded-full"
+                />
+              ) : (
+                <div className="bg-purple-500 w-10 h-10 flex items-center justify-center rounded-full">
+                  <span className="text-white font-semibold text-lg">
+                    {review.reviewer.email[0].toUpperCase()}
+                  </span>
+                </div>
+              )}
+            </div>
+
+            {/* Review Content */}
+            <div className="flex flex-col gap-1 w-full">
+              <h4 className="text-md font-semibold text-[#404145]">{review.reviewer.fullName}</h4>
+              <div className="flex items-center gap-2 text-yellow-400">
+                <div className="flex gap-1">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <FaStar
+                      key={star}
+                      className={review.rating >= star ? "text-yellow-400" : "text-gray-300"}
+                    />
+                  ))}
+                </div>
+                <span className="text-sm text-[#62646a]">{review.rating}</span>
+              </div>
+              <p className="text-[#404145] text-sm leading-relaxed">{review.reviewText}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }
 
