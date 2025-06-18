@@ -3,13 +3,13 @@ import { useStateProvider } from '../context/StateContext';
 import { HOST, SET_USER_IMAGE, SET_USER_INFO } from '../utils/constants';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react'
-import axios from "axios"
-import {toast} from "react-toastify";
+import React, { useEffect, useState } from 'react';
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const Profile = () => {
-    const router=useRouter()
-    const [{ userInfo }, dispatch] = useStateProvider();
+  const router = useRouter();
+  const [{ userInfo }, dispatch] = useStateProvider();
   const [isLoaded, setIsLoaded] = useState(true);
   const [imageHover, setImageHover] = useState(false);
   const [image, setImage] = useState(undefined);
@@ -21,38 +21,28 @@ const Profile = () => {
   });
 
   useEffect(() => {
-      const populateData = () => {
-    const handleData = { ...data };
-    if (userInfo) {
-      if (userInfo?.username) handleData.username = userInfo?.username;
-      if (userInfo?.description) handleData.description = userInfo?.description;
-      if (userInfo?.fullName) handleData.fullName = userInfo?.fullName;
-      // console.log({ userInfo });
-      // console.log({ data });
+    const populateData = () => {
+      const handleData = { ...data };
+      if (userInfo) {
+        if (userInfo?.username) handleData.username = userInfo?.username;
+        if (userInfo?.description) handleData.description = userInfo?.description;
+        if (userInfo?.fullName) handleData.fullName = userInfo?.fullName;
 
-      if (userInfo?.imageName) {
-        const fileName = image;
-        fetch(userInfo.imageName).then(async (response) => {
-          const contentType = response.headers.get("content-type");
-          const blob = await response.blob();
-          // @ts-ignore
-          const files = new File([blob], fileName, { contentType });
-          // @ts-ignore
-          setImage(files);
-        });
+        if (userInfo?.imageName) {
+          const fileName = image;
+          fetch(userInfo.imageName).then(async (response) => {
+            const contentType = response.headers.get("content-type");
+            const blob = await response.blob();
+            const files = new File([blob], fileName, { contentType });
+            setImage(files);
+          });
+        }
+
+        setData(handleData);
+        setIsLoaded(true);
       }
-
-      setData(handleData);
-      setIsLoaded(true);
-    }}
+    };
     populateData();
-      // console.log({ data });
-
-  // window.addEventListener("focus", populateData);
-
-  // return () => {
-  //   window.removeEventListener("focus", populateData);
-  // };
   }, [userInfo]);
 
   const setProfile = async () => {
@@ -73,9 +63,7 @@ const Profile = () => {
             data: { img },
           } = await axios.post(SET_USER_IMAGE, formData, {
             withCredentials: true,
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
+            headers: { "Content-Type": "multipart/form-data" },
           });
           imageName = img;
         }
@@ -88,12 +76,13 @@ const Profile = () => {
             image: imageName.length ? HOST + "/" + imageName : false,
           },
         });
-          toast.success("Profile setted up successfully");
+
+        toast.success("Profile set up successfully");
         router.push("/");
       }
     } catch (err) {
       console.error(err);
-          toast.error("Some error occurred");
+      toast.error("Some error occurred");
     }
   };
 
@@ -111,39 +100,39 @@ const Profile = () => {
   };
 
   const inputClassName =
-    "block p-4 w-full text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50  focus:ring-blue-500 focus:border-blue-500";
+    "block p-4 w-full text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500";
   const labelClassName =
-    "mb-2 text-lg font-medium text-gray-900  dark:text-white";
+    "mb-2 text-lg font-medium text-gray-900";
 
   return (
     <>
       {isLoaded && (
-        <div className="flex flex-col items-center justify-start min-h-[80vh] gap-3">
+        <div className="flex flex-col items-center justify-start min-h-[80vh] px-4 sm:px-6 gap-4 py-8">
           {errorMessage && (
             <div>
               <span className="text-red-600 font-bold">{errorMessage}</span>
             </div>
           )}
-          <h2 className="text-3xl">Welcome to Knell</h2>
-          <h4 className="text-xl">
+          <h2 className="text-2xl sm:text-3xl">Welcome to Knell</h2>
+          <h4 className="text-lg sm:text-xl text-center">
             Please complete your profile to get started
           </h4>
-          <div className="flex flex-col items-center w-full gap-5">
+
+          <div className="flex flex-col items-center w-full gap-6">
+            {/* Profile Picture Upload */}
             <div
               className="flex flex-col items-center cursor-pointer"
               onMouseEnter={() => setImageHover(true)}
               onMouseLeave={() => setImageHover(false)}
             >
-              <label className={labelClassName} htmlFor="">
-                Select a profile Picture
-              </label>
+              <label className={labelClassName}>Select a profile Picture</label>
               <div className="bg-purple-500 h-36 w-36 flex items-center justify-center rounded-full relative">
                 {image ? (
                   <Image
                     src={URL.createObjectURL(image)}
                     alt="profile"
                     fill
-                    className="rounded-full"
+                    className="rounded-full object-cover"
                   />
                 ) : (
                   <span className="text-6xl text-white">
@@ -151,13 +140,11 @@ const Profile = () => {
                   </span>
                 )}
                 <div
-                  className={`absolute bg-slate-400 h-full w-full rounded-full flex items-center justify-center   transition-all duration-100  ${
+                  className={`absolute bg-slate-400 h-full w-full rounded-full flex items-center justify-center transition-all duration-200 ${
                     imageHover ? "opacity-100" : "opacity-0"
                   }`}
                 >
-                  <span
-                    className={` flex items-center justify-center  relative`}
-                  >
+                  <span className="relative flex items-center justify-center">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       className="w-12 h-12 text-white absolute"
@@ -174,17 +161,19 @@ const Profile = () => {
                       type="file"
                       onChange={handleFile}
                       className="opacity-0"
-                      multiple={true}
+                      multiple={false}
                       name="profileImage"
                     />
                   </span>
                 </div>
               </div>
             </div>
-            <div className="flex gap-4 w-[500px]">
-              <div>
+
+            {/* Username and Full Name */}
+            <div className="flex flex-col sm:flex-row gap-4 w-full max-w-[500px]">
+              <div className="flex-1">
                 <label className={labelClassName} htmlFor="username">
-                  Please select a username
+                  Username
                 </label>
                 <input
                   className={inputClassName}
@@ -197,9 +186,9 @@ const Profile = () => {
                 />
               </div>
 
-              <div>
+              <div className="flex-1">
                 <label className={labelClassName} htmlFor="fullName">
-                  Please enter your full Name
+                  Full Name
                 </label>
                 <input
                   className={inputClassName}
@@ -212,7 +201,9 @@ const Profile = () => {
                 />
               </div>
             </div>
-            <div className="flex flex-col w-[500px]">
+
+            {/* Description */}
+            <div className="w-full max-w-[500px]">
               <label className={labelClassName} htmlFor="description">
                 Description
               </label>
@@ -222,11 +213,13 @@ const Profile = () => {
                 value={data.description}
                 onChange={handleChange}
                 className={inputClassName}
-                placeholder="description"
+                placeholder="Description"
               ></textarea>
             </div>
+
+            {/* Button */}
             <button
-              className="border   text-lg font-semibold px-5 py-3   border-[#1DBF73] bg-[#1DBF73] text-white rounded-md"
+              className="border text-lg font-semibold px-6 py-3 border-[#1DBF73] bg-[#1DBF73] text-white rounded-md"
               type="button"
               onClick={setProfile}
             >
@@ -236,7 +229,7 @@ const Profile = () => {
         </div>
       )}
     </>
-  )
-}
+  );
+};
 
-export default Profile
+export default Profile;
