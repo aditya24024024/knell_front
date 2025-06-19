@@ -26,7 +26,7 @@ function PopularServices() {
             image: "/ded.png",
         },
         {
-            name: "Tech Support",
+            name: "TechSupport/PC Builder",
             label: "Get Your pc fixed",
             image: "/yasir.png",
         },
