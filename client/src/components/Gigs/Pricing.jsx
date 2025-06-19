@@ -68,10 +68,10 @@ const Pricing = () => {
             <FiClock className="text-xl" />
             <span>{gigData.deliveryTime} Days ETA </span>
           </div>
-          <div className="flex items-center gap-2">
+{/*           <div className="flex items-center gap-2">
             <FiRefreshCcw className="text-xl" />
             <span>{gigData.revisions || 1} Revisions</span>
-          </div>
+          </div> */}
         </div>
 
         {/* Features */}
