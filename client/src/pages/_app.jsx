@@ -35,7 +35,7 @@ export default function App({ Component, pageProps }) {
 
         {/* ✅ Footer and notifications */}
         <Footer />
-        <ToastContainer position="top-right" autoClose={3000} />
+        <ToastContainer position="top-right" autoClose={3000} theme="dark"/>
       </div>
     </StateProvider>
   );
