@@ -6,6 +6,7 @@ import axios from 'axios';
 import { EDIT_GIG_DATA, GET_GIG_DATA } from '../../../utils/constants';
 import { useRouter } from 'next/router';
 import { HOST } from '../../../context/constants';
+import { toast } from 'react-toastify';
 
 const Editgig = () => {
   const [cookies] = useCookies();
@@ -74,15 +75,15 @@ const Editgig = () => {
         });
 
         if (response.status === 201) {
-          alert('Gig updated successfully!');
+          toast.success('Gig updated successfully!');
           router.push('/seller/gigs');
         }
       } catch (err) {
-        console.error(err);
-        alert('Something went wrong while updating the gig.');
+        // console.error(err);
+        toast.error('Something went wrong while updating the gig.');
       }
     } else {
-      alert('Please fill in all required fields.');
+      toast.warn('Please fill in all required fields.');
     }
   };
 
@@ -97,7 +98,7 @@ const Editgig = () => {
           title: gig.title,
           category: gig.category,
           description: gig.description,
-          time: gig.time,
+          time: gig.deliveryTime,
           shortDesc: gig.shortDesc,
           price: gig.price,
           feature: '',
@@ -172,7 +173,7 @@ const Editgig = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <label className={labelClassName}>Delivery Time (days)</label>
+            <label className={labelClassName}>ETA (days)</label>
             <input
               type="number"
               name="time"
