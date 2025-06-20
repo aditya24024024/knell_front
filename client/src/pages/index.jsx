@@ -11,23 +11,23 @@ import { toast } from "react-toastify";
 
 function Index() {
   const router=useRouter();
-  const redirected=router.query.redirected;
-  useEffect(() => {
-    if (redirected === 'true') {
-      toast.warn("Please login/signup first")
-      // Create a new query object without 'redirected'
-      const { redirected, ...restQuery } = router.query;
+  // const redirected=router.query.redirected
+  // useEffect(() => {
+  //   if (redirected === 'true') {
+  //     toast.warn("Please login/signup first")
+  //     // Create a new query object without 'redirected'
+  //     const { redirected, ...restQuery } = router.query;
 
-      router.replace(
-        {
-          pathname: router.pathname,
-          query: restQuery, // cleaned-up query
-        },
-        undefined,
-        { shallow: true } // prevents full page reload
-      );
-    }
-  }, [redirected, router]);
+  //     router.replace(
+  //       {
+  //         pathname: router.pathname,
+  //         query: restQuery, // cleaned-up query
+  //       },
+  //       undefined,
+  //       { shallow: true } // prevents full page reload
+  //     );
+  //   }
+  // }, [redirected, router]);
   return (
     <div>
       <HeroBanner/>
