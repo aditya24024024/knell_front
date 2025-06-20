@@ -5,7 +5,7 @@ export const categories = [
     { name: "Gaming Companion ", logo: "/service-11.svg" },
     { name: "Pet Companion ", logo: "/service-13.svg" },
     { name: "Old Age Companion", logo: "/service-15.svg" },
-    { name: "TechSupport/PC Builder", logo: "/service-6.svg" },
+    { name: "Freelancer", logo: "/service-6.svg" },
     { name: "Travel Companion", logo: "/service-14.svg" },
     { name: "Party/Club Companion", logo: "/service-19.svg" },
     { name: "Dance Companion", logo: "/service-18.svg" },
