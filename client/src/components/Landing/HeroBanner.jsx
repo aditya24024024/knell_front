@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 
 function HeroBanner() {
   const [image, setImage] = React.useState(3);
+  const router=useRouter();
 
   React.useEffect(() => {
     const interval = setInterval(() => {
@@ -42,11 +43,14 @@ function HeroBanner() {
         <div className="flex gap-4">
           Popular:{" "}
           <ul className="flex flex-wrap gap-3 sm:gap-5">
-            {["Social Companion", "Dance Companion", "Dog Walker", "All Services"].map(
+            {["Social Companion", "Dance Companion", "Pet Companion"].map(
               (item) => (
                 <li
                   key={item}
                   className="text-sm py-1 px-3 border rounded-full hover:bg-white hover:text-black transition-all duration-300 cursor-pointer"
+                  onClick={() =>
+                            router.push(`/search?category=${(item || "default").toLowerCase()}`)
+                        }
                 >
                   {item}
                 </li>
