@@ -8,6 +8,7 @@ import {
   FiTwitter,
 } from "react-icons/fi";
 import Image from "next/image";
+import img from './unnamed 1.svg'
 import { categories } from "../utils/categories";
 
 function Footer() {
@@ -46,7 +47,7 @@ function Footer() {
       <div className="mt-12 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
         <div className="flex items-center gap-2">
           <Image
-            src="/unnamed 1.svg"
+            src={img}
             className="rounded-full"
             alt="Knell"
             width={50}
