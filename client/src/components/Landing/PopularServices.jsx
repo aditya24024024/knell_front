@@ -16,7 +16,7 @@ function PopularServices() {
             image: "/eshan.png",
         },
         {
-            name: "Dog Walker",
+            name: "Pet Companion",
             label: "woof!! woof!!",
             image: "/aryan.png",
         },
@@ -26,7 +26,7 @@ function PopularServices() {
             image: "/ded.png",
         },
         {
-            name: "TechSupport/PC Builder",
+            name: "Freelancer",
             label: "Get Your pc fixed",
             image: "/yasir.png",
         },
