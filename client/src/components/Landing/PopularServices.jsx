@@ -27,7 +27,7 @@ function PopularServices() {
         },
         {
             name: "Freelancer",
-            label: "Get Your pc fixed",
+            label: "Do professional work.",
             image: "/yasir.png",
         },
         {
