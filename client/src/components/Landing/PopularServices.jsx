@@ -38,7 +38,7 @@ function PopularServices() {
         {
             name: "Shopping Companion",
             label: "Get someone along to bargain with you",
-            image: "/bhains.png",
+            image: "/tamanna.jpeg",
         },
         {
             name: "Dance Companion",
