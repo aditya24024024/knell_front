@@ -265,9 +265,9 @@ const Navbar = () => {
           </div>
 
           {/* Hamburger for mobile */}
-          <div className="sm:hidden text-2xl text-gray-700 cursor-pointer" onClick={toggleHamburger}>
+{/*           <div className="sm:hidden text-2xl text-gray-700 cursor-pointer" onClick={toggleHamburger}>
             <GiHamburgerMenu />
-          </div>
+          </div> */}
 
           {/* Mobile dropdown */}
 {/*           {hamburger && (
@@ -295,9 +295,9 @@ const Navbar = () => {
                   <button onClick={() => router.push("/profile")}>Profile</button>
                   <button onClick={() => router.push("/logout")}>Logout</button>
                 </>
-              )} */}
-            // </div>
-          // )}
+              )}
+            </div>
+          )} */}
         </nav>
       )}
     </>
