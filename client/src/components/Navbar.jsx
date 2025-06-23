@@ -211,17 +211,22 @@ const Navbar = () => {
     };
   }, [isContextMenuVisible]);
 
+
   return (
     <>
       {showLoginModal && <AuthWrapper type="login" />}
       {showSignupModal && <AuthWrapper type="signup" />}
       {isLoaded && (
-        <nav
-          className={`w-full px-4 sm:px-8 md:px-16 lg:px-24 flex flex-col sm:flex-row gap-4 sm:gap-0 justify-between items-center py-4 sm:py-6 top-0 z-30 transition-all duration-300 ${
-            navFixed || userInfo ? "fixed bg-white border-b border-gray-200" : "absolute bg-transparent border-transparent"
-          }`}
-        >
-          {/* Logo */}
+        <nav className={`w-full px-4 sm:px-8 md:px-16 lg:px-24 py-4 sm:py-6 top-0 z-30 transition-all duration-300 
+          ${navFixed || userInfo ? "fixed bg-white border-b border-gray-200" : "absolute bg-transparent border-transparent"} 
+          flex items-center justify-between`}>
+
+          {/* ✅ Hamburger for mobile (left-aligned) */}
+          <div className="sm:hidden mr-4 text-2xl text-gray-700 cursor-pointer" onClick={toggleHamburger}>
+            <GiHamburgerMenu />
+          </div>
+
+          {/* ✅ Logo */}
           <div className="w-[50px] h-[50px] rounded-full overflow-hidden">
             <button onClick={() => router.push("/")}>
               <Image
@@ -234,7 +239,7 @@ const Navbar = () => {
             </button>
           </div>
 
-          {/* Search Bar */}
+          {/* ✅ Search Bar */}
           <div className={`flex w-full sm:w-auto ${navFixed || userInfo ? "opacity-100" : "opacity-0"}`}>
             <input
               type="text"
@@ -255,8 +260,8 @@ const Navbar = () => {
             </button>
           </div>
 
-          {/* Desktop Menu */}
-          <div className="hidden sm:flex">
+          {/* ✅ Desktop Nav Links */}
+          <div className="hidden sm:flex items-center gap-6">
             {!userInfo ? (
               <ul className="flex gap-6 items-center">
                 {links.map(({ linkName, handler, type }) => (
@@ -286,10 +291,7 @@ const Navbar = () => {
                 <li className="cursor-pointer" onClick={handleModeSwitch}>
                   {isSeller ? "Switch To Buyer" : "Switch To Seller"}
                 </li>
-                <li className="cursor-pointer" onClick={(e) => {
-                  e.stopPropagation();
-                  setIsContextMenuVisible(true);
-                }}>
+                <li className="cursor-pointer" onClick={(e) => { e.stopPropagation(); setIsContextMenuVisible(true); }}>
                   {userInfo?.imageName ? (
                     <Image src={userInfo.imageName} alt="Profile" width={40} height={40} className="rounded-full" />
                   ) : (
@@ -303,44 +305,39 @@ const Navbar = () => {
             {isContextMenuVisible && <ContextMenu data={ContextMenuData} />}
           </div>
 
-          {/* Hamburger for mobile */}
-{/*           <div className="sm:hidden text-2xl text-gray-700 cursor-pointer" onClick={toggleHamburger}>
-            <GiHamburgerMenu />
-          </div> */}
-
-          {/* Mobile dropdown */}
-{/*           {hamburger && (
-            <div className="absolute top-[100%] left-0 w-full bg-white shadow-md z-50 flex flex-col p-4 gap-3 sm:hidden">
+          {/* ✅ Mobile Dropdown Nav */}
+          {hamburger && (
+            <div className="absolute left-0 top-full w-full bg-white shadow-md z-50 flex flex-col p-4 gap-3 sm:hidden">
               {!userInfo ? (
                 links.map(({ linkName, handler, type }) => (
-                  <button key={linkName} onClick={() => { handler(); closeHamburger(); }}>
+                  <button key={linkName} onClick={() => { handler(); closeHamburger(); }} className="text-left">
                     {linkName}
                   </button>
                 ))
               ) : (
                 <>
                   {userInfo?.email === "akshajvasudeva@gmail.com" && (
-                    <button onClick={admin}>Admin</button>
+                    <button onClick={admin} className="text-left">Admin</button>
                   )}
                   {isSeller && (
-                    <button onClick={() => { router.push("/seller/gigs/create"); closeHamburger(); }}>
+                    <button onClick={() => { router.push("/seller/gigs/create"); closeHamburger(); }} className="text-left">
                       Create Gig
                     </button>
                   )}
-                  <button onClick={handleOrdersNavigate}>Orders</button>
-                  <button onClick={handleModeSwitch}>
+                  <button onClick={handleOrdersNavigate} className="text-left">Orders</button>
+                  <button onClick={handleModeSwitch} className="text-left">
                     {isSeller ? "Switch To Buyer" : "Switch To Seller"}
                   </button>
-                  <button onClick={() => router.push("/profile")}>Profile</button>
-                  <button onClick={() => router.push("/logout")}>Logout</button>
+                  <button onClick={() => router.push("/profile")} className="text-left">Profile</button>
+                  <button onClick={() => router.push("/logout")} className="text-left">Logout</button>
                 </>
               )}
             </div>
-          )} */}
+          )}
         </nav>
       )}
     </>
-  )
-}
+  );
+};
 
 export default Navbar;
