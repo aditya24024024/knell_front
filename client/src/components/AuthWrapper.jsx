@@ -53,7 +53,7 @@ function AuthWrapper({ type }) {
         if (user) {
         console.log("st")
           dispatch({ type: reducerCases.SET_USER, userInfo: user });
-          window.location.reload();
+          // window.location.reload();
         }
     } catch (err) {
       console.log(err);
