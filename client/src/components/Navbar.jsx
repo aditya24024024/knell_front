@@ -296,8 +296,8 @@ const Navbar = () => {
                   <button onClick={() => router.push("/logout")}>Logout</button>
                 </>
               )} */}
-            </div>
-          )}
+            // </div>
+          // )}
         </nav>
       )}
     </>
