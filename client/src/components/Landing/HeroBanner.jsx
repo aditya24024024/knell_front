@@ -14,7 +14,7 @@ function HeroBanner() {
   }, []);
 
   return (
-    <div className="relative w-full aspect-[9/13] sm:aspect-[16/9] md:h-[680px] overflow-hidden">
+    <div className="relative h-[600px] md:h-[680px] bg-cover">
       {/* Background Images */}
       <div className="absolute inset-0 z-0">
         {[1, 2, 3, 4, 5, 6].map((num) => (
@@ -23,22 +23,22 @@ function HeroBanner() {
             alt={`hero ${num}`}
             src={`/bg-hero${num}.webp`}
             fill
-            sizes="100vw"
             priority={image === num}
+            sizes="100vw"
             className={`transition-opacity duration-1000 ${
               image === num ? "opacity-100" : "opacity-0 pointer-events-none"
-            } object-contain sm:object-cover object-top`}
+            } object-cover object-right`} // 👈 focus right side (crop left)
           />
         ))}
       </div>
 
-      {/* Overlay for better text readability */}
+      {/* Overlay for readability */}
       <div className="absolute inset-0 bg-black/40 z-0" />
 
-      {/* Text Content */}
-      <div className="relative z-10 w-full max-w-[650px] flex flex-col justify-center h-full gap-4 px-4 sm:px-6 lg:ml-20 text-white">
+      {/* Foreground Text */}
+      <div className="relative z-10 w-full lg:w-[650px] flex flex-col justify-center h-full gap-4 px-6 md:ml-10 lg:ml-20 text-white">
         <h1
-          className="text-2xl sm:text-4xl md:text-5xl leading-snug font-bold"
+          className="text-3xl sm:text-4xl md:text-5xl leading-snug font-bold"
           style={{ fontFamily: "Bobby Jones" }}
         >
           FIND THE PERFECT <i><br />PERSON FOR YOU</i>
@@ -52,7 +52,7 @@ function HeroBanner() {
               (item) => (
                 <li
                   key={item}
-                  className="py-1 px-3 border border-white rounded-full hover:bg-white hover:text-black transition-all duration-300 cursor-pointer text-xs sm:text-sm"
+                  className="text-sm py-1 px-3 border border-white rounded-full hover:bg-white hover:text-black transition-all duration-300 cursor-pointer"
                   onClick={() =>
                     router.push(`/search?category=${(item || "default").toLowerCase()}`)
                   }

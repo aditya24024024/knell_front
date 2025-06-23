@@ -306,34 +306,63 @@ const Navbar = () => {
           </div>
 
           {/* ✅ Mobile Dropdown Nav */}
-          {hamburger && (
-            <div className="absolute left-0 top-full w-full bg-white shadow-md z-50 flex flex-col p-4 gap-3 sm:hidden">
-              {!userInfo ? (
-                links.map(({ linkName, handler, type }) => (
-                  <button key={linkName} onClick={() => { handler(); closeHamburger(); }} className="text-left">
-                    {linkName}
-                  </button>
-                ))
-              ) : (
-                <>
-                  {userInfo?.email === "akshajvasudeva@gmail.com" && (
-                    <button onClick={admin} className="text-left">Admin</button>
-                  )}
-                  {isSeller && (
-                    <button onClick={() => { router.push("/seller/gigs/create"); closeHamburger(); }} className="text-left">
-                      Create Gig
-                    </button>
-                  )}
-                  <button onClick={handleOrdersNavigate} className="text-left">Orders</button>
-                  <button onClick={handleModeSwitch} className="text-left">
-                    {isSeller ? "Switch To Buyer" : "Switch To Seller"}
-                  </button>
-                  <button onClick={() => router.push("/profile")} className="text-left">Profile</button>
-                  <button onClick={() => router.push("/logout")} className="text-left">Logout</button>
-                </>
-              )}
-            </div>
-          )}
+{hamburger && (
+  <div className="absolute left-0 top-full w-full bg-white shadow-md z-50 flex flex-col p-4 gap-3 sm:hidden">
+    {!userInfo ? (
+      <>
+        {/* 🚀 Explore Link - opens Instagram */}
+        <a
+          href="https://www.instagram.com/knell.co.in/"
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={closeHamburger}
+          className="text-left"
+        >
+          Explore
+        </a>
+
+        {/* Render remaining links normally */}
+        {links
+          .filter(({ linkName }) => linkName !== "Explore")
+          .map(({ linkName, handler }) => (
+            <button
+              key={linkName}
+              onClick={() => {
+                handler();
+                closeHamburger();
+              }}
+              className="text-left"
+            >
+              {linkName}
+            </button>
+          ))}
+      </>
+    ) : (
+      <>
+        {userInfo?.email === "akshajvasudeva@gmail.com" && (
+          <button onClick={admin} className="text-left">Admin</button>
+        )}
+        {isSeller && (
+          <button
+            onClick={() => {
+              router.push("/seller/gigs/create");
+              closeHamburger();
+            }}
+            className="text-left"
+          >
+            Create Gig
+          </button>
+        )}
+        <button onClick={handleOrdersNavigate} className="text-left">Orders</button>
+        <button onClick={handleModeSwitch} className="text-left">
+          {isSeller ? "Switch To Buyer" : "Switch To Seller"}
+        </button>
+        <button onClick={() => router.push("/profile")} className="text-left">Profile</button>
+        <button onClick={() => router.push("/logout")} className="text-left">Logout</button>
+      </>
+    )}
+  </div>
+)}
         </nav>
       )}
     </>
