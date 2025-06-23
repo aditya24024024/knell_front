@@ -1,9 +1,8 @@
 // middleware.ts
 import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
 import { jwtVerify } from 'jose';
 
-export async function middleware(request: NextRequest) {
+export async function middleware(request) {
   const token = request.cookies.get('token')?.value;
   console.log("gyuvifj",request);
   console.log("hfj",request?.cookies);
@@ -22,5 +21,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/profile'], // protect these routes
+  matcher: ['/profile'],
 };
