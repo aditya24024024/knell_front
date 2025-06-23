@@ -41,7 +41,6 @@ function AuthWrapper({ type }) {
     }
       
         console.log("s")
-      if (email && password) {
         const {data : {user, jwt},} = await axios.post(type === "login" ? LOGIN_ROUTE : SIGNUP_ROUTE,
           { email, password },
           { withCredentials: true }
@@ -52,10 +51,10 @@ function AuthWrapper({ type }) {
         dispatch({ type: reducerCases.CLOSE_AUTH_MODAL });
 
         if (user) {
+        console.log("st")
           dispatch({ type: reducerCases.SET_USER, userInfo: user });
           window.location.reload();
         }
-      };
     } catch (err) {
       console.log(err);
   if (err?.response && err?.response?.data) {
