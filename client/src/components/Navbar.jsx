@@ -71,9 +71,9 @@ const Navbar = () => {
 
   const links = [
     { linkName: "Explore", handler: "https://www.instagram.com/knell.co.in/", type: "link" },
-    { linkName: "English", handler: "#", type: "link" },
-    { linkName: "Become a Seller", handler: "#", type: "link" },
-    { linkName: "Sign in", handler: handleLogin, type: "button" },
+    //{ linkName: "English", handler: "#", type: "link" },
+    //{ linkName: "Become a Seller", handler: "#", type: "link" },
+    { linkName: "Log In", handler: handleLogin, type: "button" },
     { linkName: "Join", handler: handleSignup, type: "button2" },
   ];
 
