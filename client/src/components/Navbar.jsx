@@ -115,6 +115,8 @@ const Navbar = () => {
 
   useEffect(() => {
     if (cookies.jwt && !userInfo) {
+      console.log(cookies.jwt);
+      console.log(cookies);
       const getUserInfo = async () => {
         try {
           const {
@@ -268,7 +270,7 @@ const Navbar = () => {
           </div>
 
           {/* Mobile dropdown */}
-          {hamburger && (
+{/*           {hamburger && (
             <div className="absolute top-[100%] left-0 w-full bg-white shadow-md z-50 flex flex-col p-4 gap-3 sm:hidden">
               {!userInfo ? (
                 links.map(({ linkName, handler, type }) => (
@@ -293,7 +295,7 @@ const Navbar = () => {
                   <button onClick={() => router.push("/profile")}>Profile</button>
                   <button onClick={() => router.push("/logout")}>Logout</button>
                 </>
-              )}
+              )} */}
             </div>
           )}
         </nav>
