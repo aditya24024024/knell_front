@@ -157,7 +157,7 @@ const Navbar = () => {
     } else {
       setIsLoaded(true);
     }
-  }, [cookies, userInfo, dispatch]);
+  }, [userInfo, dispatch]);
 
   useEffect(() => {
     const clickListener = (e) => {
