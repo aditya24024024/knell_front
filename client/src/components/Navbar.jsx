@@ -114,10 +114,10 @@ const Navbar = () => {
   }, [router.pathname]);
 
   useEffect(() => {
-    console.log("nav")
     if (!userInfo) {
-      console.log(cookies.jwt);
-      console.log(cookies);
+    console.log("nav")
+      // console.log(cookies.jwt);
+      // console.log(cookies);
       const getUserInfo = async () => {
         try {
           const {
