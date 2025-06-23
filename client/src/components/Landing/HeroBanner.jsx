@@ -27,7 +27,10 @@ function HeroBanner() {
             sizes="100vw"
             className={`transition-opacity duration-1000 ${
               image === num ? "opacity-100" : "opacity-0 pointer-events-none"
-            } object-cover scale-[1.05] md:scale-[1.2] object-[80%_center] md:object-center`}
+            }
+              object-cover
+              md:object-center
+              object-[80%_center] md:scale-100 scale-[1.05]`}
           />
         ))}
       </div>
