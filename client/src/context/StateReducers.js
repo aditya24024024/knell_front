@@ -8,6 +8,7 @@ export const initialState = {
   gigData: undefined,
   hasOrdered: false,
   reloadReviews: false,
+  hamburger: false,
 };
 
 const reducer = (state, action) => {
@@ -17,6 +18,17 @@ const reducer = (state, action) => {
         ...state,
         userInfo: action.userInfo,
       };
+      case reducerCases.TOGGLE_HAMBURGER:
+  return {
+    ...state,
+    hamburger: !state.hamburger,
+  };
+case reducerCases.CLOSE_HAMBURGER:
+  return {
+    ...state,
+    hamburger: false,
+  };
+
     case reducerCases.TOGGLE_LOGIN_MODAL:
       return {
         ...state,

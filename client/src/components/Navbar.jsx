@@ -11,61 +11,48 @@ import { useStateProvider } from '../context/StateContext';
 import img from './unnamed 1.svg'
 import ContextMenu from './ContextMenu';
 import AuthWrapper from './AuthWrapper';
-// import ContextMenu
+import { GiHamburgerMenu } from "react-icons/gi";
 
 const Navbar = () => {
-  const [cookies]=useCookies()
-  const router=useRouter()
-  const [isLoaded,setIsLoaded]=useState(false)
-  // const [isFixed,setisFixed]=useState(false)
-  const [navFixed,setNavFixed]=useState(false)
-  const [searchData,setSearchData]=useState("")
-  const [isContextMenuVisible, setIsContextMenuVisible] = useState(false);
-  const [{ showLoginModal, showSignupModal, isSeller, userInfo }, dispatch] =
-    useStateProvider()
+  const [cookies] = useCookies()
+  const router = useRouter()
+  const [isLoaded, setIsLoaded] = useState(false)
+  const [navFixed, setNavFixed] = useState(false)
+  const [searchData, setSearchData] = useState("")
+  const [isContextMenuVisible, setIsContextMenuVisible] = useState(false)
 
-  const handleLogin=()=>{
+  const [{ showLoginModal, showSignupModal, isSeller, userInfo, hamburger }, dispatch] = useStateProvider()
+
+  const handleLogin = () => {
     if (showSignupModal) {
-      dispatch({
-        type: reducerCases.TOGGLE_SIGNUP_MODAL,
-        showSignupModal: false,
-      });
+      dispatch({ type: reducerCases.TOGGLE_SIGNUP_MODAL, showSignupModal: false });
     }
-    dispatch({
-      type: reducerCases.TOGGLE_LOGIN_MODAL,
-      showLoginModal: true,
-    });
+    dispatch({ type: reducerCases.TOGGLE_LOGIN_MODAL, showLoginModal: true });
   }
 
-  const admin=()=>{
-    router.push("/admin");
-  }
-
-  const handler=(event)=>{
-    if(event.key=="Enter"){
-      router.push(`/search?q=${searchData}`);
-    }
-  }
-
-  const handleSignup=()=>{
+  const handleSignup = () => {
     if (showLoginModal) {
-      dispatch({
-        type: reducerCases.TOGGLE_LOGIN_MODAL,
-        showLoginModal: false,
-      });
+      dispatch({ type: reducerCases.TOGGLE_LOGIN_MODAL, showLoginModal: false });
     }
-    dispatch({
-      type: reducerCases.TOGGLE_SIGNUP_MODAL,
-      showSignupModal: true,
-    });
+    dispatch({ type: reducerCases.TOGGLE_SIGNUP_MODAL, showSignupModal: true });
   }
-  
+
+  const toggleHamburger = () => {
+    dispatch({ type: reducerCases.TOGGLE_HAMBURGER });
+  }
+
+  const closeHamburger = () => {
+    dispatch({ type: reducerCases.CLOSE_HAMBURGER });
+  }
+
   const handleOrdersNavigate = () => {
+    closeHamburger();
     if (isSeller) router.push("/seller/orders");
-    router.push("/buyer/orders");
-  };
+    else router.push("/buyer/orders");
+  }
 
   const handleModeSwitch = () => {
+    closeHamburger();
     if (isSeller) {
       dispatch({ type: reducerCases.SWITCH_MODE });
       router.push("/buyer/orders");
@@ -73,15 +60,45 @@ const Navbar = () => {
       dispatch({ type: reducerCases.SWITCH_MODE });
       router.push("/seller");
     }
-  };
+  }
+
+  const handler = (event) => {
+    if (event.key === "Enter") {
+      router.push(`/search?q=${searchData}`);
+      setSearchData("");
+    }
+  }
 
   const links = [
-    // { linkName: "Fiverr Business", handler: "#", type: "link" },
     { linkName: "Explore", handler: "https://www.instagram.com/knell.co.in/", type: "link" },
     { linkName: "English", handler: "#", type: "link" },
     { linkName: "Become a Seller", handler: "#", type: "link" },
     { linkName: "Sign in", handler: handleLogin, type: "button" },
     { linkName: "Join", handler: handleSignup, type: "button2" },
+  ];
+
+  const admin = () => {
+    closeHamburger();
+    router.push("/admin");
+  }
+
+  const ContextMenuData = [
+    {
+      name: "Profile",
+      callback: (e) => {
+        e.stopPropagation();
+        setIsContextMenuVisible(false);
+        router.push("/profile");
+      },
+    },
+    {
+      name: "Logout",
+      callback: (e) => {
+        e.stopPropagation();
+        setIsContextMenuVisible(false);
+        router.push("/logout");
+      },
+    },
   ];
 
   useEffect(() => {
@@ -97,50 +114,52 @@ const Navbar = () => {
   }, [router.pathname]);
 
   useEffect(() => {
-  if (!userInfo) {
-    const getUserInfo = async () => {
-      try {
-        const {
-          data: { user },
-        } = await axios.post(
-          GET_USER_INFO,
-          {},
-          {
-            withCredentials: true, // ✅ this sends the jwt cookie
+    if (cookies.jwt && !userInfo) {
+      const getUserInfo = async () => {
+        try {
+          const {
+            data: { user },
+          } = await axios.post(
+            GET_USER_INFO,
+            {},
+            {
+              withCredentials: true,
+              // headers: {
+              // Authorization: `Bearer ${cookies.jwt}`,
+              // },
+            }
+          );
+
+          let projectedUserInfo = { ...user };
+          if (user.image) {
+            projectedUserInfo = {
+              ...projectedUserInfo,
+              imageName: HOST + "/" + user.image,
+            };
           }
-        );
-
-        let projectedUserInfo = { ...user };
-        if (user.image) {
-          projectedUserInfo.imageName = HOST + "/" + user.image;
+          delete projectedUserInfo.image;
+          dispatch({
+            type: reducerCases.SET_USER,
+            userInfo: projectedUserInfo,
+          });
+          setIsLoaded(true);
+          if (user.isProfileSet === false) {
+            router.push("/profile");
+          }
+        } catch (err) {
+          console.log(err);
         }
+      };
 
-        dispatch({
-          type: reducerCases.SET_USER,
-          userInfo: projectedUserInfo,
-        });
-
-        setIsLoaded(true);
-
-        if (user.isProfileSet === false) {
-          router.push("/profile");
-        }
-      } catch (err) {
-        console.log("Auth check failed", err);
-        setIsLoaded(true); // Even if it fails, set the UI to load
-      }
-    };
-
-    getUserInfo();
-  } else {
-    setIsLoaded(true);
-  }
-}, [userInfo, dispatch]);
+      getUserInfo();
+    } else {
+      setIsLoaded(true);
+    }
+  }, [cookies, userInfo, dispatch]);
 
   useEffect(() => {
     const clickListener = (e) => {
       e.stopPropagation();
-
       if (isContextMenuVisible) setIsContextMenuVisible(false);
     };
     if (isContextMenuVisible) {
@@ -150,60 +169,32 @@ const Navbar = () => {
       window.removeEventListener("click", clickListener);
     };
   }, [isContextMenuVisible]);
-  const ContextMenuData = [
-    {
-      name: "Profile",
-      callback: (e) => {
-        e.stopPropagation();
 
-        setIsContextMenuVisible(false);
-        router.push("/profile");
-      },
-    },
-    {
-      name: "Logout",
-      callback: (e) => {
-        e.stopPropagation();
-
-        setIsContextMenuVisible(false);
-        router.push("/logout");
-      },
-    },
-  ];
-
-
-
-    return (
+  return (
     <>
       {showLoginModal && <AuthWrapper type="login" />}
       {showSignupModal && <AuthWrapper type="signup" />}
-          {isLoaded && (
+      {isLoaded && (
         <nav
           className={`w-full px-4 sm:px-8 md:px-16 lg:px-24 flex flex-col sm:flex-row gap-4 sm:gap-0 justify-between items-center py-4 sm:py-6 top-0 z-30 transition-all duration-300 ${
-          navFixed || userInfo
-          ? "fixed bg-white border-b border-gray-200"
-          : "absolute bg-transparent border-transparent"
+            navFixed || userInfo ? "fixed bg-white border-b border-gray-200" : "absolute bg-transparent border-transparent"
           }`}
         >
-          <div  className={`w-[50px] h-[50px] rounded-full overflow-hidden` }>
-            {/* <div> */}
-            <button onClick={()=>router.push("/")}>
-            <Image
-                    src={img}
-                    // className="absolute left-4"
-                    className={`${!navFixed ? "bg-white" : "bg-[#404145]"} rounded-full`}
-                    alt = "Knell"
-                    width={50}
-                    height={50}
-                  />
+          {/* Logo */}
+          <div className="w-[50px] h-[50px] rounded-full overflow-hidden">
+            <button onClick={() => router.push("/")}>
+              <Image
+                src={img}
+                className={`${!navFixed ? "bg-white" : "bg-[#404145]"} rounded-full`}
+                alt="Knell"
+                width={50}
+                height={50}
+              />
             </button>
-
           </div>
-          <div
-            className={`flex w-full sm:w-auto $ ${
-              navFixed || userInfo ? "opacity-100" : "opacity-0"
-            }`}
-          >
+
+          {/* Search Bar */}
+          <div className={`flex w-full sm:w-auto ${navFixed || userInfo ? "opacity-100" : "opacity-0"}`}>
             <input
               type="text"
               placeholder="What service are you looking for today?"
@@ -215,116 +206,100 @@ const Navbar = () => {
             <button
               className="bg-gray-900 py-1.5 text-white w-16 flex justify-center items-center"
               onClick={() => {
-                setSearchData("");
                 router.push(`/search?q=${searchData}`);
+                setSearchData("");
               }}
             >
-              <IoSearchOutline className="fill-white text-white h-6 w-6" />
+              <IoSearchOutline className="h-6 w-6" />
             </button>
           </div>
-          {!userInfo ? (
-            <ul className="flex flex-wrap justify-center gap-4 sm:gap-6 md:gap-10 items-center text-center">
-              {links.map(({ linkName, handler, type }) => {
-                return (
-                  <li
-                    key={linkName}
-                    className={`${
-                      navFixed ? "text-black" : "text-white"
-                    } font-medium`}
-                  >
+
+          {/* Desktop Menu */}
+          <div className="hidden sm:flex">
+            {!userInfo ? (
+              <ul className="flex gap-6 items-center">
+                {links.map(({ linkName, handler, type }) => (
+                  <li key={linkName} className={`${navFixed ? "text-black" : "text-white"} font-medium`}>
                     {type === "link" && <Link href={handler}>{linkName}</Link>}
-                    {type === "button" && (
-                      <button onClick={handler}>{linkName}</button>
-                    )}
+                    {type === "button" && <button onClick={handler}>{linkName}</button>}
                     {type === "button2" && (
                       <button
                         onClick={handler}
-                        className={`border   text-md font-semibold py-1 px-3 rounded-sm ${
-                          navFixed
-                            ? "border-[#1DBF73] text-[#1DBF73]"
-                            : "border-white text-white"
-                        } hover:bg-[#1DBF73] hover:text-white hover:border-[#1DBF73] transition-all duration-500`}
+                        className={`border text-md font-semibold py-1 px-3 rounded-sm ${
+                          navFixed ? "border-[#1DBF73] text-[#1DBF73]" : "border-white text-white"
+                        } hover:bg-[#1DBF73] hover:text-white transition-all duration-500`}
                       >
                         {linkName}
                       </button>
                     )}
                   </li>
-                );
-              })}
-            </ul>
-          ) : (
-            <ul className="flex flex-wrap justify-center gap-4 sm:gap-6 md:gap-10 items-center text-center">
-              {userInfo?.email=="akshajvasudeva@gmail.com"?
-              <li
-                className="cursor-pointer text-[#1DBF73] font-medium"
-                onClick={admin}
-              >
-                Admin
-              </li>:
-              <li></li>}
-              {isSeller && (
-                <li
-                  className="cursor-pointer text-[#1DBF73] font-medium"
-                  onClick={() => router.push("/seller/gigs/create")}
-                >
-                  Create Gig
+                ))}
+              </ul>
+            ) : (
+              <ul className="flex gap-6 items-center">
+                {userInfo?.email === "akshajvasudeva@gmail.com" && (
+                  <li className="cursor-pointer text-[#1DBF73] font-medium" onClick={admin}>Admin</li>
+                )}
+                {isSeller && <li className="cursor-pointer text-[#1DBF73]" onClick={() => router.push("/seller/gigs/create")}>Create Gig</li>}
+                <li className="cursor-pointer text-[#1DBF73]" onClick={handleOrdersNavigate}>Orders</li>
+                <li className="cursor-pointer" onClick={handleModeSwitch}>
+                  {isSeller ? "Switch To Buyer" : "Switch To Seller"}
                 </li>
-              )}
-              <li
-                className="cursor-pointer text-[#1DBF73] font-medium"
-                onClick={handleOrdersNavigate}
-              >
-                Orders
-              </li>
-
-              {isSeller ? (
-                <li
-                  className="cursor-pointer font-medium"
-                  onClick={handleModeSwitch}
-                >
-                  Switch To Buyer
-                </li>
-              ) : (
-                <li
-                  className="cursor-pointer font-medium"
-                  onClick={handleModeSwitch}
-                >
-                  Switch To Seller
-                </li>
-              )}
-              <li
-                className="cursor-pointer"
-                onClick={(e) => {
+                <li className="cursor-pointer" onClick={(e) => {
                   e.stopPropagation();
                   setIsContextMenuVisible(true);
-                }}
-                title="Profile"
-              >
-                {userInfo?.imageName ? (
-                  <Image
-                    src={userInfo.imageName}
-                    alt="Profile"
-                    width={40}
-                    height={40}
-                    className="rounded-full"
-                  />
-                ) : (
-                  <div className="bg-purple-500 h-10 w-10 flex items-center justify-center rounded-full relative">
-                    <span className="text-xl text-white">
-                      {userInfo &&
-                        userInfo?.email &&
-                        userInfo?.email.split("")[0].toUpperCase()}
-                    </span>
-                  </div>
-                )}
-              </li>
-            </ul>
+                }}>
+                  {userInfo?.imageName ? (
+                    <Image src={userInfo.imageName} alt="Profile" width={40} height={40} className="rounded-full" />
+                  ) : (
+                    <div className="bg-purple-500 h-10 w-10 flex items-center justify-center rounded-full">
+                      <span className="text-xl text-white">{userInfo?.email[0].toUpperCase()}</span>
+                    </div>
+                  )}
+                </li>
+              </ul>
+            )}
+            {isContextMenuVisible && <ContextMenu data={ContextMenuData} />}
+          </div>
+
+          {/* Hamburger for mobile */}
+          <div className="sm:hidden text-2xl text-gray-700 cursor-pointer" onClick={toggleHamburger}>
+            <GiHamburgerMenu />
+          </div>
+
+          {/* Mobile dropdown */}
+          {hamburger && (
+            <div className="absolute top-[100%] left-0 w-full bg-white shadow-md z-50 flex flex-col p-4 gap-3 sm:hidden">
+              {!userInfo ? (
+                links.map(({ linkName, handler, type }) => (
+                  <button key={linkName} onClick={() => { handler(); closeHamburger(); }}>
+                    {linkName}
+                  </button>
+                ))
+              ) : (
+                <>
+                  {userInfo?.email === "akshajvasudeva@gmail.com" && (
+                    <button onClick={admin}>Admin</button>
+                  )}
+                  {isSeller && (
+                    <button onClick={() => { router.push("/seller/gigs/create"); closeHamburger(); }}>
+                      Create Gig
+                    </button>
+                  )}
+                  <button onClick={handleOrdersNavigate}>Orders</button>
+                  <button onClick={handleModeSwitch}>
+                    {isSeller ? "Switch To Buyer" : "Switch To Seller"}
+                  </button>
+                  <button onClick={() => router.push("/profile")}>Profile</button>
+                  <button onClick={() => router.push("/logout")}>Logout</button>
+                </>
+              )}
+            </div>
           )}
-          {isContextMenuVisible && <ContextMenu data={ContextMenuData} />}
         </nav>
       )}
-
-    </>)
+    </>
+  )
 }
 
-export default Navbar
+export default Navbar;
