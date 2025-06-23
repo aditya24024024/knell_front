@@ -40,6 +40,7 @@ function AuthWrapper({ type }) {
       return;
     }
       
+        console.log("s")
       if (email && password) {
         const {data : {user, jwt},} = await axios.post(type === "login" ? LOGIN_ROUTE : SIGNUP_ROUTE,
           { email, password },
