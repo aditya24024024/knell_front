@@ -114,50 +114,88 @@ const Navbar = () => {
   }, [router.pathname]);
 
   useEffect(() => {
-    if (!userInfo) {
-    console.log("nav")
-      // console.log(cookies.jwt);
-      // console.log(cookies);
-      const getUserInfo = async () => {
-        try {
-          const {
-            data: { user },
-          } = await axios.post(
-            GET_USER_INFO,
-            {},
-            {
-              withCredentials: true,
-              // headers: {
-              // Authorization: `Bearer ${cookies.jwt}`,
-              // },
-            }
-          );
+    // if (!userInfo) {
+    // console.log("nav")
+    //   // console.log(cookies.jwt);
+    //   // console.log(cookies);
+    //   const getUserInfo = async () => {
+    //     try {
+    //       const {
+    //         data: { user },
+    //       } = await axios.post(
+    //         GET_USER_INFO,
+    //         {},
+    //         {
+    //           withCredentials: true,
+    //           // headers: {
+    //           // Authorization: `Bearer ${cookies.jwt}`,
+    //           // },
+    //         }
+    //       );
 
-          let projectedUserInfo = { ...user };
-          if (user.image) {
-            projectedUserInfo = {
-              ...projectedUserInfo,
-              imageName: HOST + "/" + user.image,
-            };
+    //       let projectedUserInfo = { ...user };
+    //       if (user.image) {
+    //         projectedUserInfo = {
+    //           ...projectedUserInfo,
+    //           imageName: HOST + "/" + user.image,
+    //         };
+    //       }
+    //       delete projectedUserInfo.image;
+    //       dispatch({
+    //         type: reducerCases.SET_USER,
+    //         userInfo: projectedUserInfo,
+    //       });
+    //       setIsLoaded(true);
+    //       if (user.isProfileSet === false) {
+    //         router.push("/profile");
+    //       }
+    //     } catch (err) {
+    //       console.log(err);
+    //     }
+    //   };
+
+    //   getUserInfo();
+    // } else {
+    //   setIsLoaded(true);
+    // }
+      if (!userInfo) {
+    const getUserInfo = async () => {
+      try {
+        const {
+          data: { user },
+        } = await axios.post(
+          GET_USER_INFO,
+          {},
+          {
+            withCredentials: true, 
           }
-          delete projectedUserInfo.image;
-          dispatch({
-            type: reducerCases.SET_USER,
-            userInfo: projectedUserInfo,
-          });
-          setIsLoaded(true);
-          if (user.isProfileSet === false) {
-            router.push("/profile");
-          }
-        } catch (err) {
-          console.log(err);
+        );
+
+        let projectedUserInfo = { ...user };
+        if (user.image) {
+          projectedUserInfo.imageName = HOST + "/" + user.image;
         }
-      };
 
-      getUserInfo();
-    } else {
-      setIsLoaded(true);
-    }
+        dispatch({
+          type: reducerCases.SET_USER,
+          userInfo: projectedUserInfo,
+        });
+
+        setIsLoaded(true);
+
+        if (user.isProfileSet === false) {
+          router.push("/profile");
+        }
+      } catch (err) {
+        console.log("Auth check failed", err);
+        setIsLoaded(true); 
+      }
+    };
+
+    getUserInfo();
+  } else {
+    setIsLoaded(true);
+  }
   }, [userInfo, dispatch]);
 
   useEffect(() => {
