@@ -3,7 +3,6 @@ import Image from 'next/image';
 import { FaStar } from 'react-icons/fa';
 import { useRouter } from 'next/router';
 import { HOST, IMAGES_URL } from '../../utils/constants';
-import { useRouter } from 'next/router';
 
 const SearchGridItem = ({ gig }) => {
   const router = useRouter();
