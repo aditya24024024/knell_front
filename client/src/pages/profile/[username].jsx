@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import Image from "next/image";
 import axios from "axios";
 import { HOST, IMAGES_URL } from "../../utils/constants";
-import SearchGridItem from "../../../components/search/SearchGridItem";
+import SearchGridItem from "../../components/search/SearchGridItem";
 // if you reuse it
 
 const PublicProfile = () => {
