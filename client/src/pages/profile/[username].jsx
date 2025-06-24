@@ -2,9 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import axios from "axios";
-import { HOST, IMAGES_URL } from "../../utils/constants";
+import { IMAGES_URL, GET_USER_PUBLIC_PROFILE } from "../../utils/constants";
 import SearchGridItem from "../../components/search/SearchGridItem";
-// if you reuse it
 
 const PublicProfile = () => {
   const router = useRouter();
@@ -18,12 +17,12 @@ const PublicProfile = () => {
 
     const fetchUserProfile = async () => {
       try {
-        const { data } = await axios.get(`${HOST}/user/${username}`);
+        const { data } = await axios.get(`${GET_USER_PUBLIC_PROFILE}/${username}`);
         setUser(data.user);
         setGigs(data.gigs);
       } catch (err) {
-        console.error(err);
-        router.push("/404"); // Optional: Redirect if user not found
+        console.error("Failed to fetch profile:", err);
+        router.push("/404");
       }
     };
 
@@ -38,7 +37,7 @@ const PublicProfile = () => {
       <div className="flex flex-col items-center gap-4 text-center mb-10">
         {user.profileImage ? (
           <Image
-            src={`${HOST}/${user.profileImage}`}
+            src={`${IMAGES_URL}/${user.profileImage}`}
             width={100}
             height={100}
             className="rounded-full object-cover"
