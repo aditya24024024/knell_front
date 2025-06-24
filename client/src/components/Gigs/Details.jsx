@@ -5,11 +5,13 @@ import React, { useEffect, useState } from 'react';
 import { FaStar } from 'react-icons/fa';
 import Reviews from './Reviews';
 import AddReview from './AddReview';
+import { useRouter } from 'next/router';
 
 const Details = () => {
   const [{ gigData, hasOrdered }] = useStateProvider();
   const [currentImage, setCurrentImage] = useState('');
   const [averageRatings, setAverageRatings] = useState('0');
+  const router = useRouter();
 
   useEffect(() => {
     if (gigData) {
@@ -32,10 +34,13 @@ const Details = () => {
       <h2 className="text-2xl font-bold text-[#404145]">{gigData.title}</h2>
 
       {/* Creator Info */}
-      <div className="flex items-center gap-3">
+      <div
+        className="flex items-center gap-3 cursor-pointer"
+        onClick={() => router.push(`/profile/${gigData.createdBy.username}`)}
+      >
         {gigData.createdBy.profileImage ? (
           <Image
-            src={HOST + '/' + gigData.createdBy.profileImage}
+            src={`${HOST}/${gigData.createdBy.profileImage}`}
             alt="profile"
             height={40}
             width={40}
@@ -49,8 +54,12 @@ const Details = () => {
           </div>
         )}
         <div className="flex flex-col">
-          <span className="font-semibold text-[#27272a]">{gigData.createdBy.fullName}</span>
-          <span className="text-sm text-[#74767e]">@{gigData.createdBy.username}</span>
+          <span className="font-semibold text-[#27272a]">
+            {gigData.createdBy.fullName}
+          </span>
+          <span className="text-sm text-[#74767e] hover:underline text-blue-600">
+            @{gigData.createdBy.username}
+          </span>
         </div>
         <div className="flex items-center gap-1 ml-auto">
           {[1, 2, 3, 4, 5].map((star) => (
@@ -76,7 +85,6 @@ const Details = () => {
             width={800}
             className="w-full h-auto rounded-lg hover:scale-105 transition-transform duration-500 object-cover"
           />
-{/*           {`${HOST}/uploads/${currentImage}`} */}
         </div>
         <div className="flex gap-3 flex-wrap">
           {gigData.images.map((img) => (
@@ -102,12 +110,15 @@ const Details = () => {
       </div>
 
       {/* About Seller */}
-      <div>
+      <div
+        className="cursor-pointer"
+        onClick={() => router.push(`/profile/${gigData.createdBy.username}`)}
+      >
         <h3 className="text-2xl font-semibold text-[#404145] my-4">About the Seller</h3>
         <div className="flex gap-4 items-center">
           {gigData.createdBy.profileImage ? (
             <Image
-              src={`${HOST.trim()}/uploads/${currentImage.trim()}`}
+              src={`${HOST}/${gigData.createdBy.profileImage}`}
               alt="profile"
               height={100}
               width={100}
@@ -125,7 +136,9 @@ const Details = () => {
               <span className="font-semibold text-lg">
                 {gigData.createdBy.fullName}
               </span>
-              <span className="text-sm text-[#74767e]">@{gigData.createdBy.username}</span>
+              <span className="text-sm text-[#74767e] hover:underline text-blue-600">
+                @{gigData.createdBy.username}
+              </span>
             </div>
             <p className="text-[#404145] mt-1">{gigData.createdBy.description}</p>
             <div className="flex items-center gap-1 mt-2">

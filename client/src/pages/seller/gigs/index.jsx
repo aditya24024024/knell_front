@@ -45,7 +45,7 @@ function GigsIndex() {
                 <th className="px-6 py-3">Name</th>
                 <th className="px-6 py-3">Category</th>
                 <th className="px-6 py-3">Price</th>
-                <th className="px-6 py-3">Delivery Time</th>
+                <th className="px-6 py-3">ETA</th>
                 <th className="px-6 py-3 text-right">Edit</th>
                 {/* <th className="px-6 py-3 text-right">Delete</th> */}
               </tr>

@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { FaStar } from 'react-icons/fa';
 import { useRouter } from 'next/router';
 import { HOST, IMAGES_URL } from '../../utils/constants';
+import { useRouter } from 'next/router';
 
 const SearchGridItem = ({ gig }) => {
   const router = useRouter();
@@ -46,9 +47,15 @@ const SearchGridItem = ({ gig }) => {
             </span>
           </div>
         )}
-        <span className="text-sm sm:text-base font-medium">
-          {gig.createdBy.username}
-        </span>
+        <span
+  onClick={(e) => {
+    e.stopPropagation(); // prevents the parent `onClick` from firing
+    router.push(`/profile/${gig.createdBy.username}`);
+  }}
+  className="text-sm sm:text-base font-medium text-blue-600 hover:underline cursor-pointer"
+>
+  {gig.createdBy.username}
+</span>
       </div>
 
       {/* Gig Title */}
