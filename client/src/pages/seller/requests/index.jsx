@@ -20,7 +20,9 @@ function Requests() {
         setLoading(true);
         const {
           data: { orders },
-        } = await axios.get(GET_SELLER_REQUEST_ORDERS_ROUTE, { withCredentials: true });
+        } = await axios.get(GET_SELLER_REQUEST_ORDERS_ROUTE, {
+          withCredentials: true,
+        });
         setOrders(orders);
       } catch (err) {
         console.error(err);
@@ -33,7 +35,9 @@ function Requests() {
 
   const decline = async (orderId) => {
     try {
-      const { data: { orders } } = await axios.get(`${DECLINE_ROUTE}?orderId=${orderId}`, {
+      const {
+        data: { orders },
+      } = await axios.get(`${DECLINE_ROUTE}?orderId=${orderId}`, {
         withCredentials: true,
       });
       setOrders(orders);
@@ -44,7 +48,9 @@ function Requests() {
 
   const accept = async (orderId) => {
     try {
-      const { data: { orders } } = await axios.put(
+      const {
+        data: { orders },
+      } = await axios.put(
         ORDER_SUCCESS_ROUTE,
         { orderId },
         { withCredentials: true }
@@ -57,7 +63,9 @@ function Requests() {
 
   const complete = async (orderId) => {
     try {
-      const { data: { orders } } = await axios.put(
+      const {
+        data: { orders },
+      } = await axios.put(
         ORDER_COMPLETE_ROUTE,
         { orderId },
         { withCredentials: true }
@@ -90,6 +98,7 @@ function Requests() {
                 <th className="px-4 py-3 whitespace-nowrap">Delivery Time</th>
                 <th className="px-4 py-3 whitespace-nowrap">Order Date</th>
                 <th className="px-4 py-3 whitespace-nowrap">Status</th>
+                <th className="px-4 py-3 whitespace-nowrap">Buyer</th>
                 <th className="px-4 py-3 whitespace-nowrap">Send Message</th>
                 <th className="px-4 py-3 whitespace-nowrap">Accept</th>
                 <th className="px-4 py-3 whitespace-nowrap">Decline</th>
@@ -109,6 +118,21 @@ function Requests() {
                   <td className="px-4 py-4">{order.gig.deliveryTime}</td>
                   <td className="px-4 py-4">{order.createdAt?.split("T")[0]}</td>
                   <td className="px-4 py-4">{order.status}</td>
+
+                  {/* ✅ New Buyer column */}
+                  <td className="px-4 py-4">
+                    {order.buyer?.username ? (
+                      <Link
+                        href={`/profile/${order.buyer.username}`}
+                        className="text-blue-600 hover:underline"
+                      >
+                        {order.buyer.username}
+                      </Link>
+                    ) : (
+                      <span className="text-gray-400 italic">N/A</span>
+                    )}
+                  </td>
+
                   <td className="px-4 py-4">
                     <Link
                       href={`/buyer/orders/messages/${order.id}`}
@@ -117,6 +141,7 @@ function Requests() {
                       Send
                     </Link>
                   </td>
+
                   <td className="px-4 py-4">
                     {order.status === "Request Accepted" ? (
                       <span className="text-green-600">Accepted</span>
@@ -129,6 +154,7 @@ function Requests() {
                       </button>
                     )}
                   </td>
+
                   <td className="px-4 py-4">
                     {order.status === "Request Accepted" ? (
                       <span className="text-gray-400">Accepted</span>
@@ -141,6 +167,7 @@ function Requests() {
                       </button>
                     )}
                   </td>
+
                   <td className="px-4 py-4">
                     {order.status === "Request Accepted" ? (
                       <button
