@@ -48,6 +48,7 @@ function Orders() {
                 <th className="px-4 py-3 whitespace-nowrap">Price</th>
                 <th className="px-4 py-3 whitespace-nowrap">Delivery Time</th>
                 <th className="px-4 py-3 whitespace-nowrap">Order Date</th>
+                <th className="px-4 py-3 whitespace-nowrap">Buyer</th>
                 <th className="px-4 py-3 whitespace-nowrap">Send Message</th>
               </tr>
             </thead>
@@ -62,9 +63,22 @@ function Orders() {
                   <td className="px-4 py-4">{order.gig.category}</td>
                   <td className="px-4 py-4">{order.price}</td>
                   <td className="px-4 py-4">{order.gig.deliveryTime}</td>
+                  <td className="px-4 py-4">{order.createdAt?.split("T")[0]}</td>
+
+                  {/* ✅ Buyer username with link */}
                   <td className="px-4 py-4">
-                    {order.createdAt?.split("T")[0]}
+                    {order.buyer?.username ? (
+                      <Link
+                        href={`/profile/${order.buyer.username}`}
+                        className="text-blue-600 hover:underline"
+                      >
+                        {order.buyer.username}
+                      </Link>
+                    ) : (
+                      <span className="text-gray-400 italic">N/A</span>
+                    )}
                   </td>
+
                   <td className="px-4 py-4">
                     <Link
                       href={`/buyer/orders/messages/${order.id}`}
