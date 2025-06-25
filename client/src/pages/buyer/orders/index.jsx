@@ -163,8 +163,8 @@ function BuyerOrders() {
             >
               <div className="flex items-center gap-4">
                 <img
-                  src={order.seller?.profileImage || "/default.jpg"}
-                  alt="Seller"
+                  src={order.buyer?.profileImage || "/default.jpg"}
+                  alt="buyer"
                   className="w-14 h-14 rounded-full object-cover"
                 />
                 <div className="flex flex-col">
@@ -173,10 +173,10 @@ function BuyerOrders() {
                     <b className="text-green-600">{order.gig?.title || "Unknown Gig"}</b>{" "}
                     from{" "}
                     <Link
-                      href={`/profile/${order.seller?.username || ""}`}
+                      href={`/profile/${order.buyer?.username || ""}`}
                       className="text-black hover:underline"
                     >
-                      {order.seller?.username || "Unknown"}
+                      {order.buyer?.username || "Unknown"}
                     </Link>
                   </p>
                   <span className="text-gray-500 text-sm">
