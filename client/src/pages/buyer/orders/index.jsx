@@ -51,7 +51,7 @@ function Orders() {
                 <th className="px-4 py-3">Order Id</th>
                 <th className="px-4 py-3">Name</th>
                 <th className="px-4 py-3">Price</th>
-                <th className="px-4 py-3">Seller</th>
+                <th className="px-4 py-3">View Gig</th>
                 <th className="px-4 py-3">Order Date</th>
                 <th className="px-4 py-3">Send Message</th>
                 <th className="px-4 py-3">Status</th>
@@ -67,15 +67,15 @@ function Orders() {
                   <td className="px-4 py-4 font-medium">{order.gig?.title}</td>
                   <td className="px-4 py-4">₹{order.price}</td>
                   <td className="px-4 py-4">
-                    {order.gig?.createdBy?.username ? (
+                    {order.gig?._id ? (
                       <Link
-                        href={`/profile/${order.gig.createdBy.username}`}
+                        href={`/gig/${order.gig._id}`}
                         className="text-blue-600 hover:underline"
                       >
-                        {order.gig.createdBy.username}
+                        View Gig
                       </Link>
                     ) : (
-                      <span className="text-gray-500">Unknown</span>
+                      <span className="text-gray-500">Unavailable</span>
                     )}
                   </td>
                   <td className="px-4 py-4">{order.createdAt?.split("T")[0]}</td>
