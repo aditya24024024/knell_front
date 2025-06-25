@@ -44,47 +44,41 @@ function Orders() {
       ) : orders.length === 0 ? (
         <p className="text-center text-gray-500 dark:text-gray-400">No orders found.</p>
       ) : (
-        <div className="flex flex-col gap-4">
-          {orders.map((order) => (
-            <div
-              key={order.id}
-              className="flex items-center justify-between bg-white border rounded-xl shadow px-4 py-4 dark:bg-gray-800 dark:border-gray-700"
-            >
-              <div className="flex items-center gap-4">
-                <img
-                  src={order.gig?.createdBy?.profileImage || "/default.jpg"}
-                  alt="Seller"
-                  className="w-14 h-14 rounded-full object-cover"
-                />
-                <div className="flex flex-col">
-                  <p className="font-semibold">
-                    Order from{" "}
+        <div className="w-full overflow-x-auto shadow-md rounded-lg border border-gray-200 dark:border-gray-700">
+          <table className="w-full min-w-[700px] text-sm text-left text-gray-700 dark:text-gray-300">
+            <thead className="text-xs uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-300">
+              <tr>
+                <th className="px-4 py-3">Order Id</th>
+                <th className="px-4 py-3">Name</th>
+                <th className="px-4 py-3">Price</th>
+                <th className="px-4 py-3">Order Date</th>
+                <th className="px-4 py-3">Send Message</th>
+                <th className="px-4 py-3">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {orders.map((order) => (
+                <tr
+                  key={order.id}
+                  className="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600 transition"
+                >
+                  <td className="px-4 py-4">{order.id}</td>
+                  <td className="px-4 py-4 font-medium">{order.gig?.title}</td>
+                  <td className="px-4 py-4">{order.price}</td>
+                  <td className="px-4 py-4">{order.createdAt?.split("T")[0]}</td>
+                  <td className="px-4 py-4">
                     <Link
-                      href={`/profile/${order.gig?.createdBy?.username || ""}`}
+                      href={`/buyer/orders/messages/${order.id}`}
                       className="text-blue-600 hover:underline"
                     >
-                      {order.gig?.createdBy?.username || "Unknown"}
+                      Send
                     </Link>
-                  </p>
-                  <span className="text-gray-500 text-sm">
-                    Gig: {order.gig?.title || "Untitled"} | ₹{order.price}
-                  </span>
-                  <span className="text-sm text-gray-600 dark:text-gray-400">
-                    Ordered on: {order.createdAt?.split("T")[0]} | Status: {order.status}
-                  </span>
-                </div>
-              </div>
-
-              <div>
-                <Link
-                  href={`/buyer/orders/messages/${order.id}`}
-                  className="px-4 py-2 text-sm bg-yellow-100 hover:bg-yellow-200 rounded-lg text-yellow-800"
-                >
-                  Message
-                </Link>
-              </div>
-            </div>
-          ))}
+                  </td>
+                  <td className="px-4 py-4">{order.status}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       )}
     </div>
