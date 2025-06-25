@@ -169,17 +169,17 @@ function BuyerOrders() {
                   className="w-14 h-14 rounded-full object-cover"
                 />
                 <div className="flex flex-col">
-                  {/* <p className="font-semibold">
+                  <p className="font-semibold">
                     You ordered{" "}
                     <b className="text-green-600">{order.gig?.title || "Unknown Gig"}</b>{" "}
-                    from{" "}
+                    {/* from{" "}
                     <Link
                       href={`/profile/${order.seller?.username || ""}`}
                       className="text-black hover:underline"
                     >
                       {order.seller?.username || "Unknown"}
-                    </Link>
-                  </p> */}
+                    </Link> */}
+                  </p>
                   <span className="text-gray-500 text-sm">
                     {timeAgo(order.createdAt)}
                   </span>
