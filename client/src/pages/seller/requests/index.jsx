@@ -9,6 +9,17 @@ import axios from "axios";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 
+const timeAgo = (date) => {
+  const seconds = Math.floor((new Date() - new Date(date)) / 1000);
+  if (seconds < 60) return `${seconds}s ago`;
+  const minutes = Math.floor(seconds / 60);
+  if (minutes < 60) return `${minutes}m ago`;
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return `${hours}h ago`;
+  const days = Math.floor(hours / 24);
+  return `${days}d ago`;
+};
+
 function Requests() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -87,103 +98,76 @@ function Requests() {
       ) : orders.length === 0 ? (
         <p className="text-center text-gray-500">No order requests found.</p>
       ) : (
-        <div className="w-full overflow-x-auto shadow-md sm:rounded-lg">
-          <table className="w-full text-sm text-left text-gray-700 dark:text-gray-300">
-            <thead className="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-300">
-              <tr>
-                <th className="px-4 py-3 whitespace-nowrap">Order Id</th>
-                <th className="px-4 py-3 whitespace-nowrap">Name</th>
-                <th className="px-4 py-3 whitespace-nowrap">Category</th>
-                <th className="px-4 py-3 whitespace-nowrap">Price</th>
-                <th className="px-4 py-3 whitespace-nowrap">Delivery Time</th>
-                <th className="px-4 py-3 whitespace-nowrap">Order Date</th>
-                <th className="px-4 py-3 whitespace-nowrap">Status</th>
-                <th className="px-4 py-3 whitespace-nowrap">Buyer</th>
-                <th className="px-4 py-3 whitespace-nowrap">Send Message</th>
-                <th className="px-4 py-3 whitespace-nowrap">Accept</th>
-                <th className="px-4 py-3 whitespace-nowrap">Decline</th>
-                <th className="px-4 py-3 whitespace-nowrap">Complete</th>
-              </tr>
-            </thead>
-            <tbody>
-              {orders.map((order) => (
-                <tr
-                  key={order.id}
-                  className="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600 transition"
-                >
-                  <td className="px-4 py-4">{order.id}</td>
-                  <td className="px-4 py-4 font-medium">{order.gig.title}</td>
-                  <td className="px-4 py-4">{order.gig.category}</td>
-                  <td className="px-4 py-4">{order.price}</td>
-                  <td className="px-4 py-4">{order.gig.deliveryTime}</td>
-                  <td className="px-4 py-4">{order.createdAt?.split("T")[0]}</td>
-                  <td className="px-4 py-4">{order.status}</td>
-
-                  {/* ✅ New Buyer column */}
-                  <td className="px-4 py-4">
-                    {order.buyer?.username ? (
-                      <Link
-                        href={`/profile/${order.buyer.username}`}
-                        className="text-blue-600 hover:underline"
-                      >
-                        {order.buyer.username}
-                      </Link>
-                    ) : (
-                      <span className="text-gray-400 italic">N/A</span>
-                    )}
-                  </td>
-
-                  <td className="px-4 py-4">
+        <div className="flex flex-col gap-4">
+          {orders.map((order) => (
+            <div
+              key={order.id}
+              className="flex items-center justify-between bg-white border rounded-xl shadow px-4 py-4"
+            >
+              <div className="flex items-center gap-4">
+                <img
+                  src={order.buyer?.profileImage || "/default.jpg"}
+                  alt="Profile"
+                  className="w-14 h-14 rounded-full object-cover"
+                />
+                <div className="flex flex-col">
+                  <p className="font-semibold">
                     <Link
-                      href={`/buyer/orders/messages/${order.id}`}
-                      className="text-blue-600 hover:underline"
+                      href={`/profile/${order.buyer?.username || ""}`}
+                      className="text-black hover:underline"
                     >
-                      Send
-                    </Link>
-                  </td>
+                      {order.buyer?.username || "Unknown"}
+                    </Link>{" "}
+                    has requested your service: <b>{order.gig.title}</b>
+                  </p>
+                  <span className="text-gray-500 text-sm">
+                    {timeAgo(order.createdAt)}
+                  </span>
+                  <span className="text-sm text-gray-600">
+                    Category: {order.gig.category} | Price: ₹{order.price} | Delivery:{" "}
+                    {order.gig.deliveryTime} days
+                  </span>
+                </div>
+              </div>
 
-                  <td className="px-4 py-4">
-                    {order.status === "Request Accepted" ? (
-                      <span className="text-green-600">Accepted</span>
-                    ) : (
-                      <button
-                        onClick={() => accept(order.id)}
-                        className="text-green-600 hover:underline"
-                      >
-                        Accept
-                      </button>
-                    )}
-                  </td>
-
-                  <td className="px-4 py-4">
-                    {order.status === "Request Accepted" ? (
-                      <span className="text-gray-400">Accepted</span>
-                    ) : (
-                      <button
-                        onClick={() => decline(order.id)}
-                        className="text-red-600 hover:underline"
-                      >
-                        Decline
-                      </button>
-                    )}
-                  </td>
-
-                  <td className="px-4 py-4">
-                    {order.status === "Request Accepted" ? (
-                      <button
-                        onClick={() => complete(order.id)}
-                        className="text-blue-600 hover:underline"
-                      >
-                        Mark Completed
-                      </button>
-                    ) : (
-                      <span className="text-gray-400">Accept first</span>
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+              <div className="flex gap-2 flex-wrap justify-end">
+                <Link
+                  href={`/buyer/orders/messages/${order.id}`}
+                  className="px-4 py-2 text-sm bg-yellow-100 hover:bg-yellow-200 rounded-lg text-yellow-800"
+                >
+                  Message
+                </Link>
+                {order.status !== "Request Accepted" ? (
+                  <>
+                    <button
+                      onClick={() => accept(order.id)}
+                      className="px-4 py-2 text-sm bg-blue-500 hover:bg-blue-600 text-white rounded-lg"
+                    >
+                      Confirm
+                    </button>
+                    <button
+                      onClick={() => decline(order.id)}
+                      className="px-4 py-2 text-sm bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-lg"
+                    >
+                      Delete
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <span className="text-green-600 font-semibold text-sm">
+                      Accepted
+                    </span>
+                    <button
+                      onClick={() => complete(order.id)}
+                      className="px-4 py-2 text-sm bg-green-500 hover:bg-green-600 text-white rounded-lg"
+                    >
+                      Complete
+                    </button>
+                  </>
+                )}
+              </div>
+            </div>
+          ))}
         </div>
       )}
     </div>
