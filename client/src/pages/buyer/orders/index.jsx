@@ -4,17 +4,6 @@ import axios from "axios";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 
-const timeAgo = (date) => {
-  const seconds = Math.floor((new Date() - new Date(date)) / 1000);
-  if (seconds < 60) return `${seconds}s ago`;
-  const minutes = Math.floor(seconds / 60);
-  if (minutes < 60) return `${minutes}m ago`;
-  const hours = Math.floor(minutes / 60);
-  if (hours < 24) return `${hours}h ago`;
-  const days = Math.floor(hours / 24);
-  return `${days}d ago`;
-};
-
 function Orders() {
   const [{ userInfo }] = useStateProvider();
   const [orders, setOrders] = useState([]);
@@ -45,7 +34,7 @@ function Orders() {
   }, [userInfo, hasFetched]);
 
   return (
-    <div className="min-h-screen pt-28 px-4 sm:px-6 md:px-12 lg:px-24 bg-white dark:bg-gray-900">
+    <div className="min-h-screen pt-28 px-4 sm:px-6 md:px-10 lg:px-20 bg-white dark:bg-gray-900">
       <h3 className="mb-6 text-2xl font-semibold text-center text-gray-800 dark:text-white">
         All Your Orders
       </h3>
@@ -68,31 +57,20 @@ function Orders() {
                   className="w-14 h-14 rounded-full object-cover"
                 />
                 <div className="flex flex-col">
-                  <p className="font-semibold text-gray-800 dark:text-white">
-                    Ordered from{" "}
-                    {order.gig?.createdBy?.username ? (
-  <Link
-    href={
-      userInfo?.username === order.gig.createdBy.username
-        ? "/profile"
-        : `/profile/${order.gig.createdBy.username}`
-    }
-    className="text-blue-600 hover:underline"
-  >
-    {order.gig.createdBy.username}
-  </Link>
-) : (
-  <span className="text-gray-500">Unknown</span>
-)}
+                  <p className="font-semibold">
+                    Order from{" "}
+                    <Link
+                      href={`/profile/${order.gig?.createdBy?.username || ""}`}
+                      className="text-blue-600 hover:underline"
+                    >
+                      {order.gig?.createdBy?.username || "Unknown"}
+                    </Link>
                   </p>
-                  <span className="text-sm text-gray-600 dark:text-gray-300">
-                    Gig: {order.gig?.title || "Untitled"} • ₹{order.price}
+                  <span className="text-gray-500 text-sm">
+                    Gig: {order.gig?.title || "Untitled"} | ₹{order.price}
                   </span>
-                  <span className="text-sm text-gray-500 dark:text-gray-400">
-                    {timeAgo(order.createdAt)} • Status:{" "}
-                    <span className="font-medium text-gray-700 dark:text-gray-200">
-                      {order.status}
-                    </span>
+                  <span className="text-sm text-gray-600 dark:text-gray-400">
+                    Ordered on: {order.createdAt?.split("T")[0]} | Status: {order.status}
                   </span>
                 </div>
               </div>
