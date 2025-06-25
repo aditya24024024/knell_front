@@ -45,12 +45,13 @@ function Orders() {
         <p className="text-center text-gray-500 dark:text-gray-400">No orders found.</p>
       ) : (
         <div className="w-full overflow-x-auto shadow-md rounded-lg border border-gray-200 dark:border-gray-700">
-          <table className="w-full min-w-[700px] text-sm text-left text-gray-700 dark:text-gray-300">
+          <table className="w-full min-w-[800px] text-sm text-left text-gray-700 dark:text-gray-300">
             <thead className="text-xs uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-300">
               <tr>
                 <th className="px-4 py-3">Order Id</th>
                 <th className="px-4 py-3">Name</th>
                 <th className="px-4 py-3">Price</th>
+                <th className="px-4 py-3">Seller</th>
                 <th className="px-4 py-3">Order Date</th>
                 <th className="px-4 py-3">Send Message</th>
                 <th className="px-4 py-3">Status</th>
@@ -64,7 +65,19 @@ function Orders() {
                 >
                   <td className="px-4 py-4">{order.id}</td>
                   <td className="px-4 py-4 font-medium">{order.gig?.title}</td>
-                  <td className="px-4 py-4">{order.price}</td>
+                  <td className="px-4 py-4">₹{order.price}</td>
+                  <td className="px-4 py-4">
+                    {order.gig?.createdBy?.username ? (
+                      <Link
+                        href={`/profile/${order.gig.createdBy.username}`}
+                        className="text-blue-600 hover:underline"
+                      >
+                        {order.gig.createdBy.username}
+                      </Link>
+                    ) : (
+                      <span className="text-gray-500">Unknown</span>
+                    )}
+                  </td>
                   <td className="px-4 py-4">{order.createdAt?.split("T")[0]}</td>
                   <td className="px-4 py-4">
                     <Link
