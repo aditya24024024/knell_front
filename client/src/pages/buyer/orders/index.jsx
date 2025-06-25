@@ -60,28 +60,29 @@ function Orders() {
             >
               <div className="flex items-center gap-4">
                 <img
-                  src={order.seller?.profileImage || "/default.jpg"}
-                  alt="Seller"
-                  className="w-14 h-14 rounded-full object-cover"
-                />
-                <div className="flex flex-col">
-                  <p className="font-semibold">
-                    Order from{" "}
-                    <Link
-                      href={`/profile/${order.seller?.username || ""}`}
-                      className="text-black hover:underline"
-                    >
-                      {order.seller?.username || "Unknown"}
-                    </Link>
-                  </p>
-                  <span className="text-gray-500 text-sm">
-                    {timeAgo(order.createdAt)}
-                  </span>
-                  <span className="text-sm text-gray-600">
-                    Gig: <b>{order.gig?.title}</b> | ₹{order.price} | Status:{" "}
-                    <b className="capitalize">{order.status}</b>
-                  </span>
-                </div>
+  src={order.gig?.createdBy?.profileImage || "/default.jpg"}
+  alt="Seller"
+  className="w-14 h-14 rounded-full object-cover"
+/>
+<div className="flex flex-col">
+  <p className="font-semibold">
+    Order from{" "}
+    <Link
+      href={`/profile/${order.gig?.createdBy?.username || ""}`}
+      className="text-black hover:underline"
+    >
+      {order.gig?.createdBy?.username || "Unknown"}
+    </Link>
+  </p>
+  <span className="text-gray-500 text-sm">
+    {timeAgo(order.createdAt)}
+  </span>
+  <span className="text-sm text-gray-600">
+    Gig: <b>{order.gig?.title}</b> | ₹{order.price} | Status:{" "}
+    <b className="capitalize">{order.status}</b>
+  </span>
+</div>
+
               </div>
 
               <div className="flex gap-2 flex-wrap justify-end">
