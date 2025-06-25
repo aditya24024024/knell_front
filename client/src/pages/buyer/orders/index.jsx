@@ -71,11 +71,15 @@ function Orders() {
                   <p className="font-semibold text-gray-800 dark:text-white">
                     Ordered from{" "}
                     <Link
-                      href={`/profile/${order.gig?.createdBy?.username || ""}`}
-                      className="text-blue-600 hover:underline"
-                    >
-                      {order.gig?.createdBy?.username || "Unknown"}
-                    </Link>
+  href={
+    userInfo?.username === order.gig?.createdBy?.username
+      ? "/profile" // user's own editable profile
+      : `/profile/${order.gig?.createdBy?.username}` // other's public profile
+  }
+  className="text-blue-600 hover:underline"
+>
+  {order.gig?.createdBy?.username || "Unknown"}
+</Link>
                   </p>
                   <span className="text-sm text-gray-600 dark:text-gray-300">
                     Gig: {order.gig?.title || "Untitled"} • ₹{order.price}
