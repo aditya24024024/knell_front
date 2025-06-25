@@ -67,17 +67,17 @@ function Orders() {
                   <td className="px-4 py-4 font-medium">{order.gig?.title}</td>
                   <td className="px-4 py-4">₹{order.price}</td>
                   <td className="px-4 py-4">
-                    {order.gig?._id ? (
-                      <Link
-                        href={`/gig/${order.gig._id}`}
-                        className="text-blue-600 hover:underline"
-                      >
-                        View Gig
-                      </Link>
-                    ) : (
-                      <span className="text-gray-500">Unavailable</span>
-                    )}
-                  </td>
+  {order.gig?._id ? (
+    <Link
+      href={`/gig/${order.gig._id}`}
+      className="text-blue-600 hover:underline"
+    >
+      View Gig
+    </Link>
+  ) : (
+    <span className="text-gray-500">Unavailable</span>
+  )}
+</td>
                   <td className="px-4 py-4">{order.createdAt?.split("T")[0]}</td>
                   <td className="px-4 py-4">
                     <Link
