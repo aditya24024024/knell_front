@@ -101,6 +101,7 @@
 // export default Orders;
 import { useStateProvider } from "../../../context/StateContext";
 import { GET_BUYER_ORDERS_ROUTE } from "../../../utils/constants";
+import { GET_SELLER_ORDERS_ROUTE } from "../../../utils/constants";
 import axios from "axios";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
@@ -163,22 +164,22 @@ function BuyerOrders() {
             >
               <div className="flex items-center gap-4">
                 <img
-                  src={order.buyer?.profileImage || "/default.jpg"}
-                  alt="buyer"
+                  src={order.seller?.profileImage || "/default.jpg"}
+                  alt="seller"
                   className="w-14 h-14 rounded-full object-cover"
                 />
                 <div className="flex flex-col">
-                  <p className="font-semibold">
+                  {/* <p className="font-semibold">
                     You ordered{" "}
                     <b className="text-green-600">{order.gig?.title || "Unknown Gig"}</b>{" "}
                     from{" "}
                     <Link
-                      href={`/profile/${order.buyer?.username || ""}`}
+                      href={`/profile/${order.seller?.username || ""}`}
                       className="text-black hover:underline"
                     >
-                      {order.buyer?.username || "Unknown"}
+                      {order.seller?.username || "Unknown"}
                     </Link>
-                  </p>
+                  </p> */}
                   <span className="text-gray-500 text-sm">
                     {timeAgo(order.createdAt)}
                   </span>
