@@ -78,7 +78,7 @@ const Profile = () => {
         });
 
         toast.success("Profile set up successfully");
-        router.push(`/profile/${data.username}`);
+        router.push("/profile");
       }
     } catch (err) {
       console.error(err);
