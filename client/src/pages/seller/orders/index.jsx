@@ -4,6 +4,17 @@ import axios from "axios";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 
+const timeAgo = (date) => {
+  const seconds = Math.floor((new Date() - new Date(date)) / 1000);
+  if (seconds < 60) return `${seconds}s ago`;
+  const minutes = Math.floor(seconds / 60);
+  if (minutes < 60) return `${minutes}m ago`;
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return `${hours}h ago`;
+  const days = Math.floor(hours / 24);
+  return `${days}d ago`;
+};
+
 function Orders() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -38,59 +49,50 @@ function Orders() {
       ) : orders.length === 0 ? (
         <p className="text-center text-gray-500">No orders found.</p>
       ) : (
-        <div className="w-full overflow-x-auto shadow-md sm:rounded-lg">
-          <table className="w-full text-sm text-left text-gray-600 dark:text-gray-300">
-            <thead className="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-300">
-              <tr>
-                <th className="px-4 py-3 whitespace-nowrap">Order Id</th>
-                <th className="px-4 py-3 whitespace-nowrap">Name</th>
-                <th className="px-4 py-3 whitespace-nowrap">Category</th>
-                <th className="px-4 py-3 whitespace-nowrap">Price</th>
-                <th className="px-4 py-3 whitespace-nowrap">Delivery Time</th>
-                <th className="px-4 py-3 whitespace-nowrap">Order Date</th>
-                <th className="px-4 py-3 whitespace-nowrap">Buyer</th>
-                <th className="px-4 py-3 whitespace-nowrap">Send Message</th>
-              </tr>
-            </thead>
-            <tbody>
-              {orders.map((order) => (
-                <tr
-                  key={order.id}
-                  className="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600 transition"
+        <div className="flex flex-col gap-4">
+          {orders.map((order) => (
+            <div
+              key={order.id}
+              className="flex items-center justify-between bg-white border rounded-xl shadow px-4 py-4"
+            >
+              <div className="flex items-center gap-4">
+                <img
+                  src={order.buyer?.profileImage || "/default.jpg"}
+                  alt="Profile"
+                  className="w-14 h-14 rounded-full object-cover"
+                />
+                <div className="flex flex-col">
+                  <p className="font-semibold">
+                    Order for <b>{order.gig.title}</b>
+                  </p>
+                  <span className="text-sm text-gray-600">
+                    ₹{order.price} • {order.gig.category} • Delivery:{" "}
+                    {order.gig.deliveryTime} day(s)
+                  </span>
+                  <span className="text-gray-500 text-sm">
+                    Ordered {timeAgo(order.createdAt)}
+                  </span>
+                </div>
+              </div>
+
+              <div className="flex gap-2 flex-wrap justify-end">
+                {order.buyer?.username && (
+                  <Link
+                    href={`/profile/${order.buyer.username}`}
+                    className="px-4 py-2 text-sm bg-blue-100 hover:bg-blue-200 text-blue-800 rounded-lg"
+                  >
+                    {order.buyer.username}
+                  </Link>
+                )}
+                <Link
+                  href={`/buyer/orders/messages/${order.id}`}
+                  className="px-4 py-2 text-sm bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-lg"
                 >
-                  <td className="px-4 py-4">{order.id}</td>
-                  <td className="px-4 py-4 font-medium">{order.gig.title}</td>
-                  <td className="px-4 py-4">{order.gig.category}</td>
-                  <td className="px-4 py-4">{order.price}</td>
-                  <td className="px-4 py-4">{order.gig.deliveryTime}</td>
-                  <td className="px-4 py-4">{order.createdAt?.split("T")[0]}</td>
-
-                  {/* ✅ Buyer username with link */}
-                  <td className="px-4 py-4">
-                    {order.buyer?.username ? (
-                      <Link
-                        href={`/profile/${order.buyer.username}`}
-                        className="text-blue-600 hover:underline"
-                      >
-                        {order.buyer.username}
-                      </Link>
-                    ) : (
-                      <span className="text-gray-400 italic">N/A</span>
-                    )}
-                  </td>
-
-                  <td className="px-4 py-4">
-                    <Link
-                      href={`/buyer/orders/messages/${order.id}`}
-                      className="text-blue-600 hover:underline"
-                    >
-                      Send
-                    </Link>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                  Message
+                </Link>
+              </div>
+            </div>
+          ))}
         </div>
       )}
     </div>
