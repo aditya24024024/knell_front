@@ -67,9 +67,9 @@ function Orders() {
                   <td className="px-4 py-4 font-medium">{order.gig?.title}</td>
                   <td className="px-4 py-4">₹{order.price}</td>
                   <td className="px-4 py-4">
-  {order.gig?._id ? (
+  {order.gig?.id ? (
     <Link
-      href={`/gig/${order.gig._id}`}
+      href={`/gig/${order.gig.id}`}
       className="text-blue-600 hover:underline"
     >
       View Gig
