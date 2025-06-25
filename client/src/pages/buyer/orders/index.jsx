@@ -176,7 +176,7 @@ function BuyerOrders() {
                       href={`/profile/${order.seller?.username || ""}`}
                       className="text-black hover:underline"
                     >
-                      @{order.seller?.username || "Unknown"}
+                      {order.seller?.username || "Unknown"}
                     </Link>
                   </p>
                   <span className="text-gray-500 text-sm">
