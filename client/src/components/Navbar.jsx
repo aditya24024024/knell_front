@@ -14,6 +14,7 @@ import AuthWrapper from './AuthWrapper';
 import { GiHamburgerMenu } from "react-icons/gi";
 import OtpWrapper from './OtpWrapper'
 
+
 const Navbar = () => {
   const [cookies] = useCookies()
   const router = useRouter()
@@ -22,7 +23,7 @@ const Navbar = () => {
   const [searchData, setSearchData] = useState("")
   const [isContextMenuVisible, setIsContextMenuVisible] = useState(false)
 
-  const [{ showLoginModal, showSignupModal, isSeller, userInfo, hamburger }, dispatch] = useStateProvider()
+  const [{ showLoginModal, showSignupModal, isSeller, userInfo, hamburger,otpmodal }, dispatch] = useStateProvider()
 
   const handleLogin = () => {
     if (showSignupModal) {

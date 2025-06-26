@@ -9,9 +9,9 @@ import { useCookies } from "react-cookie";
 import { reducerCases } from "../context/constants";
 
 function AuthWrapper({ type }) {
-  const [cookies, setCookies] = useCookies();
+  // const [cookies, setCookies] = useCookies();
 
-  const [{ showLoginModal, showSignupModal }, dispatch] = useStateProvider();
+  const [{}, dispatch] = useStateProvider();
 
   const [values, setValues] = useState({ email: "", password: "" });
 
