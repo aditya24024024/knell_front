@@ -12,6 +12,7 @@ import img from './unnamed 1.svg'
 import ContextMenu from './ContextMenu';
 import AuthWrapper from './AuthWrapper';
 import { GiHamburgerMenu } from "react-icons/gi";
+import OtpWrapper from './OtpWrapper'
 
 const Navbar = () => {
   const [cookies] = useCookies()
@@ -215,6 +216,7 @@ const Navbar = () => {
   return (
     <>
       {showLoginModal && <AuthWrapper type="login" />}
+      {otpmodal && <OtpWrapper/>}
       {showSignupModal && <AuthWrapper type="signup" />}
       {isLoaded && (
         <nav className={`w-full px-4 sm:px-8 md:px-16 lg:px-24 py-4 sm:py-6 top-0 z-30 transition-all duration-300 

@@ -9,6 +9,8 @@ export const initialState = {
   hasOrdered: false,
   reloadReviews: false,
   hamburger: false,
+  unverifiedmail: undefined,
+  otpmodal: false,
 };
 
 const reducer = (state, action) => {
@@ -34,6 +36,18 @@ case reducerCases.CLOSE_HAMBURGER:
         ...state,
         showLoginModal: action.showLoginModal,
       };
+
+      case reducerCases.SET_UNVERIFIED_USER:
+      return {
+        ...state,
+        unverifiedmail: action.unverifiedmail,
+      };
+    case reducerCases.OTP_MODAL:
+      return {
+        ...state,
+        otpmodal: action.otpmodal,
+      };
+      
     case reducerCases.TOGGLE_SIGNUP_MODAL:
       return {
         ...state,

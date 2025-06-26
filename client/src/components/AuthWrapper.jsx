@@ -1,5 +1,5 @@
 import axios from "axios";
-import { LOGIN_ROUTE, SIGNUP_ROUTE } from "../utils/constants";
+import { LOGIN_ROUTE, OTP_SEND } from "../utils/constants";
 import React, { useEffect, useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { MdFacebook } from "react-icons/md";
@@ -31,37 +31,48 @@ function AuthWrapper({ type }) {
       const { email, password } = values;
 
       if (!email || !password) {
-      setErrorMessage("Email and password are required.");
-      return;
-    }
+        setErrorMessage("Email and password are required.");
+        return;
+      }
 
-    if (!isValidGmail(email)) {
-      setErrorMessage("Please enter a valid Gmail address.");
-      return;
-    }
-      
-        console.log("s")
-        const {data : {user, jwt},} = await axios.post(type === "login" ? LOGIN_ROUTE : SIGNUP_ROUTE,
-          { email, password },
-          { withCredentials: true }
-        );
-        console.log("sdsgyufuibkdsadfrgtgfd")
-        console.log(jwt);
-        // setCookies("jwt", { jwt});
-        dispatch({ type: reducerCases.CLOSE_AUTH_MODAL });
+      if (!isValidGmail(email)) {
+        setErrorMessage("Please enter a valid Gmail address.");
+        return;
+      }
 
-        if (user) {
-        console.log("st")
-          dispatch({ type: reducerCases.SET_USER, userInfo: user });
-          // window.location.reload();
+      if (email && password) {
+        if (type === "login") {
+          const { data: { user, jwt }, } = await axios.post(LOGIN_ROUTE,
+            { email, password },
+            { withCredentials: true }
+          );
+          // console.log(user);
+          // setCookies("jwt", { jwt});
+
+          dispatch({ type: reducerCases.CLOSE_AUTH_MODAL });
+          if (user) {
+            dispatch({ type: reducerCases.SET_USER, userInfo: user });
+          }
         }
+        else {
+          const { data: { user }, } = await axios.post(OTP_SEND,
+            { email, password },
+            { withCredentials: true }
+          );
+          dispatch({ type: reducerCases.CLOSE_AUTH_MODAL });
+          if (user) {
+            dispatch({ type: reducerCases.SET_UNVERIFIED_USER, unverifiedmail: user });
+          }
+          dispatch({ type: reducerCases.OTP_MODAL, otpmodal: true });
+        }
+      };
     } catch (err) {
-      console.log(err);
-  if (err?.response && err?.response?.data) {
-    setErrorMessage(err.response.data);
-  } else {
-    setErrorMessage("Something went wrong. Please try again.");
-  }
+      // console.log(err);
+      if (err?.response && err?.response?.data) {
+        setErrorMessage(err.response.data);
+      } else {
+        setErrorMessage("Something went wrong. Please try again.");
+      }
     }
   };
 
@@ -76,6 +87,14 @@ function AuthWrapper({ type }) {
           className="fixed z-[101] w-[90vw] max-w-sm bg-white flex flex-col justify-center items-center rounded-md shadow-lg"
           id="auth-modal"
         >
+          <button
+          className="absolute top-3 right-3 text-xl text-slate-500 hover:text-slate-700"
+          onClick={() => {
+            dispatch({type: reducerCases.CLOSE_AUTH_MODAL});
+          }}
+        >
+          &times;
+        </button>
           <div className="flex flex-col justify-center items-center p-8 gap-7">
             <h3 className="text-2xl font-semibold text-slate-700">
               {type === "login" ? "Login " : "Sign in "}

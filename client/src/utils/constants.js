@@ -8,6 +8,7 @@ export const ORDERS_ROUTES = `${API_URL}/orders`;
 export const MESSAGES_ROUTES = `${API_URL}/messages`;
 export const DASHBOARD_DATA_ROUTES = `${API_URL}/dashboard`;
 
+export const MAIL_ROUTES = `${API_URL}/otp`;
 export const SIGNUP_ROUTE = `${AUTH_ROUTES}/signup`;
 export const LOGIN_ROUTE = `${AUTH_ROUTES}/login`;
 export const LOGOUT_ROUTE = `${AUTH_ROUTES}/logout`;
@@ -43,3 +44,6 @@ export const GET_SELLER_DASHBOARD_DATA = `${DASHBOARD_DATA_ROUTES}/seller`;
 
 export const ADMIN_ROUTE=`${GIG_ROUTES}/get-all-gig-data`;
 export const DELETE_GIG=`${GIG_ROUTES}/delete-gig`;
+
+export const OTP_VERIFICATION = `${MAIL_ROUTES}/verify-otp`;
+export const OTP_SEND = `${MAIL_ROUTES}/send-otp`;
