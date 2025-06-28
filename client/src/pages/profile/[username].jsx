@@ -13,23 +13,43 @@ const PublicProfile = () => {
   const [gigs, setGigs] = useState([]);
 
   useEffect(() => {
-    if (!username) return;
+     if (!username) return;
+
+    const controller = new AbortController();
+    const timeout = setTimeout(() => {
+      controller.abort(); // cancels the request
+      setTimeoutReached(true);
+      setLoading(false);
+    }, 10000); // 10 seconds
 
     const fetchUserProfile = async () => {
       try {
-        const { data } = await axios.get(`${GET_USER_PUBLIC_PROFILE}/${username}`);
+        const { data } = await axios.get(`${GET_USER_PUBLIC_PROFILE}/${username}`,{ signal: controller.signal });
+        clearTimeout(timeout);
         setUser(data.user);
         setGigs(data.gigs);
+        setLoading(false);
       } catch (err) {
-        console.error("Failed to fetch profile:", err);
-        router.push("/404");
+        clearTimeout(timeout);
+       if (err.name === 'CanceledError' || err.code === 'ERR_CANCELED') {
+          console.warn("Request cancelled due to timeout");
+        } else {
+          console.error("Failed to fetch profile:", err);
+          router.push("/404");
+        }
+        setLoading(false);
       }
     };
 
     fetchUserProfile();
+    return () => {
+      clearTimeout(timeout);
+      controller.abort();
+    };
   }, [username]);
 
-  if (!user) return <p className="p-10 text-center">Loading profile...</p>;
+  if (loading) return <div>Loading profile...</div>;
+  if (timeoutReached) return <div>Request timed out. Please try again later.</div>;
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
