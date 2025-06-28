@@ -11,6 +11,8 @@ const PublicProfile = () => {
 
   const [user, setUser] = useState(null);
   const [gigs, setGigs] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [timeoutReached, setTimeoutReached] = useState(false);
 
   useEffect(() => {
      if (!username) return;
