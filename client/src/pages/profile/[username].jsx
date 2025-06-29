@@ -11,54 +11,43 @@ const PublicProfile = () => {
 
   const [user, setUser] = useState(null);
   const [gigs, setGigs] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [timeoutReached, setTimeoutReached] = useState(false);
 
   useEffect(() => {
-     if (!username) return;
-
-    const controller = new AbortController();
-    const timeout = setTimeout(() => {
-      controller.abort(); // cancels the request
-      setTimeoutReached(true);
-      setLoading(false);
-    }, 10000); // 10 seconds
+    if (!username) return;
 
     const fetchUserProfile = async () => {
       try {
-        const { data } = await axios.get(`${GET_USER_PUBLIC_PROFILE}/${username}`,{ signal: controller.signal });
-        clearTimeout(timeout);
+        const { data } = await axios.get(`${GET_USER_PUBLIC_PROFILE}/${username}`);
         setUser(data.user);
         setGigs(data.gigs);
-        setLoading(false);
       } catch (err) {
-        clearTimeout(timeout);
-       if (err.name === 'CanceledError' || err.code === 'ERR_CANCELED') {
-          console.warn("Request cancelled due to timeout");
-        } else {
-          console.error("Failed to fetch profile:", err);
-          router.push("/404");
-        }
-        setLoading(false);
+        console.error("Failed to fetch profile:", err);
+        router.push("/404");
       }
     };
 
     fetchUserProfile();
-    return () => {
-      clearTimeout(timeout);
-      controller.abort();
-    };
   }, [username]);
 
-  if (loading) return <p className="p-10 text-center">Loading profile...</p>;;
-  if (timeoutReached) return <p className="p-10 text-center">Request timed out. Please try again later.</p>;
+  if (!user) return <p className="p-10 text-center">Loading profile...</p>;
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
       {/* User Info */}
       <div className="flex flex-col items-center gap-4 text-center mb-10">
-        if (!user) return <p className="text-center p-8">User not found.</p>;
-
+        {user.profileImage ? (
+          <Image
+            src={`${IMAGES_URL}/${user.profileImage}`}
+            width={100}
+            height={100}
+            className="rounded-full object-cover"
+            alt="Profile"
+          />
+        ) : (
+          <div className="bg-purple-500 w-[100px] h-[100px] rounded-full flex items-center justify-center text-white text-4xl font-bold">
+            {user.email[0]?.toUpperCase()}
+          </div>
+        )}
 
         <div>
           <h2 className="text-2xl font-bold">{user.fullName}</h2>
