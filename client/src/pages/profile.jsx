@@ -1,6 +1,6 @@
-import { reducerCases } from '../../context/constants';
-import { useStateProvider } from '../../context/StateContext';
-import { HOST, SET_USER_IMAGE, SET_USER_INFO } from '../../utils/constants';
+import { reducerCases } from '../context/constants';
+import { useStateProvider } from '../context/StateContext';
+import { HOST, SET_USER_IMAGE, SET_USER_INFO } from '../utils/constants';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
