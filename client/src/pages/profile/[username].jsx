@@ -51,7 +51,7 @@ const PublicProfile = () => {
   }, [username]);
 
   if (loading) return <p className="p-10 text-center">Loading profile...</p>;;
-  if (timeoutReached) return <<p className="p-10 text-center">>Request timed out. Please try again later.</p>;
+  if (timeoutReached) return <p className="p-10 text-center">Request timed out. Please try again later.</p>;
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
