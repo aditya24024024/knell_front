@@ -57,19 +57,8 @@ const PublicProfile = () => {
     <div className="max-w-6xl mx-auto px-4 py-8">
       {/* User Info */}
       <div className="flex flex-col items-center gap-4 text-center mb-10">
-        {user.profileImage ? (
-          <Image
-            src={`${IMAGES_URL}/${user.profileImage}`}
-            width={100}
-            height={100}
-            className="rounded-full object-cover"
-            alt="Profile"
-          />
-        ) : (
-          <div className="bg-purple-500 w-[100px] h-[100px] rounded-full flex items-center justify-center text-white text-4xl font-bold">
-            {user.email[0]?.toUpperCase()}
-          </div>
-        )}
+        if (!user) return <p className="text-center p-8">User not found.</p>;
+
 
         <div>
           <h2 className="text-2xl font-bold">{user.fullName}</h2>
