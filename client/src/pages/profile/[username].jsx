@@ -22,7 +22,7 @@ const PublicProfile = () => {
         setGigs(data.gigs);
       } catch (err) {
         console.error("Failed to fetch profile:", err);
-        router.push("/404");
+        // router.push("/404");
       }
     };
 

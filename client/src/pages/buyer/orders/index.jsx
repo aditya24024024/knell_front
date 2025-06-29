@@ -172,7 +172,7 @@ function BuyerOrders() {
                   <p className="font-semibold">
                     You ordered{" "}
                     <b className="text-green-600">{order.gig?.title || "Unknown Gig"}</b>{" "}
-                    {/* from{" "}
+{/*                     from{" "}
                     <Link
                       href={`/profile/${order.seller?.username || ""}`}
                       className="text-black hover:underline"
