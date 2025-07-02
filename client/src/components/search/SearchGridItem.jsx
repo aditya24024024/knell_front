@@ -22,6 +22,7 @@ const SearchGridItem = ({ gig }) => {
     //     </div>
     //   ):
     // (
+          // onLoadingComplete={() => setIsLoading(false)}
       <div
       className="w-full sm:max-w-[300px] flex flex-col gap-2 p-2 cursor-pointer hover:shadow-md transition-all rounded-lg"
       onClick={() => router.push(`/gig/${gig.id}`)}
@@ -33,7 +34,6 @@ const SearchGridItem = ({ gig }) => {
           alt="Gig Image"
           fill
           className="object-cover"
-{/*           onLoadingComplete={() => setIsLoading(false)} */}
         />
       </div>
 
