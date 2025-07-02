@@ -1,10 +1,11 @@
-import React from 'react';
+import React,{ useState } from 'react';
 import Image from 'next/image';
 import { FaStar } from 'react-icons/fa';
 import { useRouter } from 'next/router';
 import { HOST, IMAGES_URL } from '../../utils/constants';
 
 const SearchGridItem = ({ gig }) => {
+  const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
   const calculateRatings = () => {
@@ -15,7 +16,12 @@ const SearchGridItem = ({ gig }) => {
   };
 
   return (
-    <div
+    isLoading?
+        (<div className="absolute inset-0 z-10 flex items-center justify-center bg-gray-200 animate-pulse">
+          <span className="text-sm text-gray-500">Loading...</span>
+        </div>
+      ):
+    (<div
       className="w-full sm:max-w-[300px] flex flex-col gap-2 p-2 cursor-pointer hover:shadow-md transition-all rounded-lg"
       onClick={() => router.push(`/gig/${gig.id}`)}
     >
@@ -26,6 +32,7 @@ const SearchGridItem = ({ gig }) => {
           alt="Gig Image"
           fill
           className="object-cover"
+          onLoadingComplete={() => setIsLoading(false)}
         />
       </div>
 
@@ -77,7 +84,7 @@ const SearchGridItem = ({ gig }) => {
           From ₹{gig.price}
         </strong>
       </div>
-    </div>
+    </div>)
   );
 };
 
