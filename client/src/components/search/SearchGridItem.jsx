@@ -2,7 +2,7 @@ import React,{ useState } from 'react';
 import Image from 'next/image';
 import { FaStar } from 'react-icons/fa';
 import { useRouter } from 'next/router';
-import { HOST, IMAGES_URL } from '../../utils/constants';
+import { HOST } from '../../utils/constants';
 
 const SearchGridItem = ({ gig }) => {
   // const [isLoading, setIsLoading] = useState(true);
