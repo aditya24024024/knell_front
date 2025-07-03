@@ -30,7 +30,7 @@ const SearchGridItem = ({ gig }) => {
       {/* Gig Image */}
       <div className="relative w-full h-40 sm:h-48 md:h-52 rounded-xl overflow-hidden">
         <Image
-          src={`${IMAGES_URL}/${gig.images[0]}`}
+          src={`${gig.images[0]}`}
           alt="Gig Image"
           fill
           className="object-cover"
