@@ -79,7 +79,7 @@ const Details = () => {
       <div className="flex flex-col gap-4">
         <div className="w-full max-w-[800px] overflow-hidden rounded">
           <Image
-            src={`${HOST}/uploads/${currentImage}`}
+            src={`${currentImage}`}
             alt="Gig"
             height={800}
             width={800}
@@ -90,7 +90,7 @@ const Details = () => {
           {gigData.images.map((img) => (
             <Image
               key={img}
-              src={`${HOST}/uploads/${img}`}
+              src={`${img}`}
               alt="Thumbnail"
               height={100}
               width={100}
@@ -157,11 +157,8 @@ const Details = () => {
           </div>
         </div>
       </div>
-
-      {/* Reviews */}
+      
       <Reviews />
-
-      {/* Add Review */}
       {hasOrdered && <AddReview />}
     </div>
   );
