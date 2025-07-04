@@ -106,7 +106,7 @@ function Requests() {
             >
               <div className="flex items-center gap-4">
                 <img
-                  src={order.buyer?.profileImage || "/default.jpg"}
+                  src={order.buyer?.profileImage || "/user.png"}
                   alt="Profile"
                   className="w-14 h-14 rounded-full object-cover"
                 />
