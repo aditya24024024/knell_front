@@ -41,7 +41,7 @@ const SearchGridItem = ({ gig }) => {
       <div className="flex items-center gap-2 mt-2">
         {gig.createdBy.profileImage ? (
           <Image
-            src={`${HOST}/${gig.createdBy.profileImage}`}
+            src={`${gig.createdBy.profileImage}`}
             alt="Profile"
             height={30}
             width={30}
