@@ -175,7 +175,7 @@ const Navbar = () => {
 
         let projectedUserInfo = { ...user };
         if (user.image) {
-          projectedUserInfo.imageName = HOST + "/" + user.image;
+          projectedUserInfo.imageName = user.image;
         }
 
         dispatch({
