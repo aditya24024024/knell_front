@@ -164,7 +164,7 @@ function BuyerOrders() {
             >
               <div className="flex items-center gap-4">
                 <img
-                  src={order.seller?.profileImage || "/default.jpg"}
+                  src={order.seller?.profileImage || "/user.png"}
                   alt="seller"
                   className="w-14 h-14 rounded-full object-cover"
                 />
