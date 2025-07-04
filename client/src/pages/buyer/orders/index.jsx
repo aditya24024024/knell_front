@@ -132,7 +132,7 @@ function BuyerOrders() {
         const { data } = await axios.get(GET_BUYER_ORDERS_ROUTE, {
           withCredentials: true,
         });
-        // console.log(data);
+        console.log(data);
         setOrders(data.orders || []);
         setHasFetched(true);
       } catch (error) {
