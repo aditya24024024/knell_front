@@ -78,7 +78,7 @@ const Profile = () => {
         });
         window.location.reload();
         toast.success("Profile set up successfully");
-        router.push("/");
+        router.push("https://www.knell.co.in/");
       }
     } catch (err) {
       console.error(err);
