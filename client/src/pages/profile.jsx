@@ -76,9 +76,14 @@ const Profile = () => {
             image: imageName.length ? imageName : false,
           },
         });
-        window.location.reload();
         toast.success("Profile set up successfully");
-        router.push("https://www.knell.co.in/");
+
+setTimeout(() => {
+  router.push("/"); // navigates to home page
+  setTimeout(() => {
+    window.location.reload(); // forces reload after navigation
+  }, 1000); // small delay to ensure navigation happens
+}, 1000); // optional delay to let toast show before redirect
       }
     } catch (err) {
       console.error(err);
