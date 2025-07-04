@@ -172,7 +172,7 @@ function BuyerOrders() {
                 <div className="flex flex-col">
                   <p className="font-semibold">
                     You ordered{" "}
-                    <b className="text-green-600">{order.gig?.createdBy?.username || "Unknown Gig"}</b>{" "}
+                    <b className="text-green-600">{order.gig?.title || "Unknown Gig"}</b>{" "}
                     from{" "}
                     <Link
                       href={`/profile/${order.gig?.createdBy?.username || ""}`}
