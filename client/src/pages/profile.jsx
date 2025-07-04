@@ -76,9 +76,9 @@ const Profile = () => {
             image: imageName.length ? imageName : false,
           },
         });
-        window.location.reload();
         toast.success("Profile set up successfully");
         router.push("/");
+        window.location.reload();
       }
     } catch (err) {
       console.error(err);
