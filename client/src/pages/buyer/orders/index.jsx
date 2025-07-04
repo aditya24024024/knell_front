@@ -132,7 +132,6 @@ function BuyerOrders() {
         const { data } = await axios.get(GET_BUYER_ORDERS_ROUTE, {
           withCredentials: true,
         });
-        console.log(data);
         setOrders(data.orders || []);
         setHasFetched(true);
       } catch (error) {
@@ -172,11 +171,11 @@ function BuyerOrders() {
                 <div className="flex flex-col">
                   <p className="font-semibold">
                     You ordered{" "}
-                    <b className="text-green-600">{order.gig?.title || "Unknown Gig"}</b>{" "}
+                    <b className="text-black hover:underline">{order.gig?.title || "Unknown Gig"}</b>{" "}
                     from{" "}
                     <Link
                       href={`/profile/${order.gig?.createdBy?.username || ""}`}
-                      className="text-black hover:underline"
+                      className="text-green-600"
                     >
                       {order.gig?.createdBy?.username || "Unknown"}
                     </Link>
