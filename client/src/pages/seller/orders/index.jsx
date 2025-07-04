@@ -3,6 +3,7 @@ import { GET_SELLER_ORDERS_ROUTE } from "../../../utils/constants";
 import axios from "axios";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
+import img from "../../../../public/user.png";
 
 const timeAgo = (date) => {
   const seconds = Math.floor((new Date() - new Date(date)) / 1000);
@@ -57,7 +58,7 @@ function Orders() {
             >
               <div className="flex items-center gap-4">
                 <img
-                  src={order.buyer?.profileImage || "/default.jpg"}
+                  src={order.buyer?.profileImage || img}
                   alt="Profile"
                   className="w-14 h-14 rounded-full object-cover"
                 />
