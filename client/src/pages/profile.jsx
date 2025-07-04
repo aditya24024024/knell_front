@@ -73,7 +73,7 @@ const Profile = () => {
           userInfo: {
             ...userInfo,
             ...data,
-            image: imageName.length ? HOST + "/" + imageName : false,
+            image: imageName.length ? imageName : false,
           },
         });
 
