@@ -42,7 +42,7 @@ const Pricing = () => {
       if (status === 401) {
         toast.error("You already have pending request from the gig");
       }
-      if (status === 409 || status === 411) {
+      else if (status === 409 || status === 411) {
         toast.error("Please login again.");
         handleLogin();
       } else if (status === 410) {
