@@ -18,6 +18,10 @@ export default function App({ Component, pageProps }) {
         <link rel="shortcut icon" href="/unnamed.jpg" />
         <title>knell</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta
+          name="description"
+          content="Knell lets you hire verified college students in India for freelance gigs or safe, platonic, activity-based companionship. On-demand, flexible, trusted."
+        />
       </Head>
 
       {/* ✅ Page wrapper */}
