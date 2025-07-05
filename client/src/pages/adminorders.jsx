@@ -14,7 +14,6 @@ function AdminOders() {
           data: { orders },
         } = await axios.get(ALL_ORDER_ROUTE, { withCredentials: true });
         setorders(orders);
-        console.log(orders);
       } catch (err) {
         console.error(err);
       }
