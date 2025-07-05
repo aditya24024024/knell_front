@@ -35,6 +35,7 @@ export const GET_SELLER_ORDERS_ROUTE=`${ORDERS_ROUTES}/get-seller-orders`
 export const DECLINE_ROUTE=`${ORDERS_ROUTES}/decline-order`
 export const ORDER_COMPLETE_ROUTE=`${ORDERS_ROUTES}/complete`
 export const ALL_ORDER_ROUTE=`${ORDERS_ROUTES}/all-orders`
+export const DELETE_ORDER_ROUTE=`${ORDERS_ROUTES}/delete-orders`
 
 export const GET_MESSAGES = `${MESSAGES_ROUTES}/get-messages`;
 export const ADD_MESSAGE = `${MESSAGES_ROUTES}/add-message`;
