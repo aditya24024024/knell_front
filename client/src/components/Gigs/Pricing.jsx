@@ -39,6 +39,9 @@ const Pricing = () => {
       router.push('/buyer/orders/');
     } catch (err) {
       const status = err.response?.status;
+      if (status === 401) {
+        toast.error("You already have pending request from the gig");
+      }
       if (status === 409 || status === 411) {
         toast.error("Please login again.");
         handleLogin();
