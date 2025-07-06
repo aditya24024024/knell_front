@@ -68,6 +68,7 @@ function Requests() {
         { withCredentials: true }
       );
       setOrders(orders);
+      console.log("accept")
       window.location.reload();
     } catch (err) {
       console.error(err);
@@ -84,6 +85,7 @@ function Requests() {
         { withCredentials: true }
       );
       setOrders(orders);
+      console.log("complete")
       window.location.reload();
     } catch (err) {
       console.error(err);
