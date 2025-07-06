@@ -46,9 +46,7 @@ function Requests() {
   
   const decline = async (orderId) => {
     try {
-      const {
-        data: { orders },
-      } = await axios.get(`${DECLINE_ROUTE}?orderId=${orderId}`, {
+      const res = await axios.get(`${DECLINE_ROUTE}?orderId=${orderId}`, {
         withCredentials: true,
       });
       console.log("declinedsfer")
@@ -89,16 +87,14 @@ function Requests() {
 
   const complete = async (orderId) => {
     try {
-      const {
-        data: { orders },
-      } = await axios.put(
+      const res= await axios.put(
         ORDER_COMPLETE_ROUTE,
         { orderId },
         { withCredentials: true }
       );
       if (orders) {
       // Give React time to settle state changes if needed
-      console.log("completedfd")
+      console.log("completedfd",res)
       console.log("complete")
       setTimeout(() => {
         window.location.reload();
