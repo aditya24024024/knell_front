@@ -24,7 +24,6 @@ function AdminOders() {
   const del=async(orderid)=>{
     try {
       const new_order_list=await axios.get(`${DELETE_ORDER_ROUTE}?orderId=${orderid}`, { withCredentials: true });
-      setorders(new_order_list);
     } catch (err) {
       console.error(err);
     }
