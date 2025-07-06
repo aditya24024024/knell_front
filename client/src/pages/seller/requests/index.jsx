@@ -49,11 +49,13 @@ function Requests() {
       const res = await axios.get(`${DECLINE_ROUTE}?orderId=${orderId}`, {
         withCredentials: true,
       });
-      console.log("declinedsfer")
-      console.log("decline")
+       if (res) {
       setTimeout(() => {
-      window.location.reload();
-    }, 300);
+        window.location.reload();
+      }, 300);
+    } else {
+      toast.info("Please reload the site");
+    }
     } catch (err) {
       console.error(err);
     }
@@ -61,25 +63,18 @@ function Requests() {
 
   const accept = async (orderId) => {
     try {
-      console.log("Sending request...");
     const res = await axios.put(
       ORDER_SUCCESS_ROUTE,
       { orderId },
       { withCredentials: true }
     );
-    console.log("Response received:", res);
-    alert("Success!");
-    //   if (orders) {
-    //   // Give React time to settle state changes if needed
-    //   console.log("acceptdf")
-    //   setOrders(orders);
-    //   console.log("accept")
-    //   setTimeout(() => {
-    //     window.location.reload();
-    //   }, 3000); // Delay ensures the request isn't interrupted
-    // } else {
-    //   console.error("Order not accepted successfully");
-    // }
+      if (res) {
+      setTimeout(() => {
+        window.location.reload();
+      }, 300);
+    } else {
+      toast.info("Please reload the site");
+    }
     } catch (err) {
       console.error(err);
     }
@@ -92,15 +87,12 @@ function Requests() {
         { orderId },
         { withCredentials: true }
       );
-      if (orders) {
-      // Give React time to settle state changes if needed
-      console.log("completedfd",res)
-      console.log("complete")
+      if (res) {
       setTimeout(() => {
         window.location.reload();
-      }, 300); // Delay ensures the request isn't interrupted
+      }, 300);
     } else {
-      console.error("Order not completed successfully");
+      toast.info("Please reload the site");
     }
     } catch (err) {
       console.error(err);
