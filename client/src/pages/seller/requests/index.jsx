@@ -52,7 +52,6 @@ function Requests() {
         withCredentials: true,
       });
       console.log("declinedsfer")
-      setOrders(orders);
       console.log("decline")
       setTimeout(() => {
       window.location.reload();
@@ -100,11 +99,10 @@ function Requests() {
       if (orders) {
       // Give React time to settle state changes if needed
       console.log("completedfd")
-      setOrders(orders);
       console.log("complete")
       setTimeout(() => {
         window.location.reload();
-      }, 3000); // Delay ensures the request isn't interrupted
+      }, 300); // Delay ensures the request isn't interrupted
     } else {
       console.error("Order not completed successfully");
     }
