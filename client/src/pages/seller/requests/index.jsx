@@ -64,24 +64,25 @@ function Requests() {
 
   const accept = async (orderId) => {
     try {
-      const {
-        data: { orders },
-      } = await axios.put(
-        ORDER_SUCCESS_ROUTE,
-        { orderId },
-        { withCredentials: true }
-      );
-      if (orders) {
-      // Give React time to settle state changes if needed
-      console.log("acceptdf")
-      setOrders(orders);
-      console.log("accept")
-      setTimeout(() => {
-        window.location.reload();
-      }, 3000); // Delay ensures the request isn't interrupted
-    } else {
-      console.error("Order not accepted successfully");
-    }
+      console.log("Sending request...");
+    const res = await axios.put(
+      ORDER_SUCCESS_ROUTE,
+      { orderId },
+      { withCredentials: true }
+    );
+    console.log("Response received:", res);
+    alert("Success!");
+    //   if (orders) {
+    //   // Give React time to settle state changes if needed
+    //   console.log("acceptdf")
+    //   setOrders(orders);
+    //   console.log("accept")
+    //   setTimeout(() => {
+    //     window.location.reload();
+    //   }, 3000); // Delay ensures the request isn't interrupted
+    // } else {
+    //   console.error("Order not accepted successfully");
+    // }
     } catch (err) {
       console.error(err);
     }
