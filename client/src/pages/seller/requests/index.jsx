@@ -51,8 +51,12 @@ function Requests() {
       } = await axios.get(`${DECLINE_ROUTE}?orderId=${orderId}`, {
         withCredentials: true,
       });
+      console.log("declinedsfer")
       setOrders(orders);
+      console.log("decline")
+      setTimeout(() => {
       window.location.reload();
+    }, 300);
     } catch (err) {
       console.error(err);
     }
@@ -67,9 +71,12 @@ function Requests() {
         { orderId },
         { withCredentials: true }
       );
+      console.log("acceptdf")
       setOrders(orders);
       console.log("accept")
+      setTimeout(() => {
       window.location.reload();
+    }, 300);
     } catch (err) {
       console.error(err);
     }
@@ -84,9 +91,12 @@ function Requests() {
         { orderId },
         { withCredentials: true }
       );
+      console.log("completxwfe")
       setOrders(orders);
       console.log("complete")
+      setTimeout(() => {
       window.location.reload();
+    }, 300);
     } catch (err) {
       console.error(err);
     }
