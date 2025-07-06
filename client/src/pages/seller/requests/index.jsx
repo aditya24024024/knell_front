@@ -43,9 +43,6 @@ function Requests() {
     };
     if (userInfo) getOrders();
   }, [userInfo]);
-
-  useEffect(() => {
-}, [orders]);
   
   const decline = async (orderId) => {
     try {
@@ -55,6 +52,7 @@ function Requests() {
         withCredentials: true,
       });
       setOrders(orders);
+      window.location.reload();
     } catch (err) {
       console.error(err);
     }
@@ -70,6 +68,7 @@ function Requests() {
         { withCredentials: true }
       );
       setOrders(orders);
+      window.location.reload();
     } catch (err) {
       console.error(err);
     }
@@ -85,6 +84,7 @@ function Requests() {
         { withCredentials: true }
       );
       setOrders(orders);
+      window.location.reload();
     } catch (err) {
       console.error(err);
     }
