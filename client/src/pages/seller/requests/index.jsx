@@ -71,12 +71,17 @@ function Requests() {
         { orderId },
         { withCredentials: true }
       );
+      if (orders) {
+      // Give React time to settle state changes if needed
       console.log("acceptdf")
       setOrders(orders);
       console.log("accept")
       setTimeout(() => {
-      window.location.reload();
-    }, 300);
+        window.location.reload();
+      }, 3000); // Delay ensures the request isn't interrupted
+    } else {
+      console.error("Order not accepted successfully");
+    }
     } catch (err) {
       console.error(err);
     }
@@ -91,12 +96,17 @@ function Requests() {
         { orderId },
         { withCredentials: true }
       );
-      console.log("completxwfe")
+      if (orders) {
+      // Give React time to settle state changes if needed
+      console.log("completedfd")
       setOrders(orders);
       console.log("complete")
       setTimeout(() => {
-      window.location.reload();
-    }, 300);
+        window.location.reload();
+      }, 3000); // Delay ensures the request isn't interrupted
+    } else {
+      console.error("Order not completed successfully");
+    }
     } catch (err) {
       console.error(err);
     }
