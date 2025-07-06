@@ -44,6 +44,9 @@ function Requests() {
     if (userInfo) getOrders();
   }, [userInfo]);
 
+  useEffect(() => {
+}, [orders]);
+  
   const decline = async (orderId) => {
     try {
       const {
