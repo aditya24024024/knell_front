@@ -291,10 +291,10 @@ const Navbar = () => {
               </ul>
             ) : (
               <ul className="flex gap-6 items-center">
-                {userInfo?.email === "akshajvasudeva@gmail.com" && (
+                {(userInfo?.email === "akshajvasudeva@gmail.com"||userInfo?.email ==="Kalakartik23@gmail.com") && (
                   <li className="cursor-pointer text-[#1DBF73] font-medium" onClick={admin}>Admin</li>
                 )}
-                {userInfo?.email === "akshajvasudeva@gmail.com" && (
+                {(userInfo?.email === "akshajvasudeva@gmail.com"||userInfo?.email ==="Kalakartik23@gmail.com") && (
                   <li className="cursor-pointer text-[#1DBF73] font-medium" onClick={adminorders}>All Orders</li>
                 )}
                 {isSeller && <li className="cursor-pointer text-[#1DBF73]" onClick={() => router.push("/seller/gigs/create")}>Create Gig</li>}
@@ -350,10 +350,10 @@ const Navbar = () => {
       </>
     ) : (
       <>
-        {userInfo?.email === "akshajvasudeva@gmail.com" && (
+        {(userInfo?.email === "akshajvasudeva@gmail.com"||userInfo?.email ==="Kalakartik23@gmail.com") && (
           <button onClick={admin} className="text-left">Admin</button>
         )}
-        {userInfo?.email === "akshajvasudeva@gmail.com" && (
+        {(userInfo?.email === "akshajvasudeva@gmail.com"||userInfo?.email ==="Kalakartik23@gmail.com") && (
           <button onClick={adminorders} className="text-left">All Orders</button>
         )}
         {isSeller && (
