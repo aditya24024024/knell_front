@@ -49,15 +49,15 @@ const Navbar = () => {
 
   const handleOrdersNavigate = () => {
     closeHamburger();
-    if (isSeller) router.push("/seller/orders");
-    else router.push("/buyer/orders");
+    if (isSeller) router.push("/seller");
+    else router.push("/buyer");
   }
 
   const handleModeSwitch = () => {
     closeHamburger();
     if (isSeller) {
       dispatch({ type: reducerCases.SWITCH_MODE });
-      router.push("/buyer/orders");
+      router.push("/buyer");
     } else {
       dispatch({ type: reducerCases.SWITCH_MODE });
       router.push("/seller");
