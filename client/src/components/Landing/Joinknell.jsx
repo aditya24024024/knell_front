@@ -21,7 +21,7 @@ function Joinknell() {
         {/* Overlay content */}
         <div className="absolute z-10 top-[15%] sm:top-1/4 left-4 sm:left-10 right-4 sm:right-auto">
           <h4 className="text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl mb-4 sm:mb-6 leading-snug sm:leading-tight max-w-[90%] sm:max-w-[75%] md:max-w-[65%]">
-            monetise&apos;s your <i>time.</i>
+            monetise your <i>time.</i>
           </h4>
           {!userInfo && (
             <button

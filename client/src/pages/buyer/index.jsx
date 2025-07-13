@@ -5,7 +5,9 @@ import { useRouter } from "next/router";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import { GET_BUYER_ORDERS_ROUTE, GET_BUYER_UNREAD_MESSAGES_ROUTE } from "../../utils/constants";
+
+import { GET_BUYER_DASHBOARD_DATA } from "../../utils/constants";
+import { GET_BUYER_ORDERS_ROUTE, GET_UNREAD_MESSAGES } from "../../utils/constants";
 
 const DashboardCard = ({ label, value, onClick }) => (
   <div
@@ -32,7 +34,7 @@ function BuyerDashboard() {
       try {
         const [ordersRes, unreadRes] = await Promise.all([
           axios.get(GET_BUYER_ORDERS_ROUTE, { withCredentials: true }),
-          axios.get(GET_BUYER_UNREAD_MESSAGES_ROUTE, { withCredentials: true }),
+          axios.get(GET_UNREAD_MESSAGES, { withCredentials: true }),
         ]);
         setOrdersCount(ordersRes.data.orders?.length || 0);
         setUnreadCount(unreadRes.data.unreadCount || 0);
