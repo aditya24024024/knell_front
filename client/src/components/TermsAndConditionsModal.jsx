@@ -24,7 +24,7 @@ function TermsAndConditionsModal() {
         <h2 className="text-xl font-semibold mb-4 text-center">Terms & Conditions</h2>
         <div className="h-48 overflow-y-auto border border-gray-200 p-3 text-sm text-gray-700 rounded">
           <p className="whitespace-pre-line">
-  {`Knell – Terms & Conditions
+  {Knell – Terms & Conditions
 
 1. About Knell
 Knell is a neutral digital platform that helps users discover and connect with independent service providers (e.g., students offering freelance or platonic activity-based sessions). Knell does not provide any service itself, does not employ any service providers, and does not charge any commission.
@@ -111,7 +111,7 @@ We may use cookies or analytics tools to improve performance. You can disable co
 
 7. Data Security
 We follow reasonable industry standards to protect user data, but no system is 100% secure.}
-          `}
+          }
 </p>
         </div>
         <div className="flex items-center mt-4">
