@@ -177,8 +177,8 @@ const Navbar = () => {
             withCredentials: true, 
           }
         );
-        console.log("afkmd");
-        console.log("user",{user});
+        // console.log("afkmd");
+        // console.log("user",{user});
         let projectedUserInfo = { ...user };
         if (user.image) {
           projectedUserInfo.imageName = user.image;
@@ -199,10 +199,10 @@ const Navbar = () => {
         setIsLoaded(true); 
       }
     };
-        console.log('abcdef');
+        // console.log('abcdef');
     getUserInfo();
   } else {
-        console.log('ghijkl');
+        // console.log('ghijkl');
     setIsLoaded(true);
   }
   }, [userInfo, dispatch]);
