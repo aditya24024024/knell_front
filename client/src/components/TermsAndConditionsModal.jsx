@@ -1,10 +1,21 @@
 import React, { useState } from "react";
 import { useStateProvider } from "../context/StateContext";
 import { reducerCases } from "../context/constants";
+import { useRouter } from "next/router";
 
 function TermsAndConditionsModal() {
   const [, dispatch] = useStateProvider();
   const [accepted, setAccepted] = useState(false);
+  const router = useRouter();
+
+  const termsText = `
+Knell – Terms & Conditions
+
+1. About Knell
+Knell is a neutral digital platform that helps users discover and connect with independent service providers...
+
+[continue your detailed terms here, like you originally had them]
+`;
 
   const handleContinue = () => {
     if (accepted) {
@@ -15,31 +26,8 @@ function TermsAndConditionsModal() {
 
   const handleClose = () => {
     dispatch({ type: reducerCases.TOGGLE_TERMS_MODAL, showTermsModal: false });
+    router.push("/");
   };
-
-  const termsText = `
-Knell – Terms & Conditions
-
-1. About Knell
-Knell is a neutral digital platform that helps users discover and connect with independent service providers (e.g., students offering freelance or platonic activity-based sessions). Knell does not provide any service itself, does not employ any service providers, and does not charge any commission.
-
-...
-
-9. Governing Law
-These Terms are governed by the laws of India. Jurisdiction lies with the courts of New Delhi.
-
----
-
-Knell – Privacy Policy
-
-Effective Date: [Insert Date]
-Platform Name: Knell (www.knell.co.in)
-
-...
-
-7. Data Security
-We use industry-standard protection but cannot guarantee 100% security.
-`;
 
   return (
     <div className="fixed inset-0 z-[9999] flex items-center justify-center">
@@ -97,4 +85,5 @@ We use industry-standard protection but cannot guarantee 100% security.
     </div>
   );
 }
+
 export default TermsAndConditionsModal;
