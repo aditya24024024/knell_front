@@ -199,7 +199,7 @@ const Navbar = () => {
         setIsLoaded(true); 
       }
     };
-
+        console.log('abcdef');
     getUserInfo();
   } else {
     setIsLoaded(true);
