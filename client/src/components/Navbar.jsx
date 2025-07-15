@@ -21,12 +21,13 @@ const Navbar = () => {
   const router = useRouter()
   const [isLoaded, setIsLoaded] = useState(false)
   const [navFixed, setNavFixed] = useState(false)
-  const [showTermsModal, setShowTermsModal] = useState(false);
+  // const [showTermsModal, setShowTermsModal] = useState(false);
 
   const [searchData, setSearchData] = useState("")
   const [isContextMenuVisible, setIsContextMenuVisible] = useState(false)
 
-  const [{ showLoginModal, showSignupModal, isSeller, userInfo, hamburger,otpmodal }, dispatch] = useStateProvider()
+const [{ showLoginModal, showSignupModal, isSeller, userInfo, hamburger, otpmodal, showTermsModal }, dispatch] = useStateProvider();
+
 
   const handleLogin = () => {
     if (showSignupModal) {
