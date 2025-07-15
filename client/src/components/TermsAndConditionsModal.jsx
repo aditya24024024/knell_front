@@ -25,7 +25,7 @@ function TermsAndConditionsModal() {
         <div className="h-48 overflow-y-auto border border-gray-200 p-3 text-sm text-gray-700 rounded">
           <p>
             Please read and accept the terms before continuing.
-            {📜 Knell – Terms & Conditions
+            {Knell – Terms & Conditions
 
 1. About Knell
 Knell is a neutral digital platform that helps users discover and connect with independent service providers (e.g., students offering freelance or platonic activity-based sessions). Knell does not provide any service itself, does not employ any service providers, and does not charge any commission.
@@ -73,7 +73,7 @@ These Terms are governed by the laws of India. Jurisdiction lies with the courts
 
 
 
-🔐 Knell – Privacy Policy
+Knell – Privacy Policy
 Effective Date: [Insert Date]
 Platform Name: Knell (www.knell.co.in)
 
