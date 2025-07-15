@@ -13,6 +13,7 @@ import ContextMenu from './ContextMenu';
 import AuthWrapper from './AuthWrapper';
 import { GiHamburgerMenu } from "react-icons/gi";
 import OtpWrapper from './OtpWrapper'
+import TermsAndConditionsModal from './TermsAndConditionsModal';
 
 
 const Navbar = () => {
