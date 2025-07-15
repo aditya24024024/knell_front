@@ -33,11 +33,12 @@ const Navbar = () => {
   }
 
   const handleSignup = () => {
-    if (showLoginModal) {
-      dispatch({ type: reducerCases.TOGGLE_LOGIN_MODAL, showLoginModal: false });
-    }
-    dispatch({ type: reducerCases.TOGGLE_SIGNUP_MODAL, showSignupModal: true });
+  if (showLoginModal) {
+    dispatch({ type: reducerCases.TOGGLE_LOGIN_MODAL, showLoginModal: false });
   }
+  setShowTermsModal(true); // Show Terms modal first
+};
+
 
   const toggleHamburger = () => {
     dispatch({ type: reducerCases.TOGGLE_HAMBURGER });
@@ -226,6 +227,38 @@ const Navbar = () => {
       {showLoginModal && <AuthWrapper type="login" />}
       {otpmodal && <OtpWrapper/>}
       {showSignupModal && <AuthWrapper type="signup" />}
+
+      
+{/* ✅ Terms and Conditions Modal */}
+{showTermsModal && (
+  <div className="fixed top-0 left-0 w-full h-full z-[200] bg-black bg-opacity-60 flex justify-center items-center">
+    <div className="bg-white rounded-lg shadow-xl p-6 max-w-lg w-full relative">
+      <h2 className="text-xl font-semibold mb-4">Terms and Conditions</h2>
+      <p className="text-sm text-gray-700 mb-4 overflow-y-auto max-h-64">
+        By signing up to Knell, you agree to our Terms of Service and Privacy Policy.
+        Please read them carefully before continuing.
+      </p>
+      <div className="flex justify-end gap-4">
+        <button
+          className="bg-gray-200 text-gray-700 px-4 py-2 rounded"
+          onClick={() => setShowTermsModal(false)}
+        >
+          Cancel
+        </button>
+        <button
+          className="bg-[#1DBF73] text-white px-4 py-2 rounded"
+          onClick={() => {
+            setShowTermsModal(false);
+            dispatch({ type: reducerCases.TOGGLE_SIGNUP_MODAL, showSignupModal: true });
+          }}
+        >
+          I Agree
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+
       {isLoaded && (
         <nav className={`w-full px-4 sm:px-8 md:px-16 lg:px-24 py-4 sm:py-6 top-0 z-30 transition-all duration-300 
           ${navFixed || userInfo ? "fixed bg-white border-b border-gray-200" : "absolute bg-transparent border-transparent"} 

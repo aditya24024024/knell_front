@@ -11,6 +11,8 @@ export const initialState = {
   hamburger: false,
   unverifiedmail: undefined,
   otpmodal: false,
+  showTermsModal: false,
+
 };
 
 const reducer = (state, action) => {
@@ -47,6 +49,14 @@ case reducerCases.CLOSE_HAMBURGER:
         ...state,
         otpmodal: action.otpmodal,
       };
+      
+
+    case reducerCases.TOGGLE_TERMS_MODAL:
+  return {
+    ...state,
+    showTermsModal: action.showTermsModal,
+  };
+
       
     case reducerCases.TOGGLE_SIGNUP_MODAL:
       return {
