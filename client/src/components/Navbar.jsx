@@ -177,7 +177,8 @@ const Navbar = () => {
             withCredentials: true, 
           }
         );
-
+        console.log("afkmd");
+        console.log("user",{user});
         let projectedUserInfo = { ...user };
         if (user.image) {
           projectedUserInfo.imageName = user.image;
