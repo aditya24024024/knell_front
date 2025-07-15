@@ -17,6 +17,30 @@ function TermsAndConditionsModal() {
     dispatch({ type: reducerCases.TOGGLE_TERMS_MODAL, showTermsModal: false });
   };
 
+  const termsText = `
+Knell – Terms & Conditions
+
+1. About Knell
+Knell is a neutral digital platform that helps users discover and connect with independent service providers (e.g., students offering freelance or platonic activity-based sessions). Knell does not provide any service itself, does not employ any service providers, and does not charge any commission.
+
+...
+
+9. Governing Law
+These Terms are governed by the laws of India. Jurisdiction lies with the courts of New Delhi.
+
+---
+
+Knell – Privacy Policy
+
+Effective Date: [Insert Date]
+Platform Name: Knell (www.knell.co.in)
+
+...
+
+7. Data Security
+We use industry-standard protection but cannot guarantee 100% security.
+`;
+
   return (
     <div className="fixed inset-0 z-[9999] flex items-center justify-center">
       {/* Overlay */}
@@ -34,90 +58,9 @@ function TermsAndConditionsModal() {
         </p>
 
         {/* Scrollable Terms Text */}
-        const termsText = `
-Knell – Terms & Conditions
-
-1. About Knell
-Knell is a neutral digital platform that helps users discover and connect with independent service providers (e.g., students offering freelance or platonic activity-based sessions). Knell does not provide any service itself, does not employ any service providers, and does not charge any commission.
-
-Knell operates strictly as an intermediary under Section 79 of the Information Technology Act, 2000, and is not responsible for the actions, omissions, or conduct of users listed on the platform.
-
-2. User Roles
-Service Providers: Independent individuals offering freelance or social services.
-Customers: Users who seek to connect with service providers for specific, non-romantic, activity-based services.
-All interactions are arranged directly between users. Knell only facilitates discovery and basic communication.
-
-3. Platform Rules
-- No listings or bookings for romantic, sexual, or illegal services.
-- All users must comply with applicable local laws.
-- Respect, consent, and professional behavior are mandatory.
-
-4. Knell’s Legal Position
-- Knell is not a party to any transaction between users.
-- Knell does not set, influence, or enforce pricing.
-- Knell does not verify or guarantee the identity, skills, or background of any user.
-- Users are advised to exercise due diligence before any offline interaction.
-
-5. Payments
-Knell does not process payments or take commissions. Any payments exchanged are handled directly between the customer and the service provider.
-
-6. Limitation of Liability
-Knell shall not be held liable for:
-- Personal injury, loss, or dispute arising from user interactions.
-- Fraud, misconduct, or illegal activity by a user.
-- Cancellation, no-shows, or dissatisfaction with a session.
-Users agree to hold Knell harmless in all such cases.
-
-7. Dispute Resolution
-Disputes must be resolved directly between users. Knell is not obligated to mediate, though it may suspend or ban accounts violating these Terms.
-
-8. Termination
-Knell may terminate or suspend access without notice for any violation of these Terms or behavior that could harm the platform.
-
-9. Governing Law
-These Terms are governed by the laws of India. Jurisdiction lies with the courts of New Delhi.
-
----
-
-Knell – Privacy Policy
-
-Effective Date: [Insert Date]
-Platform Name: Knell (www.knell.co.in)
-
-1. What We Collect
-- Name, email, phone number
-- IP address, device info
-- Session history, messages, etc.
-
-2. Why We Collect
-- To enable platform features
-- Ensure safety and prevent misuse
-- Comply with Indian DPDP law
-
-3. Our Legal Basis
-We rely on your consent, as per the DPDP Act 2023.
-
-4. Data Sharing
-Only with law enforcement or technical partners under NDA.
-
-5. Your Rights
-- Access, correct, or delete your data
-- Withdraw consent anytime
-- Contact: kk@knell.co.in
-
-6. Cookies & Tracking
-We may use cookies/analytics to improve user experience.
-
-7. Data Security
-We use industry-standard protection but cannot guarantee 100% security.
-`;
-
-...
-
-<div className="h-64 overflow-y-auto border border-gray-300 p-4 rounded text-sm text-gray-800 whitespace-pre-wrap">
-  {termsText}
-</div>
-
+        <div className="h-64 overflow-y-auto border border-gray-300 p-4 rounded text-sm text-gray-800 whitespace-pre-wrap">
+          {termsText}
+        </div>
 
         {/* Consent and Continue */}
         <div className="flex items-center mt-4">
@@ -154,5 +97,4 @@ We use industry-standard protection but cannot guarantee 100% security.
     </div>
   );
 }
-
 export default TermsAndConditionsModal;
