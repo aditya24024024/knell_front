@@ -53,7 +53,7 @@ function AuthWrapper({ type }) {
             dispatch({ type: reducerCases.SET_USER, userInfo: user });
           }
           console.log(userInfo);
-          window.location.reload();
+          // window.location.reload();
         }
         else {
           const { data: { user }, } = await axios.post(OTP_SEND,
