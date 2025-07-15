@@ -18,12 +18,24 @@ function TermsAndConditionsModal() {
   };
 
   return (
-    <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-[9999]">
-      <div className="fixed inset-0 bg-black opacity-50" onClick={handleClose}></div>
-      <div className="bg-white rounded-lg shadow-lg p-6 z-[10000] max-w-md w-full mx-4 relative">
-        <h2 className="text-xl font-semibold mb-4 text-center">Terms & Conditions</h2>
-        <div className="h-48 overflow-y-auto border border-gray-200 p-3 text-sm text-gray-700 rounded whitespace-pre-wrap">
-  {`
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center">
+      {/* Overlay */}
+      <div
+        className="absolute inset-0 bg-black opacity-50"
+        onClick={handleClose}
+      ></div>
+
+      {/* Modal */}
+      <div className="relative z-[10000] bg-white rounded-lg shadow-lg p-6 max-w-2xl w-full mx-4 overflow-hidden">
+        <h2 className="text-2xl font-semibold mb-4 text-center">Terms & Conditions</h2>
+        <p className="text-sm text-gray-600 mb-2 text-center">
+          By signing up to Knell, you agree to our Terms of Service and Privacy Policy.
+          Please read them carefully before continuing.
+        </p>
+
+        {/* Scrollable Terms Text */}
+        <div className="h-64 overflow-y-auto border border-gray-300 p-4 rounded text-sm text-gray-800 whitespace-pre-wrap">
+          {`
 Knell – Terms & Conditions
 
 1. About Knell
@@ -48,24 +60,23 @@ All interactions are arranged directly between users. Knell only facilitates dis
 - Users are advised to exercise due diligence before any offline interaction.
 
 5. Payments
-Knell does not process payments or take commissions. Any payments exchanged are handled directly between the customer and the service provider, offline or via mutual agreement.
+Knell does not process payments or take commissions. Any payments exchanged are handled directly between the customer and the service provider.
 
 6. Limitation of Liability
 Knell shall not be held liable for:
-- Any personal injury, loss, or dispute arising from user interactions.
+- Personal injury, loss, or dispute arising from user interactions.
 - Fraud, misconduct, or illegal activity by a user.
 - Cancellation, no-shows, or dissatisfaction with a session.
 Users agree to hold Knell harmless in all such cases.
 
 7. Dispute Resolution
-Disputes must be resolved directly between users. Knell is not obligated to mediate, though it may suspend or ban accounts found violating these Terms.
+Disputes must be resolved directly between users. Knell is not obligated to mediate, though it may suspend or ban accounts violating these Terms.
 
 8. Termination
-Knell reserves the right to terminate or suspend user access without notice if these Terms are violated or if any activity risks legal or reputational harm to the platform.
+Knell may terminate or suspend access without notice for any violation of these Terms or behavior that could harm the platform.
 
 9. Governing Law
 These Terms are governed by the laws of India. Jurisdiction lies with the courts of New Delhi.
-
 
 Knell – Privacy Policy
 
@@ -86,21 +97,22 @@ Platform Name: Knell (www.knell.co.in)
 We rely on your consent, as per the DPDP Act 2023.
 
 4. Data Sharing
-- Only with law enforcement or necessary technical partners under NDA.
+Only with law enforcement or technical partners under NDA.
 
 5. Your Rights
-- Access/correct/delete your data
+- Access, correct, or delete your data
 - Withdraw consent anytime
 - Contact: kk@knell.co.in
 
 6. Cookies & Tracking
-- We may use cookies/analytics to improve the site.
+We may use cookies/analytics to improve user experience.
 
 7. Data Security
-We use industry standards but cannot guarantee 100% safety.
-  `}
-</div>
+We use industry-standard protection but cannot guarantee 100% security.
+          `}
+        </div>
 
+        {/* Consent and Continue */}
         <div className="flex items-center mt-4">
           <input
             type="checkbox"
@@ -109,17 +121,28 @@ We use industry standards but cannot guarantee 100% safety.
             onChange={() => setAccepted(!accepted)}
             className="mr-2"
           />
-          <label htmlFor="acceptTerms" className="text-sm">I agree to the Terms and Conditions</label>
+          <label htmlFor="acceptTerms" className="text-sm">
+            I agree to the Terms and Conditions
+          </label>
         </div>
-        <button
-          disabled={!accepted}
-          onClick={handleContinue}
-          className={`w-full mt-4 py-2 text-white rounded ${
-            accepted ? "bg-[#1DBF73] hover:bg-[#149e5f]" : "bg-gray-400 cursor-not-allowed"
-          }`}
-        >
-          Continue to Signup
-        </button>
+
+        <div className="flex justify-end gap-4 mt-4">
+          <button
+            className="bg-gray-300 text-gray-700 px-4 py-2 rounded"
+            onClick={handleClose}
+          >
+            Cancel
+          </button>
+          <button
+            onClick={handleContinue}
+            disabled={!accepted}
+            className={`px-4 py-2 rounded text-white ${
+              accepted ? "bg-[#1DBF73] hover:bg-[#149e5f]" : "bg-gray-400 cursor-not-allowed"
+            }`}
+          >
+            Continue to Signup
+          </button>
+        </div>
       </div>
     </div>
   );
