@@ -22,9 +22,8 @@ function TermsAndConditionsModal() {
       <div className="fixed inset-0 bg-black opacity-50" onClick={handleClose}></div>
       <div className="bg-white rounded-lg shadow-lg p-6 z-[10000] max-w-md w-full mx-4 relative">
         <h2 className="text-xl font-semibold mb-4 text-center">Terms & Conditions</h2>
-        <div className="h-48 overflow-y-auto border border-gray-200 p-3 text-sm text-gray-700 rounded">
-          <pre className="whitespace-pre-wrap text-sm text-gray-700 max-h-64 overflow-y-auto border border-gray-200 p-3 rounded">
-{`
+        <div className="h-48 overflow-y-auto border border-gray-200 p-3 text-sm text-gray-700 rounded whitespace-pre-wrap">
+  {`
 Knell – Terms & Conditions
 
 1. About Knell
@@ -99,10 +98,9 @@ We rely on your consent, as per the DPDP Act 2023.
 
 7. Data Security
 We use industry standards but cannot guarantee 100% safety.
-`}
-</pre>
+  `}
+</div>
 
-        </div>
         <div className="flex items-center mt-4">
           <input
             type="checkbox"
