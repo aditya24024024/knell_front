@@ -9,7 +9,7 @@ import { useCookies } from "react-cookie";
 import { reducerCases } from "../context/constants";
 
 function AuthWrapper({ type }) {
-  // const [cookies, setCookies] = useCookies();
+  const [cookies, setCookies] = useCookies();
 
   const [{}, dispatch] = useStateProvider();
 
@@ -47,7 +47,7 @@ function AuthWrapper({ type }) {
             { withCredentials: true }
           );
           // console.log(user);
-          // setCookies("jwt", { jwt});
+          setCookies("jwt", { jwt});
 
           dispatch({ type: reducerCases.CLOSE_AUTH_MODAL });
           if (user) {
