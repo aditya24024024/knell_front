@@ -202,6 +202,7 @@ const Navbar = () => {
         console.log('abcdef');
     getUserInfo();
   } else {
+        console.log('ghijkl');
     setIsLoaded(true);
   }
   }, [userInfo, dispatch]);
