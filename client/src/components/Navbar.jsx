@@ -39,7 +39,8 @@ const Navbar = () => {
   if (showLoginModal) {
     dispatch({ type: reducerCases.TOGGLE_LOGIN_MODAL, showLoginModal: false });
   }
-  setShowTermsModal(true); // Show Terms modal first
+  dispatch({ type: reducerCases.TOGGLE_TERMS_MODAL, showTermsModal: true });
+ // Show Terms modal first
 };
 
 
@@ -230,10 +231,11 @@ const Navbar = () => {
       {showLoginModal && <AuthWrapper type="login" />}
       {otpmodal && <OtpWrapper/>}
       {showSignupModal && <AuthWrapper type="signup" />}
+      {showTermsModal && <TermsAndConditionsModal />}
 
       
 {/* ✅ Terms and Conditions Modal */}
-{showTermsModal && (
+{/* {showTermsModal && (
   <div className="fixed top-0 left-0 w-full h-full z-[200] bg-black bg-opacity-60 flex justify-center items-center">
     <div className="bg-white rounded-lg shadow-xl p-6 max-w-lg w-full relative">
       <h2 className="text-xl font-semibold mb-4">Terms and Conditions</h2>
@@ -260,7 +262,7 @@ const Navbar = () => {
       </div>
     </div>
   </div>
-)}
+)} */}
 
       {isLoaded && (
         <nav className={`w-full px-4 sm:px-8 md:px-16 lg:px-24 py-4 sm:py-6 top-0 z-30 transition-all duration-300 
