@@ -46,13 +46,13 @@ function AuthWrapper({ type }) {
             { email, password },
             { withCredentials: true }
           );
-          // console.log(user);
           setCookies("jwt", { jwt});
 
           dispatch({ type: reducerCases.CLOSE_AUTH_MODAL });
           if (user) {
             dispatch({ type: reducerCases.SET_USER, userInfo: user });
           }
+          console.log(userInfo);
           window.location.reload();
         }
         else {
