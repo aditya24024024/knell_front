@@ -34,8 +34,7 @@ function TermsAndConditionsModal() {
         </p>
 
         {/* Scrollable Terms Text */}
-        <div className="h-64 overflow-y-auto border border-gray-300 p-4 rounded text-sm text-gray-800 whitespace-pre-wrap">
-          {`
+        const termsText = `
 Knell – Terms & Conditions
 
 1. About Knell
@@ -78,6 +77,8 @@ Knell may terminate or suspend access without notice for any violation of these 
 9. Governing Law
 These Terms are governed by the laws of India. Jurisdiction lies with the courts of New Delhi.
 
+---
+
 Knell – Privacy Policy
 
 Effective Date: [Insert Date]
@@ -109,8 +110,14 @@ We may use cookies/analytics to improve user experience.
 
 7. Data Security
 We use industry-standard protection but cannot guarantee 100% security.
-          `}
-        </div>
+`;
+
+...
+
+<div className="h-64 overflow-y-auto border border-gray-300 p-4 rounded text-sm text-gray-800 whitespace-pre-wrap">
+  {termsText}
+</div>
+
 
         {/* Consent and Continue */}
         <div className="flex items-center mt-4">
