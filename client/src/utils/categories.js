@@ -1,5 +1,5 @@
 export const categories = [
-    { name: " ", logo: "/service-1.svg" },
+    // { name: " ", logo: "/service-1.svg" },
     { name: "Social Companion ", logo: "/service-21.svg" },
     { name: "Study Companion", logo: "/service-17.svg" },
     { name: "Gaming Companion ", logo: "/service-11.svg" },
