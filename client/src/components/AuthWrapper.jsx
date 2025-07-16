@@ -47,14 +47,14 @@ function AuthWrapper({ type }) {
             { withCredentials: true }
           );
           // setCookies("jwt", { jwt});
-          console.log(user);
+          // console.log(user);
           dispatch({ type: reducerCases.CLOSE_AUTH_MODAL });
           if (user) {
             dispatch({ type: reducerCases.SET_USER, userInfo: user });
           }
-          console.log("dsfgd");
-          console.log(userInfo);
-          // window.location.reload();
+          // console.log("dsfgd");
+          // console.log(userInfo);
+          window.location.reload();
         }
         else {
           const { data: { user }, } = await axios.post(OTP_SEND,
