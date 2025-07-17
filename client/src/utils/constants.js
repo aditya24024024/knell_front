@@ -1,4 +1,5 @@
-export const HOST = process.env.NEXT_PUBLIC_SERVER_URL;
+// export const HOST = process.env.NEXT_PUBLIC_SERVER_URL;
+export const HOST = "https://api.knell.co.in";
 export const API_URL = `${HOST}/api`;
 export const IMAGES_URL = `${HOST}/uploads`;
 
