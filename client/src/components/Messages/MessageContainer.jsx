@@ -126,7 +126,7 @@ import { BsCheckAll } from "react-icons/bs";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useStateProvider } from "../../context/StateContext";
-import { ADD_MESSAGE, GET_MESSAGES, HOST } from "../../utils/constants";
+import { ADD_MESSAGE, GET_MESSAGES } from "../../utils/constants";
 import { io } from "socket.io-client";
 
 let socket;
@@ -142,7 +142,7 @@ function MessageContainer() {
 
   useEffect(() => {
     // Initialize socket connection
-    socket = io(HOST, {
+    socket = io(process.env.NEXT_PUBLIC_BACKEND_URL, {
       withCredentials: true,
     });
 
