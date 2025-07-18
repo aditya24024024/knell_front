@@ -142,6 +142,7 @@ function MessageContainer() {
 
   useEffect(() => {
     // Initialize socket connection
+            if (!userInfo?.id) return;
     socket = io(HOST, {
       withCredentials: true,
     });
@@ -159,6 +160,7 @@ function MessageContainer() {
   }, [userInfo]);
 
   useEffect(() => {
+             if (!socket || !orderId || !userInfo?.id) return;
     const getMessages = async () => {
       const {
         data: { messages: dataMessages, recipentId: recipent },
