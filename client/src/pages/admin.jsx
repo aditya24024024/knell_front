@@ -23,8 +23,7 @@ function Admin() {
   
   const del=async(gigid)=>{
     try {
-      const new_order_list=await axios.get(`${DELETE_GIG}?gigId=${gigid}`, { withCredentials: true });
-      setgigs(new_order_list);
+      await axios.get(`${DELETE_GIG}?gigId=${gigid}`, { withCredentials: true });
     } catch (err) {
       console.error(err);
     }
