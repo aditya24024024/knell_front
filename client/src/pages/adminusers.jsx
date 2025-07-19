@@ -13,8 +13,6 @@ function Adminusers() {
         const {
           data: { users },
         } = await axios.get(ALL_USERS_ROUTE, { withCredentials: true });
-        setusers(users);
-        // console.log(users);
       } catch (err) {
         console.error(err);
       }
@@ -46,9 +44,6 @@ function Adminusers() {
               <th scope="col" className="px-6 py-3">
                 Username
               </th>
-{/*               <th scope="col" className="px-6 py-3">
-                Gigs
-              </th> */}
               <th scope="col" className="px-6 py-3">
                 Delete
               </th>
