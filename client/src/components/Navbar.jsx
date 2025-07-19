@@ -94,6 +94,11 @@ const [{ showLoginModal, showSignupModal, isSeller, userInfo, hamburger, otpmoda
     closeHamburger();
     router.push("/adminorders");
   }
+  
+  const adminusers = () => {
+    closeHamburger();
+    router.push("/adminusers");
+  }
 
   const ContextMenuData = [
     {
@@ -336,6 +341,9 @@ const [{ showLoginModal, showSignupModal, isSeller, userInfo, hamburger, otpmoda
                   <li className="cursor-pointer text-[#1DBF73] font-medium" onClick={admin}>Admin</li>
                 )}
                 {(userInfo?.email === "akshajvasudeva@gmail.com"||userInfo?.email ==="Kalakartik23@gmail.com") && (
+                  <li className="cursor-pointer text-[#1DBF73] font-medium" onClick={adminusers}>All Users</li>
+                )}
+                {(userInfo?.email === "akshajvasudeva@gmail.com"||userInfo?.email ==="Kalakartik23@gmail.com") && (
                   <li className="cursor-pointer text-[#1DBF73] font-medium" onClick={adminorders}>All Orders</li>
                 )}
                 {isSeller && <li className="cursor-pointer text-[#1DBF73]" onClick={() => router.push("/seller/gigs/create")}>Create Gig</li>}
@@ -393,6 +401,9 @@ const [{ showLoginModal, showSignupModal, isSeller, userInfo, hamburger, otpmoda
       <>
         {(userInfo?.email === "akshajvasudeva@gmail.com"||userInfo?.email ==="Kalakartik23@gmail.com") && (
           <button onClick={admin} className="text-left">Admin</button>
+        )}
+        {(userInfo?.email === "akshajvasudeva@gmail.com"||userInfo?.email ==="Kalakartik23@gmail.com") && (
+          <button onClick={adminusers} className="text-left">All Users</button>
         )}
         {(userInfo?.email === "akshajvasudeva@gmail.com"||userInfo?.email ==="Kalakartik23@gmail.com") && (
           <button onClick={adminorders} className="text-left">All Orders</button>
