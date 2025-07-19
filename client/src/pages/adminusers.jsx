@@ -68,8 +68,11 @@ function Adminusers() {
                   <th scope="row" className="px-6 py-4 font-medium">
                     {users.email}
                   </th>
-                  <td className="px-6 py-4">{users.username}</td>
-{/*                   <td className="px-6 py-4">{users.gigs}</td> */}
+                  <td className="px-6 py-4">
+                    <Link href={`/profile/${users.username}`} className="text-blue-600 hover:underline">
+                      {users.username}
+                    </Link>
+                </td>
                 <td className="px-6 py-4">
                     <button onClick={()=> del(users.id)}>
                   Delete
