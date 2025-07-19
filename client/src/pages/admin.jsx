@@ -14,45 +14,21 @@ function Admin() {
           data: { gigs },
         } = await axios.get(ADMIN_ROUTE, { withCredentials: true });
         setgigs(gigs);
-        console.log(gigs)
       } catch (err) {
         console.error(err);
       }
     };
-    console.log("ak")
-    // console.log(userInfo)
-    // if (userInfo) {
-      // console.log("asdfghjk")
       getgigs();
-    // }
-      console.log("aks")
     }, []);
   
   const del=async(gigid)=>{
     try {
-      // console.log(gigid)
       const new_order_list=await axios.get(`${DELETE_GIG}?gigId=${gigid}`, { withCredentials: true });
       setgigs(new_order_list);
     } catch (err) {
       console.error(err);
     }
   }
-//   const accept=async(orderid)=>{
-//     try {
-//       const new_order_list=await axios.put(ORDER_SUCCESS_ROUTE,{orderId:orderid}, { withCredentials: true });
-//       setOrders(new_order_list);
-//     } catch (err) {
-//       console.error(err);
-//     }
-//   }
-//   const complete=async(orderid)=>{
-//     try {
-//       const new_order_list=await axios.put(ORDER_COMPLETE_ROUTE,{orderId:orderid}, { withCredentials: true });
-//       setOrders(new_order_list);
-//     } catch (err) {
-//       console.error(err);
-//     }
-//   }
 
   return (
     <div className="min-h-[80vh] my-10 mt-0 px-32">
@@ -70,30 +46,9 @@ function Admin() {
               <th scope="col" className="px-6 py-3">
                 Category
               </th>
-              {/* <th scope="col" className="px-6 py-3">
-                Price
-              </th> */}
-              {/* <th scope="col" className="px-6 py-3">
-                Delivery Time
-              </th> */}
-              {/* <th scope="col" className="px-6 py-3">
-                Order Date
-              </th> */}
-              {/* <th scope="col" className="px-6 py-3">
-                Status
-              </th> */}
-              {/* <th scope="col" className="px-6 py-3">
-                Send Message
-              </th> */}
-              {/* <th scope="col" className="px-6 py-3">
-                Accept Request
-              </th> */}
               <th scope="col" className="px-6 py-3">
                 Delete
               </th>
-              {/* <th scope="col" className="px-6 py-3">
-                Completed?
-              </th> */}
             </tr>
           </thead>
           <tbody>
@@ -110,43 +65,11 @@ function Admin() {
                     {gigs.title}
                   </th>
                   <td className="px-6 py-4">{gigs.category}</td>
-                  {/* <td className="px-6 py-4">{order.price}</td>
-                  <td className="px-6 py-4">{order.gig.deliveryTime}</td>
-                  <td className="px-6 py-4">{order.createdAt.split("T")[0]}</td>
-                  <td className="px-6 py-4">{order.status}</td> */}
-                  {/* {
-                    order.status==="Request Accepted"?
-                    <td className="px-6 py-4 ">
-                    <Link
-                      href={`/buyer/orders/messages/${order.id}`}
-                      className="font-medium text-blue-600  hover:underline"
-                    >
-                      Send
-                    </Link>
-                  </td>
-                  :
-                  "Can not send Message"
-                }
-                <td className="px-6 py-4">
-                  {order.status==="Request Accepted"?
-                  "Request Accepted":
-                  <button onClick={()=> accept(order.id)}>
-                  Accept Request
-                  </button>
-                  }
-                </td> */}
                 <td className="px-6 py-4">
                     <button onClick={()=> del(gigs.id)}>
                   Delete
                   </button>
                 </td>
-                {/* <td className="px-6 py-4">
-                  {order.status==="Request Accepted"?
-                    <button onClick={()=> complete(order.id)}>
-                  Completed
-                  </button>:
-                  "Accept the request first"}
-                </td> */}
                 </tr>
               );
             })}
