@@ -16,13 +16,13 @@ export const LOGOUT_ROUTE = `${AUTH_ROUTES}/logout`;
 export const GET_USER_INFO = `${AUTH_ROUTES}/get-user-info`;
 export const SET_USER_INFO = `${AUTH_ROUTES}/set-user-info`;
 export const SET_USER_IMAGE = `${AUTH_ROUTES}/set-user-image`;
-export const GET_USER_PUBLIC_PROFILE = `${AUTH_ROUTES}/user`; // used with /:username
+export const SET_USER_IMAGE = `${AUTH_ROUTES}/all-users`;
+export const GET_USER_PUBLIC_PROFILE = `${AUTH_ROUTES}/user`;
 
 
 export const ADD_GIG_ROUTE=`${GIG_ROUTES}/add`;
 export const GET_USER_GIGS_ROUTE=`${GIG_ROUTES}/get-user-gigs`;
 export const GET_GIG_DATA=`${GIG_ROUTES}/get-gig-data`;
-// export const SET_GIG_DATA=`${GIG_ROUTES}/set-gig-data`;
 export const EDIT_GIG_DATA=`${GIG_ROUTES}/edit-gig`;
 export const SEARCH_GIGS_ROUTE=`${GIG_ROUTES}/search-gigs`;
 export const CHECK_USER_ORDERED_GIG_ROUTE=`${GIG_ROUTES}/check-gig-order`;
