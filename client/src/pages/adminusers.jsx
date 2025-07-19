@@ -47,9 +47,9 @@ function Adminusers() {
               <th scope="col" className="px-6 py-3">
                 Username
               </th>
-              <th scope="col" className="px-6 py-3">
+{/*               <th scope="col" className="px-6 py-3">
                 Gigs
-              </th>
+              </th> */}
               <th scope="col" className="px-6 py-3">
                 Delete
               </th>
@@ -69,7 +69,7 @@ function Adminusers() {
                     {users.email}
                   </th>
                   <td className="px-6 py-4">{users.username}</td>
-                  <td className="px-6 py-4">{users.gigs}</td>
+{/*                   <td className="px-6 py-4">{users.gigs}</td> */}
                 <td className="px-6 py-4">
                     <button onClick={()=> del(users.id)}>
                   Delete
