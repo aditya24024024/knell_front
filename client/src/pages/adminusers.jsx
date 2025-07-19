@@ -24,8 +24,7 @@ function Adminusers() {
   
   const del=async(userid)=>{
     try {
-      const new_user_list=await axios.get(`${DELETE_USER_ROUTE}?userId=${userid}`, { withCredentials: true });
-      setgigs(new_user_list);
+      await axios.get(`${DELETE_USER_ROUTE}?userId=${userid}`, { withCredentials: true });
     } catch (err) {
       console.error(err);
     }
