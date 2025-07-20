@@ -97,18 +97,31 @@ const Pricing = () => {
             <BiRightArrowAlt className="text-2xl ml-2" />
           </button>
         ) : (
-          <button
-            className={`flex items-center justify-center py-2 font-bold text-lg rounded transition ${
-              userInfo?.isSocialLogin
-                ? 'bg-[#1DBF73] hover:bg-[#17a865] text-white'
-                : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-            }`}
-            onClick={handleRequest}
-            disabled={!userInfo?.isSocialLogin}
-          >
-            <span>{userInfo?.isSocialLogin ? 'Request For Service' : 'Verify to Request'}</span>
-            <BiRightArrowAlt className="text-2xl ml-2" />
-          </button>
+         <div className="relative">
+  <button
+    className={`flex items-center justify-center w-full py-2 font-bold text-lg rounded transition ${
+      userInfo?.isSocialLogin
+        ? 'bg-[#1DBF73] hover:bg-[#17a865] text-white'
+        : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+    }`}
+    onClick={handleRequest}
+    disabled={!userInfo?.isSocialLogin}
+  >
+    <span>{userInfo?.isSocialLogin ? 'Request For Service' : 'Verify to Request'}</span>
+    <BiRightArrowAlt className="text-2xl ml-2" />
+  </button>
+
+  {!userInfo?.isSocialLogin && (
+    <div
+      className="absolute inset-0 cursor-pointer"
+      onClick={() => {
+        toast.warn("⚠️ You need to verify your account first. Head to your profile to complete verification.");
+        setTimeout(() => router.push("/profile"), 1500);
+      }}
+    />
+  )}
+</div>
+
         )}
       </div>
 
