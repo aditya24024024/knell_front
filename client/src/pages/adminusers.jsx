@@ -14,7 +14,12 @@ useEffect(() => {
 
 const fetchUsers = async () => {
   try {
-    const { data } = await axios.get(ALL_USERS_ROUTE, { withCredentials: true }); // ✅ FIXED THIS LINE
+    const { data } = await axios.post(
+  VERIFY_USER_ROUTE,
+  { userIdToVerify: userId },
+  { withCredentials: true }
+);
+
     setusers(data.users);
   } catch (err) {
     console.error("Error fetching users:", err);
@@ -32,12 +37,17 @@ const del = async (userid) => {
 
 const verifyUser = async (userId) => {
   try {
-    await axios.get(`${VERIFY_USER_ROUTE}?userIdToVerify=${userId}`, { withCredentials: true });
+    await axios.post(
+      VERIFY_USER_ROUTE,
+      { userIdToVerify: userId },
+      { withCredentials: true }
+    );
     fetchUsers(); // refresh list
   } catch (err) {
     console.error("Verification error:", err.response?.data || err.message);
   }
 };
+
 
 
 
