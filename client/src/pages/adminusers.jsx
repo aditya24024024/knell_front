@@ -13,15 +13,14 @@ function Adminusers() {
   }, []);
 
   const fetchUsers = async () => {
-    try {
-      const { data } = axios.post(VERIFY_USER_ROUTE, { userIdToVerify: user.id }, { withCredentials: true });
-    };
+  try {
+    const { data } = await axios.get(ALL_USERS_ROUTE, { withCredentials: true });
+    setusers(data.users);
+  } catch (err) {
+    console.error(err);
+  }
+};
 
-      setusers(data.users);
-    } catch (err) {
-      console.error(err);
-    }
-  };
 
   const del = async (userid) => {
     try {
