@@ -13,6 +13,7 @@ function Adminusers() {
         const {
           data: { users },
         } = await axios.get(ALL_USERS_ROUTE, { withCredentials: true });
+        setusers(users);
       } catch (err) {
         console.error(err);
       }
