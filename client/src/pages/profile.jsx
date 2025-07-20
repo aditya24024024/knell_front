@@ -60,18 +60,14 @@ const Profile = () => {
   const setProfile = async () => {
     try {
       const response = await axios.post(SET_USER_INFO, { ...data }, { withCredentials: true });
-      console.log({...data});
 
       if (response?.data?.usernameError) {
         setErrorMessage("Enter a Unique Username");
         return;
       }
 
-      // console.log(response);
-      // console.log(response.data);
-      if (response.status==400) {
-        console.log("dsgdklds");
-        setErrorMessage(response.data);
+      if (response?.data?.emptyFieldError) {
+        setErrorMessage("Please enter all the required fields");
         return;
       }
 
