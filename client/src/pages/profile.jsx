@@ -1,6 +1,6 @@
 import { reducerCases } from '../context/constants';
 import { useStateProvider } from '../context/StateContext';
-import { SET_USER_IMAGE, SET_USER_INFO } from '../utils/constants';
+import { GET_USER_INFO, SET_USER_IMAGE, SET_USER_INFO } from '../utils/constants';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
@@ -10,7 +10,7 @@ import { toast } from 'react-toastify';
 const Profile = () => {
   const router = useRouter();
   const [{ userInfo }, dispatch] = useStateProvider();
-  const [isLoaded, setIsLoaded] = useState(true);
+  const [isLoaded, setIsLoaded] = useState(false);
   const [imageHover, setImageHover] = useState(false);
   const [image, setImage] = useState(null);
   const [preview, setPreview] = useState(null);
@@ -24,33 +24,42 @@ const Profile = () => {
   const MEET_LINK = "https://meet.google.com/hso-tfhz-npz";
 
   useEffect(() => {
-    const populateData = async () => {
-      if (!userInfo) return;
-      const handleData = { ...data };
+    const fetchUserInfo = async () => {
+      try {
+        const {
+          data: { user },
+        } = await axios.post(GET_USER_INFO, {}, {
+          withCredentials: true,
+        });
 
-      handleData.username = userInfo?.username || "";
-      handleData.description = userInfo?.description || "";
-      handleData.fullName = userInfo?.fullName || "";
+        dispatch({
+          type: reducerCases.SET_USER,
+          userInfo: {
+            ...user,
+            image: user.image,
+          },
+        });
 
-      setData(handleData);
+        const handleData = {
+          username: user?.username || "",
+          description: user?.description || "",
+          fullName: user?.fullName || "",
+        };
+        setData(handleData);
+        if (user?.image) setPreview(user.image);
 
-      if (userInfo?.image) {
-        setPreview(userInfo.image);
+        setIsLoaded(true);
+      } catch (err) {
+        console.error("Failed to fetch updated user info:", err);
       }
-
-      setIsLoaded(true);
     };
 
-    populateData();
-  }, [userInfo]);
+    fetchUserInfo();
+  }, [dispatch]);
 
   const setProfile = async () => {
     try {
-      const response = await axios.post(
-        SET_USER_INFO,
-        { ...data },
-        { withCredentials: true }
-      );
+      const response = await axios.post(SET_USER_INFO, { ...data }, { withCredentials: true });
 
       if (response.data.usernameError) {
         setErrorMessage("Enter a Unique Username");
