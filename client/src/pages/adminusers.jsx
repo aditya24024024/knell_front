@@ -22,12 +22,6 @@ const fetchUsers = async () => {
 };
 
 
-    setusers(data.users);
-  } catch (err) {
-    console.error("Error fetching users:", err);
-  }
-};
-
 const del = async (userid) => {
   try {
     await axios.get(`${DELETE_USER_ROUTE}?userId=${userid}`, { withCredentials: true });
