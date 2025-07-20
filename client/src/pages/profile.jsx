@@ -62,7 +62,7 @@ const Profile = () => {
       console.log({...data});
       const response = await axios.post(SET_USER_INFO, { ...data }, { withCredentials: true });
 
-      if (response.data.usernameError) {
+      if (response?.data?.usernameError) {
         setErrorMessage("Enter a Unique Username");
         return;
       }
