@@ -21,7 +21,7 @@ const Profile = () => {
     description: "",
   });
   const [showVerificationTab, setShowVerificationTab] = useState(false);
-  const MEET_LINK = "https://meet.google.com/your-meeting-code";
+  const MEET_LINK = "meet.google.com/krp-vssb-xub";
 
   useEffect(() => {
     const populateData = async () => {
