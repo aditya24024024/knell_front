@@ -21,7 +21,7 @@ const Profile = () => {
     description: "",
   });
   const [showVerificationTab, setShowVerificationTab] = useState(false);
-  const MEET_LINK = "https://meet.google.com/hso-tfhz-npz";
+  const MEET_LINK = "https://meet.google.com/wyu-nqxw-dqq";
 
   useEffect(() => {
     const fetchUserInfo = async () => {
@@ -131,11 +131,16 @@ const Profile = () => {
             Please complete your profile to get started
           </h4>
 
-          {!userInfo?.isSocialLogin && (
-            <div className="text-yellow-600 font-medium">
-              ⚠️ Your account is not yet verified.
-            </div>
-          )}
+          {userInfo?.isSocialLogin ? (
+  <div className="text-green-600 font-semibold">
+    ✅ You are now a verified user.
+  </div>
+) : (
+  <div className="text-yellow-600 font-medium">
+    ⚠️ Your account is not yet verified.
+  </div>
+)}
+
 
           <div className="flex flex-col items-center w-full gap-6">
             {/* Profile Picture Upload */}

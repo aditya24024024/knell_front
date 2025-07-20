@@ -29,30 +29,34 @@ const Pricing = () => {
   };
 
   const handleRequest = async () => {
-    if (!userInfo?.isSocialLogin) {
-      toast.error("Please verify your account first to access services.");
-      return;
-    }
+  if (!userInfo?.isSocialLogin) {
+    toast.error("⚠️ You are not verified! Please complete verification in your profile before placing an order.");
+    setTimeout(() => {
+      router.push('/profile');
+    }, 1500); // Optional: navigate them after short delay
+    return;
+  }
 
-    try {
-      const { data } = await axios.post(CREATE_ORDER, { gigid }, { withCredentials: true });
-      toast.success("Your order request has been sent! Please wait for your 'Friend' to accept.");
-      router.push('/buyer/orders/');
-    } catch (err) {
-      const status = err.response?.status;
-      if (status === 401) {
-        toast.error("You already have a pending request from this gig.");
-      } else if (status === 409 || status === 411) {
-        toast.error("Please login again.");
-        handleLogin();
-      } else if (status === 410) {
-        toast.error("You must sign up first before ordering.");
-        handleSignup();
-      } else {
-        toast.error("Order creation failed. Please try again later.");
-      }
+  try {
+    const { data } = await axios.post(CREATE_ORDER, { gigid }, { withCredentials: true });
+    toast.success("Your order request has been sent! Please wait for your 'Friend' to accept.");
+    router.push('/buyer/orders/');
+  } catch (err) {
+    const status = err.response?.status;
+    if (status === 401) {
+      toast.error("You already have a pending request from this gig.");
+    } else if (status === 409 || status === 411) {
+      toast.error("Please login again.");
+      handleLogin();
+    } else if (status === 410) {
+      toast.error("You must sign up first before ordering.");
+      handleSignup();
+    } else {
+      toast.error("Order creation failed. Please try again later.");
     }
-  };
+  }
+};
+
 
   if (!gigData) return null;
 
