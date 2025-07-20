@@ -14,8 +14,8 @@ function Adminusers() {
 
   const fetchUsers = async () => {
     try {
-      const { data } = await axios.get(`${VERIFY_USER_ROUTE}?userIdToVerify=${user.id}`, {
-  withCredentials: true,
+      const { data } = axios.post(VERIFY_USER_ROUTE, { userIdToVerify: user.id }, { withCredentials: true });
+
 });
 
       setusers(data.users);
