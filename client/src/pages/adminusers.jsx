@@ -32,7 +32,8 @@ function Adminusers() {
 
   const verifyUser = async (userId) => {
     try {
-      await axios.post(VERIFY_USER_ROUTE, { userId }, { withCredentials: true });
+      await axios.post(VERIFY_USER_ROUTE, { userIdToVerify: userId }, { withCredentials: true });
+
       fetchUsers(); // Refresh list after verification
     } catch (err) {
       console.error("Verification error:", err);
