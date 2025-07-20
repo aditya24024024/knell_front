@@ -66,8 +66,8 @@ const Profile = () => {
         return;
       }
 
-      console.log(response);
-      console.log(response.data);
+      // console.log(response);
+      // console.log(response.data);
       if (response.status==400) {
         console.log("dsgdklds");
         setErrorMessage(response.data);
