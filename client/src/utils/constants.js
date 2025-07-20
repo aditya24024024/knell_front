@@ -15,7 +15,7 @@ export const LOGIN_ROUTE = `${AUTH_ROUTES}/login`;
 export const LOGOUT_ROUTE = `${AUTH_ROUTES}/logout`;
 export const GET_USER_INFO = `${AUTH_ROUTES}/get-user-info`;
 
-export const VERIFY_USER_ROUTE = `${AUTH_ROUTES}/verify-user`;
+export const VERIFY_USER_ROUTE = `${AUTH_ROUTES}/admin/verify-user`;
 
 export const SET_USER_INFO = `${AUTH_ROUTES}/set-user-info`;
 export const SET_USER_IMAGE = `${AUTH_ROUTES}/set-user-image`;
