@@ -32,12 +32,13 @@ const del = async (userid) => {
 
 const verifyUser = async (userId) => {
   try {
-    await axios.post(VERIFY_USER_ROUTE, { userIdToVerify: userId }, { withCredentials: true }); // ✅ verify logic
-    fetchUsers(); // refresh table
+    await axios.get(`${VERIFY_USER_ROUTE}?userIdToVerify=${userId}`, { withCredentials: true });
+    fetchUsers(); // refresh list
   } catch (err) {
-    console.error("Verification error:", err);
+    console.error("Verification error:", err.response?.data || err.message);
   }
 };
+
 
 
   return (
