@@ -14,7 +14,10 @@ function Adminusers() {
 
   const fetchUsers = async () => {
     try {
-      const { data } = await axios.get(ALL_USERS_ROUTE, { withCredentials: true });
+      const { data } = await axios.get(`${VERIFY_USER_ROUTE}?userIdToVerify=${user.id}`, {
+  withCredentials: true,
+});
+
       setusers(data.users);
     } catch (err) {
       console.error(err);
