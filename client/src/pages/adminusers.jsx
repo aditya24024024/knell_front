@@ -14,11 +14,13 @@ useEffect(() => {
 
 const fetchUsers = async () => {
   try {
-    const { data } = await axios.post(
-  VERIFY_USER_ROUTE,
-  { userIdToVerify: userId },
-  { withCredentials: true }
-);
+    const { data } = await axios.get(ALL_USERS_ROUTE, { withCredentials: true });
+    setusers(data.users);
+  } catch (err) {
+    console.error("Error fetching users:", err);
+  }
+};
+
 
     setusers(data.users);
   } catch (err) {
