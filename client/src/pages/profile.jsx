@@ -59,6 +59,7 @@ const Profile = () => {
 
   const setProfile = async () => {
     try {
+      console.log({...data});
       const response = await axios.post(SET_USER_INFO, { ...data }, { withCredentials: true });
 
       if (response.data.usernameError) {
