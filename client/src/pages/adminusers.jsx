@@ -8,38 +8,37 @@ function Adminusers() {
   const [users, setusers] = useState([]);
   const [{ userInfo }] = useStateProvider();
 
-  useEffect(() => {
-    fetchUsers();
-  }, []);
+useEffect(() => {
+  fetchUsers();
+}, []);
 
-  const fetchUsers = async () => {
+const fetchUsers = async () => {
   try {
-    const { data } = await axios.post(VERIFY_USER_ROUTE, { userIdToVerify: user.id }, { withCredentials: true });
+    const { data } = await axios.get(ALL_USERS_ROUTE, { withCredentials: true }); // ✅ FIXED THIS LINE
     setusers(data.users);
+  } catch (err) {
+    console.error("Error fetching users:", err);
+  }
+};
+
+const del = async (userid) => {
+  try {
+    await axios.get(`${DELETE_USER_ROUTE}?userId=${userid}`, { withCredentials: true });
+    fetchUsers();
   } catch (err) {
     console.error(err);
   }
 };
 
+const verifyUser = async (userId) => {
+  try {
+    await axios.post(VERIFY_USER_ROUTE, { userIdToVerify: userId }, { withCredentials: true }); // ✅ verify logic
+    fetchUsers(); // refresh table
+  } catch (err) {
+    console.error("Verification error:", err);
+  }
+};
 
-  const del = async (userid) => {
-    try {
-      await axios.get(`${DELETE_USER_ROUTE}?userId=${userid}`, { withCredentials: true });
-      fetchUsers();
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  const verifyUser = async (userId) => {
-    try {
-      await axios.post(VERIFY_USER_ROUTE, { userIdToVerify: userId }, { withCredentials: true });
-
-      fetchUsers(); // Refresh list after verification
-    } catch (err) {
-      console.error("Verification error:", err);
-    }
-  };
 
   return (
     <div className="min-h-[80vh] my-10 mt-0 px-32">
