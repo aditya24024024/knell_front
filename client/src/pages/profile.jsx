@@ -59,8 +59,8 @@ const Profile = () => {
 
   const setProfile = async () => {
     try {
-      console.log({...data});
       const response = await axios.post(SET_USER_INFO, { ...data }, { withCredentials: true });
+      console.log({...data});
 
       if (response?.data?.usernameError) {
         setErrorMessage("Enter a Unique Username");
