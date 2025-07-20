@@ -1,47 +1,46 @@
 import { reducerCases } from '../context/constants';
 import { useStateProvider } from '../context/StateContext';
-import { HOST, SET_USER_IMAGE, SET_USER_INFO } from '../utils/constants';
+import { SET_USER_IMAGE, SET_USER_INFO } from '../utils/constants';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
-import axios from "axios";
-import { toast } from "react-toastify";
+import axios from 'axios';
+import { toast } from 'react-toastify';
 
 const Profile = () => {
   const router = useRouter();
   const [{ userInfo }, dispatch] = useStateProvider();
   const [isLoaded, setIsLoaded] = useState(true);
   const [imageHover, setImageHover] = useState(false);
-  const [image, setImage] = useState(undefined);
+  const [image, setImage] = useState(null);
+  const [preview, setPreview] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
   const [data, setData] = useState({
     username: "",
     fullName: "",
     description: "",
   });
+  const [showVerificationTab, setShowVerificationTab] = useState(false);
+  const MEET_LINK = "https://meet.google.com/your-meeting-code";
 
   useEffect(() => {
-    const populateData = () => {
+    const populateData = async () => {
+      if (!userInfo) return;
       const handleData = { ...data };
-      if (userInfo) {
-        if (userInfo?.username) handleData.username = userInfo?.username;
-        if (userInfo?.description) handleData.description = userInfo?.description;
-        if (userInfo?.fullName) handleData.fullName = userInfo?.fullName;
 
-        if (userInfo?.imageName) {
-          const fileName = image;
-          fetch(userInfo.imageName).then(async (response) => {
-            const contentType = response.headers.get("content-type");
-            const blob = await response.blob();
-            const files = new File([blob], fileName, { contentType });
-            setImage(files);
-          });
-        }
+      handleData.username = userInfo?.username || "";
+      handleData.description = userInfo?.description || "";
+      handleData.fullName = userInfo?.fullName || "";
 
-        setData(handleData);
-        setIsLoaded(true);
+      setData(handleData);
+
+      if (userInfo?.image) {
+        setPreview(userInfo.image);
       }
+
+      setIsLoaded(true);
     };
+
     populateData();
   }, [userInfo]);
 
@@ -52,39 +51,38 @@ const Profile = () => {
         { ...data },
         { withCredentials: true }
       );
+
       if (response.data.usernameError) {
         setErrorMessage("Enter a Unique Username");
-      } else {
-        let imageName = "";
-        if (image) {
-          const formData = new FormData();
-          formData.append("images", image);
-          const {
-            data: { img },
-          } = await axios.post(SET_USER_IMAGE, formData, {
-            withCredentials: true,
-            headers: { "Content-Type": "multipart/form-data" },
-          });
-          imageName = img;
-        }
-
-        dispatch({
-          type: reducerCases.SET_USER,
-          userInfo: {
-            ...userInfo,
-            ...data,
-            image: imageName.length ? imageName : false,
-          },
-        });
-        toast.success("Profile set up successfully");
-
-setTimeout(() => {
-  router.push("/"); // navigates to home page
-  setTimeout(() => {
-    window.location.reload(); // forces reload after navigation
-  }, 1000); // small delay to ensure navigation happens
-}, 1000); // optional delay to let toast show before redirect
+        return;
       }
+
+      let imageName = "";
+      if (image) {
+        const formData = new FormData();
+        formData.append("images", image);
+        const { data: { img } } = await axios.post(SET_USER_IMAGE, formData, {
+          withCredentials: true,
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+        imageName = img;
+      }
+
+      dispatch({
+        type: reducerCases.SET_USER,
+        userInfo: {
+          ...userInfo,
+          ...data,
+          image: imageName || userInfo?.image || false,
+        },
+      });
+
+      toast.success("Profile set up successfully");
+
+      setTimeout(() => {
+        router.push("/");
+        setTimeout(() => window.location.reload(), 1000);
+      }, 1000);
     } catch (err) {
       console.error(err);
       toast.error("Some error occurred");
@@ -92,11 +90,12 @@ setTimeout(() => {
   };
 
   const handleFile = (e) => {
-    let file = e.target.files;
-    const fileType = file[0]["type"];
+    const file = e.target.files?.[0];
+    const fileType = file?.type;
     const validImageTypes = ["image/gif", "image/jpeg", "image/png"];
-    if (validImageTypes.includes(fileType)) {
-      setImage(file[0]);
+    if (file && validImageTypes.includes(fileType)) {
+      setImage(file);
+      setPreview(URL.createObjectURL(file));
     }
   };
 
@@ -106,8 +105,7 @@ setTimeout(() => {
 
   const inputClassName =
     "block p-4 w-full text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500";
-  const labelClassName =
-    "mb-2 text-lg font-medium text-gray-900";
+  const labelClassName = "mb-2 text-lg font-medium text-gray-900";
 
   return (
     <>
@@ -118,10 +116,17 @@ setTimeout(() => {
               <span className="text-red-600 font-bold">{errorMessage}</span>
             </div>
           )}
+
           <h2 className="text-2xl sm:text-3xl">Welcome to Knell</h2>
           <h4 className="text-lg sm:text-xl text-center">
             Please complete your profile to get started
           </h4>
+
+          {!userInfo?.isSocialLogin && (
+            <div className="text-yellow-600 font-medium">
+              ⚠️ Your account is not yet verified.
+            </div>
+          )}
 
           <div className="flex flex-col items-center w-full gap-6">
             {/* Profile Picture Upload */}
@@ -130,18 +135,18 @@ setTimeout(() => {
               onMouseEnter={() => setImageHover(true)}
               onMouseLeave={() => setImageHover(false)}
             >
-              <label className={labelClassName}>Select a profile Picture</label>
+              <label className={labelClassName}>Select a profile picture</label>
               <div className="bg-purple-500 h-36 w-36 flex items-center justify-center rounded-full relative">
-                {image ? (
+                {preview ? (
                   <Image
-                    src={URL.createObjectURL(image)}
+                    src={preview}
                     alt="profile"
                     fill
                     className="rounded-full object-cover"
                   />
                 ) : (
                   <span className="text-6xl text-white">
-                    {userInfo?.email[0].toUpperCase()}
+                    {userInfo?.email?.[0]?.toUpperCase() || "U"}
                   </span>
                 )}
                 <div
@@ -174,55 +179,79 @@ setTimeout(() => {
               </div>
             </div>
 
-            {/* Username and Full Name */}
+            {/* Username & Full Name */}
             <div className="flex flex-col sm:flex-row gap-4 w-full max-w-[500px]">
               <div className="flex-1">
-                <label className={labelClassName} htmlFor="username">
-                  Username
-                </label>
+                <label className={labelClassName} htmlFor="username">Username</label>
                 <input
                   className={inputClassName}
                   type="text"
                   name="username"
                   id="username"
-                  placeholder="Username"
                   value={data.username}
                   onChange={handleChange}
+                  placeholder="Username"
                 />
               </div>
-
               <div className="flex-1">
-                <label className={labelClassName} htmlFor="fullName">
-                  Full Name
-                </label>
+                <label className={labelClassName} htmlFor="fullName">Full Name</label>
                 <input
                   className={inputClassName}
                   type="text"
                   name="fullName"
                   id="fullName"
-                  placeholder="Full Name"
                   value={data.fullName}
                   onChange={handleChange}
+                  placeholder="Full Name"
                 />
               </div>
             </div>
 
             {/* Description */}
             <div className="w-full max-w-[500px]">
-              <label className={labelClassName} htmlFor="description">
-                Description
-              </label>
+              <label className={labelClassName} htmlFor="description">Description</label>
               <textarea
+                className={inputClassName}
                 name="description"
                 id="description"
                 value={data.description}
                 onChange={handleChange}
-                className={inputClassName}
-                placeholder="Description"
-              ></textarea>
+                placeholder="Tell us about yourself"
+              />
             </div>
 
-            {/* Button */}
+            {/* Verification Link */}
+            {!userInfo?.isSocialLogin && (
+              <button
+                className="mt-4 text-blue-600 underline"
+                onClick={() => setShowVerificationTab(!showVerificationTab)}
+              >
+                I want to verify my account
+              </button>
+            )}
+
+            {showVerificationTab && (
+              <div className="mt-6 p-5 w-full max-w-[500px] rounded-lg border border-blue-300 bg-blue-50">
+                <h3 className="text-xl font-semibold text-blue-700 mb-2">Account Verification</h3>
+                <p className="mb-3 text-gray-700">
+                  To verify your account, please join our live verification session on Google Meet.
+                  Admins are available 24/7.
+                </p>
+                <a
+                  href={MEET_LINK}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                >
+                  Join Verification Meet
+                </a>
+                <p className="text-sm text-gray-500 mt-4">
+                  You will be approved manually by an admin after the session.
+                </p>
+              </div>
+            )}
+
+            {/* Submit Button */}
             <button
               className="border text-lg font-semibold px-6 py-3 border-[#1DBF73] bg-[#1DBF73] text-white rounded-md"
               type="button"
