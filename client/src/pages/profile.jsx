@@ -66,6 +66,12 @@ const Profile = () => {
         return;
       }
 
+      console.log(response);
+      if (response.data.message) {
+        setErrorMessage(response.data.message);
+        return;
+      }
+
       let imageName = "";
       if (image) {
         const formData = new FormData();
