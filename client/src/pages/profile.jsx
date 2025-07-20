@@ -67,8 +67,8 @@ const Profile = () => {
       }
 
       console.log(response);
-      if (response.data.message) {
-        setErrorMessage(response.data.message);
+      if (response.status==400) {
+        setErrorMessage(response.data);
         return;
       }
 
