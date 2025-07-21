@@ -21,7 +21,7 @@ const Profile = () => {
     description: "",
   });
   const [showVerificationTab, setShowVerificationTab] = useState(false);
-  const MEET_LINK = "https://meet.google.com/wyu-nqxw-dqq";
+  const MEET_LINK = "https://meet.google.com/xiy-zezv-hhw";
 
   useEffect(() => {
     const fetchUserInfo = async () => {
