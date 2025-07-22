@@ -62,7 +62,7 @@ function AuthWrapper({ type }) {
             dispatch({ type: reducerCases.SET_UNVERIFIED_USER, unverifiedmail: user });
           }
           dispatch({ type: reducerCases.OTP_MODAL, otpmodal: true });
-        }
+        };
     } catch (err) {
       if (err?.response && err?.response?.data) {
         setErrorMessage(err.response.data);
