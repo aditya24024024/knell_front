@@ -2,6 +2,7 @@ import { reducerCases } from "./constants";
 
 export const initialState = {
   userInfo: undefined,
+  resetPass:false,
   showLoginModal: false,
   showSignupModal: false,
   isSeller: false,
@@ -21,6 +22,11 @@ const reducer = (state, action) => {
       return {
         ...state,
         userInfo: action.userInfo,
+      };
+    case reducerCases.RESET_PASS:
+      return {
+        ...state,
+        resetPass: action.resetPass,
       };
       case reducerCases.TOGGLE_HAMBURGER:
   return {
