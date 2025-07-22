@@ -1,13 +1,14 @@
 import { useState } from "react";
-import { OTP_VERIFICATION, SIGNUP_ROUTE } from "../utils/constants";
+import { OTP_VERIFICATION, SIGNUP_ROUTE , FORGOT_PASSWORD } from "../utils/constants";
 import axios from "axios";
 import { useStateProvider } from "../context/StateContext";
 import { reducerCases } from "../context/constants";
+import { toast } from "react-toastify";
 
 export default function OtpWrapper() {
   const [otp, setOtp] = useState("");
   const [errorMessage, setErrorMessage] = useState("")
-  const [{ unverifiedmail }, dispatch] = useStateProvider()
+  const [{ unverifiedmail, resetPass }, dispatch] = useStateProvider()
 
 
   async function verifyOtp() {
@@ -18,9 +19,8 @@ export default function OtpWrapper() {
         { email, otp },
         { withCredentials: true }
       );
-      // console.log(response);
       const password = response.data.password;
-      const { data: { user, jwt }, } = await axios.post(SIGNUP_ROUTE,
+      const { data: { user, jwt }, } = await axios.post(resetPass ? FORGOT_PASSWORD : SIGNUP_ROUTE,
         { email, password },
         { withCredentials: true }
       );
@@ -29,6 +29,7 @@ export default function OtpWrapper() {
       }
       dispatch({ type: reducerCases.SET_UNVERIFIED_USER, unverifiedmail: undefined });
       dispatch({ type: reducerCases.OTP_MODAL, otpmodal: false });
+      if (resetPass) toast.success("Password Updated.");
       window.location.reload();
     } catch (err) {
       if (err?.response && err?.response?.data) {
@@ -54,6 +55,11 @@ export default function OtpWrapper() {
             className="absolute top-3 right-3 text-xl text-slate-500 hover:text-slate-700"
             onClick={() => {
               dispatch({ type: reducerCases.OTP_MODAL, otpmodal: false });
+              dispatch({ type: reducerCases.CLOSE_AUTH_MODAL });
+              dispatch({
+                type: reducerCases.RESET_PASS,
+                resetPass: false,
+              });
             }}
           >
             &times;
