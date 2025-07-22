@@ -172,7 +172,7 @@ function AuthWrapper({ type }) {
                   </span>
                   <div className="mt-2 flex justify-end">
                           <span
-                            className="px-4 py-2 text--[#1DBF73] rounded transition duration-200"
+                            className="text-[#1DBF73] cursor-pointer"
                             onClick={() => {
                               dispatch({
                                 type: reducerCases.RESET_PASS,
