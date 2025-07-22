@@ -1,5 +1,5 @@
 import axios from "axios";
-import { LOGIN_ROUTE, OTP_SEND } from "../utils/constants";
+import { LOGIN_ROUTE, OTP_SEND , SEND_FORGOT_OTP } from "../utils/constants";
 import React, { useEffect, useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { MdFacebook } from "react-icons/md";
@@ -11,7 +11,7 @@ import { reducerCases } from "../context/constants";
 function AuthWrapper({ type }) {
   const [cookies, setCookies] = useCookies();
 
-  const [{}, dispatch] = useStateProvider();
+  const [{resetPass}, dispatch] = useStateProvider();
 
   const [values, setValues] = useState({ email: "", password: "" });
 
@@ -46,18 +46,14 @@ function AuthWrapper({ type }) {
             { email, password },
             { withCredentials: true }
           );
-          // setCookies("jwt", { jwt});
-          // console.log(user);
           dispatch({ type: reducerCases.CLOSE_AUTH_MODAL });
           if (user) {
             dispatch({ type: reducerCases.SET_USER, userInfo: user });
           }
-          // console.log("dsfgd");
-          // console.log(userInfo);
           window.location.reload();
         }
         else {
-          const { data: { user }, } = await axios.post(OTP_SEND,
+          const { data: { user }, } = await axios.post(resetPass?SEND_FORGOT_OTP:OTP_SEND,
             { email, password },
             { withCredentials: true }
           );
@@ -67,9 +63,7 @@ function AuthWrapper({ type }) {
           }
           dispatch({ type: reducerCases.OTP_MODAL, otpmodal: true });
         }
-      };
     } catch (err) {
-      // console.log(err);
       if (err?.response && err?.response?.data) {
         setErrorMessage(err.response.data);
       } else {
@@ -93,13 +87,17 @@ function AuthWrapper({ type }) {
           className="absolute top-3 right-3 text-xl text-slate-500 hover:text-slate-700"
           onClick={() => {
             dispatch({type: reducerCases.CLOSE_AUTH_MODAL});
+            dispatch({
+                type: reducerCases.RESET_PASS,
+                resetPass: false,
+              });
           }}
         >
           &times;
         </button>
           <div className="flex flex-col justify-center items-center p-8 gap-7">
             <h3 className="text-2xl font-semibold text-slate-700">
-  {type === "login" ? "Login to Knell" : "Create your Knell account"}
+  {resetPass ? "Update Password " : (type === "login" ? "Login to Knell" : "Create your Knell account")}
 </h3>
 
             {/* <div className="flex flex-col gap-5">
@@ -139,7 +137,7 @@ function AuthWrapper({ type }) {
   )}
               <button
                 className="bg-[#1DBF73] text-white px-6 py-3 w-full max-w-xs"
-                onClick={handleClick} // Now defined
+                onClick={handleClick}
                 type="button"
               >
                 Continue
@@ -156,17 +154,42 @@ function AuthWrapper({ type }) {
                     className="text-[#1DBF73] cursor-pointer"
                     onClick={() => {
                       dispatch({
-                        type: reducerCases.TOGGLE_SIGNUP_MODAL,
-                        showSignupModal: true,
-                      });
-                      dispatch({
-                        type: reducerCases.TOGGLE_LOGIN_MODAL,
-                        showLoginModal: false,
-                      });
+                          type: reducerCases.TOGGLE_LOGIN_MODAL,
+                          showLoginModal: false,
+                        });
+                        dispatch({
+                          type: reducerCases.TOGGLE_SIGNUP_MODAL,
+                          showSignupModal: true,
+                        });
+                        dispatch({
+                          type: reducerCases.RESET_PASS,
+                          resetPass: false,
+                        });
                     }}
                   >
                     Join Now
                   </span>
+                  <div className="mt-2 flex justify-end">
+                          <span
+                            className="px-4 py-2 text--[#1DBF73] rounded transition duration-200"
+                            onClick={() => {
+                              dispatch({
+                                type: reducerCases.RESET_PASS,
+                                resetPass: true,
+                              });
+                              dispatch({
+                                type: reducerCases.TOGGLE_LOGIN_MODAL,
+                                showLoginModal: false,
+                              });
+                              dispatch({
+                                type: reducerCases.TOGGLE_SIGNUP_MODAL,
+                                showSignupModal: false,
+                              });
+                            }}
+                          >
+                            Forgot Password?
+                          </span>
+                        </div>
                 </>
               ) : (
                 <>
@@ -175,13 +198,17 @@ function AuthWrapper({ type }) {
                     className="text-[#1DBF73] cursor-pointer"
                     onClick={() => {
                       dispatch({
-                        type: reducerCases.TOGGLE_SIGNUP_MODAL,
-                        showSignupModal: false,
-                      });
-                      dispatch({
-                        type: reducerCases.TOGGLE_LOGIN_MODAL,
-                        showLoginModal: true,
-                      });
+                                type: reducerCases.RESET_PASS,
+                                resetPass: true,
+                              });
+                              dispatch({
+                                type: reducerCases.TOGGLE_LOGIN_MODAL,
+                                showLoginModal: false,
+                              });
+                              dispatch({
+                                type: reducerCases.TOGGLE_SIGNUP_MODAL,
+                                showSignupModal: false,
+                              });
                     }}
                   >
                     Login Now
