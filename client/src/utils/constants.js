@@ -14,14 +14,13 @@ export const SIGNUP_ROUTE = `${AUTH_ROUTES}/signup`;
 export const LOGIN_ROUTE = `${AUTH_ROUTES}/login`;
 export const LOGOUT_ROUTE = `${AUTH_ROUTES}/logout`;
 export const GET_USER_INFO = `${AUTH_ROUTES}/get-user-info`;
-
 export const SET_USER_INFO = `${AUTH_ROUTES}/set-user-info`;
 export const SET_USER_IMAGE = `${AUTH_ROUTES}/set-user-image`;
 export const ALL_USERS_ROUTE = `${AUTH_ROUTES}/all-users`;
 export const VERIFY_USER_ROUTE = `${AUTH_ROUTES}/verify-user`;
 export const DELETE_USER_ROUTE = `${AUTH_ROUTES}/delete-user`;
 export const GET_USER_PUBLIC_PROFILE = `${AUTH_ROUTES}/user`;
-
+export const FORGOT_PASSWORD = `${AUTH_ROUTES}/forgot-password`;
 
 export const ADD_GIG_ROUTE=`${GIG_ROUTES}/add`;
 export const GET_USER_GIGS_ROUTE=`${GIG_ROUTES}/get-user-gigs`;
@@ -54,3 +53,4 @@ export const DELETE_GIG=`${GIG_ROUTES}/delete-gig`;
 
 export const OTP_VERIFICATION = `${MAIL_ROUTES}/verify-otp`;
 export const OTP_SEND = `${MAIL_ROUTES}/send-otp`;
+export const SEND_FORGOT_OTP = `${MAIL_ROUTES}/send-forgot-otp`;
