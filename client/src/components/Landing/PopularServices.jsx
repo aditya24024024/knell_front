@@ -11,7 +11,7 @@ function PopularServices() {
             image: "/yasir.png",
         },
         {
-            name: "Study Companion",
+            name: "Tutor/Counselor",
             label: "Academic Come-Back",
             image: "/eshan.png",
         },
@@ -31,12 +31,12 @@ function PopularServices() {
             image: "/aditya.png",
         },
         {
-            name: "Music Companion",
+            name: "with laksy",
             label: "Lets Jam!!!!!",
             image: "/music.png",
         },
         {
-            name: "Shopping Companion",
+            name: "Shopper",
             label: "Get someone along to bargain with you",
             image: "/tamanna.jpeg",
         },
