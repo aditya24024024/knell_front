@@ -6,9 +6,9 @@ function PopularServices() {
     const router = useRouter();
     const popularServicesData = [
         {
-            name: "Social Companion",
-            label: "Accompanies You",
-            image: "/aditya.png",
+            name: "Freelancer",
+            label: "Do professional work.",
+            image: "/yasir.png",
         },
         {
             name: "Study Companion",
@@ -26,9 +26,9 @@ function PopularServices() {
             image: "/ded.png",
         },
         {
-            name: "Freelancer",
-            label: "Do professional work.",
-            image: "/yasir.png",
+            name: "Social Companion",
+            label: "Accompanies You",
+            image: "/aditya.png",
         },
         {
             name: "Music Companion",
