@@ -44,14 +44,14 @@ function HeroBanner() {
           className="text-3xl sm:text-4xl md:text-5xl leading-snug font-bold"
           style={{ fontFamily: "Bobby Jones" }}
         >
-          FIND THE PERFECT <i><br />PERSON FOR YOU</i>
+          HIRE THE PERFECT <i><br />PERSON FOR YOU</i>
         </h1>
 
         {/* Popular items */}
         <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 text-sm">
           <span className="font-semibold">Popular:</span>
           <ul className="flex flex-wrap gap-2 sm:gap-4">
-            {["Social Companion", "Dance Companion", "Pet Companion"].map((item) => (
+            {["Freelancer", "Dance Companion", "Pet Companion"].map((item) => (
               <li
                 key={item}
                 className="text-sm py-1 px-3 border border-white rounded-full hover:bg-white hover:text-black transition-all duration-300 cursor-pointer"
