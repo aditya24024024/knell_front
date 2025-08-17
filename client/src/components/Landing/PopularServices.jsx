@@ -31,7 +31,7 @@ function PopularServices() {
             image: "/aditya.png",
         },
         {
-            name: "with laksy",
+            name: "Musician",
             label: "Lets Jam!!!!!",
             image: "/music.png",
         },
