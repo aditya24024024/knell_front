@@ -26,6 +26,12 @@ const Search = () => {
     if (category || q) getData();
   }, [category, q]);
 
+  const HeavyComponent = dynamic(() => SearchGridItem, {
+  ssr: false, 
+  loading: () => <p>Loading...</p>,
+});
+
+
   return (
     <>
       {gigs && (
@@ -36,7 +42,6 @@ const Search = () => {
             </h3>
           )}
 
-          {/* Filter Buttons */}
           <div className="flex flex-wrap gap-3 mb-6">
             <button className="py-2 px-4 border border-gray-400 rounded-lg font-medium text-sm sm:text-base">
               Category
