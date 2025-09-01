@@ -34,6 +34,7 @@ const SearchGridItem = ({ gig }) => {
           alt="Gig Image"
           fill
           className="object-cover"
+          loading="lazy"
         />
       </div>
 
@@ -46,6 +47,7 @@ const SearchGridItem = ({ gig }) => {
             height={30}
             width={30}
             className="rounded-full object-cover"
+            loading="lazy"
           />
         ) : (
           <div className="bg-purple-500 h-[30px] w-[30px] flex items-center justify-center rounded-full">
