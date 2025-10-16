@@ -86,13 +86,15 @@ function MessageContainer() {
 
   const sendMessage = async () => {
      const now = Date.now();
-    console.log(lastSentRef.current);
-    console.log(now);
-    console.log(now - lastSentRef.current)
+
+  // block if user sends too fast
   if (now - lastSentRef.current < 2000) {
     console.warn("You're sending messages too quickly!");
     return;
   }
+
+  // ✅ Set timestamp immediately to prevent race condition
+  lastSentRef.current = now;
 
   if (messageText.trim().length) {
     try {
@@ -105,10 +107,11 @@ function MessageContainer() {
       if (response.status === 201) {
         setMessages((prev) => [...prev, response.data.message]);
         setMessageText("");
-        lastSentRef.current = Date.now(); // update cooldown timestamp
       }
     } catch (err) {
       console.error(err);
+      // optional: rollback timestamp if request fails
+      lastSentRef.current = 0;
     }
   }
   };
