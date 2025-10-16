@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { FaRegPaperPlane } from "react-icons/fa";
 import { BsCheckAll } from "react-icons/bs";
 import axios from "axios";
@@ -17,6 +17,7 @@ function MessageContainer() {
   const [recipentId, setRecipentId] = useState(undefined);
   const [messageText, setMessageText] = useState("");
   const [messages, setMessages] = useState([]);
+  const lastSentRef = useRef(0);
 
   useEffect(() => {
     // Initialize socket connection
@@ -84,18 +85,29 @@ function MessageContainer() {
   };
 
   const sendMessage = async () => {
-    if (messageText.trim().length) {
+     const now = Date.now();
+  if (lastSentRef.current && now - lastSentRef.current < 2000) {
+    console.warn("You're sending messages too quickly!");
+    return;
+  }
+
+  if (messageText.trim().length) {
+    try {
       const response = await axios.post(
         `${ADD_MESSAGE}/${orderId}`,
         { message: messageText, recipentId },
         { withCredentials: true }
       );
+
       if (response.status === 201) {
         setMessages((prev) => [...prev, response.data.message]);
         setMessageText("");
-        // NOTE: No need to emit manually — backend already emits after DB insert
+        lastSentRef.current = Date.now(); // update cooldown timestamp
       }
+    } catch (err) {
+      console.error(err);
     }
+  }
   };
 
   return (
