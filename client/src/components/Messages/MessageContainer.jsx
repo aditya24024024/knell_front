@@ -88,7 +88,7 @@ function MessageContainer() {
      const now = Date.now();
     console.log(lastSentRef.current);
     console.log(now);
-    console.log(lastSentRef.current && now - lastSentRef.current)
+    console.log(now - lastSentRef.current)
   if (now - lastSentRef.current < 100000) {
     console.warn("You're sending messages too quickly!");
     return;
