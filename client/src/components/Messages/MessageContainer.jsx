@@ -86,6 +86,9 @@ function MessageContainer() {
 
   const sendMessage = async () => {
      const now = Date.now();
+    console.log(lastSentRef.current," ");
+    console.log(now," ");
+    console.log(lastSentRef.current && now - lastSentRef.current);
   if (lastSentRef.current && now - lastSentRef.current < 2000) {
     console.warn("You're sending messages too quickly!");
     return;
