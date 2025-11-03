@@ -41,8 +41,8 @@ function PopularServices() {
             image: "/tamanna.jpeg",
         },
         {
-            name: "Dance Companion",
-            label: "Lets Dance",
+            name: "Editor",
+            label: "Lets Create",
             image: "/shreya.png",
         },
     ];
