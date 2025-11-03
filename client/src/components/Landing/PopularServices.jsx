@@ -41,7 +41,7 @@ function PopularServices() {
             image: "/tamanna.jpeg",
         },
         {
-            name: "Editor",
+            name: "editor",
             label: "Lets Create",
             image: "/shreya.png",
         },
