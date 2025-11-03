@@ -6,7 +6,7 @@ import { FaStar } from 'react-icons/fa';
 import Reviews from './Reviews';
 import AddReview from './AddReview';
 import { useRouter } from 'next/router';
-import Head from "next/head";
+// import Head from "next/head";
 
 const Details = () => {
   const [{ gigData, hasOrdered }] = useStateProvider();
@@ -30,9 +30,9 @@ const Details = () => {
   if (!gigData || !currentImage) return null;
 
   return (
-    <Head>
-      <meta name="desciption" content={gigData.features}/>
-    </Head>
+    // <Head>
+    //   <meta name="desciption" content={gigData.features}/>
+    // </Head>
     <div className="col-span-2 flex flex-col gap-6">
       {/* Title */}
       <h2 className="text-2xl font-bold text-[#404145]">{gigData.title}</h2>
