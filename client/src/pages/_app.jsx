@@ -20,7 +20,7 @@ export default function App({ Component, pageProps }) {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta
           name="description"
-          content="Knell lets you hire verified college students in India for freelance gigs or safe, platonic, activity-based companionship. On-demand, flexible, trusted."
+          content="Knell connects you to top freelancers in editing, web development, design and more. Hire trusted Indian talent fast, pay securely, and get your project done in time."
         />
       </Head>
 
