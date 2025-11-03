@@ -16,9 +16,9 @@ function PopularServices() {
             image: "/eshan.png",
         },
         {
-            name: "Pet Companion",
-            label: "woof!! woof!!",
-            image: "/aryan.png",
+            name: "editor",
+            label: "Lets Create",
+            image: "/shreya.png",
         },
         {
             name: "Gaming Companion",
@@ -41,9 +41,9 @@ function PopularServices() {
             image: "/tamanna.jpeg",
         },
         {
-            name: "editor",
-            label: "Lets Create",
-            image: "/shreya.png",
+            name: "Pet Companion",
+            label: "woof!! woof!!",
+            image: "/aryan.png",
         },
     ];
 
