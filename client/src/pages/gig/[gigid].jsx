@@ -53,8 +53,8 @@ const Gig = () => {
     // <Head>
     //   <meta name="description" content={gig.description?.slice(0, 160)} />
     // </Head>
+    <div>{gigData?.features}</div>
     <div className="grid grid-cols-1 lg:grid-cols-3 mx-6 md:mx-16 lg:mx-32 gap-10 md:gap-16 lg:gap-20">
-      {gigData?.features}
       <Details />
       <Pricing />
     </div>
