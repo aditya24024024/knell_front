@@ -50,6 +50,7 @@ const Gig = () => {
   }, [gigid, userInfo, dispatch]);
 
   return (
+    <>
     <Head>
       <meta name="keywords" content={gigData.features?.join(', ') || ''} />
     </Head>
@@ -57,6 +58,7 @@ const Gig = () => {
       <Details />
       <Pricing />
     </div>
+    </>
   );
 };
 
