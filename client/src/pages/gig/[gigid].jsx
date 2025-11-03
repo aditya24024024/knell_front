@@ -52,7 +52,7 @@ const Gig = () => {
   return (
     <>
     <Head>
-      <meta name="keywords" content={gigData.features?.join(', ') || ''} />
+      <meta name="keywords" content={gigData?.features?.join(', ') || ''} />
     </Head>
     <div className="grid grid-cols-1 lg:grid-cols-3 mx-6 md:mx-16 lg:mx-32 gap-10 md:gap-16 lg:gap-20">
       <Details />
