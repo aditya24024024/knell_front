@@ -8,6 +8,8 @@ import Services from "../components/Landing/Services";
 import React, { useEffect } from "react";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
+import Script from "next/script";
+import Head from "next/head";
 
 function Index() {
   const router=useRouter();
@@ -29,6 +31,17 @@ function Index() {
   //   }
   // }, [redirected, router]);
   return (
+    <>
+    <Head>
+      <Script async src="https://www.googletagmanager.com/gtag/js?id=AW-17643560057"/>
+        <Script>
+          {`window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+        
+          gtag('config', 'AW-17643560057');`}
+        </Script>
+    </Head>
     <div>
       <HeroBanner/>
       <Companies/>
@@ -38,6 +51,7 @@ function Index() {
       <KnellBusiness/>
       <Joinknell/>
     </div>
+      </>
   );
     
 }
