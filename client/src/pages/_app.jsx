@@ -8,6 +8,7 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Script from "next/script";
 
 export default function App({ Component, pageProps }) {
   const router = useRouter();
@@ -15,14 +16,14 @@ export default function App({ Component, pageProps }) {
   return (
     <StateProvider initialState={initialState} reducer={reducer}>
       <Head>
-        <script async src="https://www.googletagmanager.com/gtag/js?id=AW-17643560057"></script>
-        <script>
+        <Script async src="https://www.googletagmanager.com/gtag/js?id=AW-17643560057"></Script>
+        <Script>
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
         
           gtag('config', 'AW-17643560057');
-        </script>
+        </Script>
         <link rel="shortcut icon" href="/unnamed.jpg" />
         <title>knell</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
