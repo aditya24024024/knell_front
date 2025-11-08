@@ -29,36 +29,32 @@ const Pricing = () => {
   };
 
   const handleRequest = async () => {
-  if (!userInfo?.isSocialLogin) {
-    toast.error("⚠️ You are not verified! Please complete verification in your profile before placing an order.");
-    setTimeout(() => {
-      router.push('/profile');
-    }, 1500); // Optional: navigate them after short delay
-    return;
-  }
-
-  try {
-    const { data } = await axios.post(CREATE_ORDER, { gigid }, { withCredentials: true });
-    toast.success("Your order request has been sent! Please wait for your 'Friend' to accept.");
-    router.push('/buyer/orders/');
-  } catch (err) {
-    const status = err.response?.status;
-    if (status === 401) {
-      toast.error("You already have a pending request from this gig.");
-    } else if (status === 409 || status === 411) {
-      toast.error("Please login again.");
-      handleLogin();
-    } else if (status === 410) {
-      toast.error("You must sign up first before ordering.");
-      handleSignup();
-    } else {
-      toast.error("Order creation failed. Please try again later.");
+    if (!userInfo?.isSocialLogin) {
+      toast.error("⚠️ You are not verified! Please complete verification in your profile before placing an order.");
+      setTimeout(() => router.push('/profile'), 1500);
+      return;
     }
-  }
-};
 
+    try {
+      const { data } = await axios.post(CREATE_ORDER, { gigid }, { withCredentials: true });
+      toast.success("Your order request has been sent!");
+      router.push('/buyer/orders/');
+    } catch (err) {
+      const status = err.response?.status;
+      if (status === 401) toast.error("You already have a pending request from this gig.");
+      else if (status === 409 || status === 411) {
+        toast.error("Please login again.");
+        handleLogin();
+      } else if (status === 410) {
+        toast.error("You must sign up first before ordering.");
+        handleSignup();
+      } else toast.error("Order creation failed. Please try again later.");
+    }
+  };
 
   if (!gigData) return null;
+
+  const currencySymbol = gigData.currency?.symbol || '₹';
 
   return (
     <div className="sticky top-36 mb-10 h-max w-full max-w-sm">
@@ -66,14 +62,16 @@ const Pricing = () => {
         {/* Header */}
         <div className="flex justify-between items-center">
           <h4 className="text-md font-medium text-[#74767e]">{gigData.shortDesc}</h4>
-          <h6 className="font-semibold text-lg">₹{gigData.price}</h6>
+          <h6 className="font-semibold text-lg">
+            {currencySymbol}{gigData.price}
+          </h6>
         </div>
 
         {/* Delivery Info */}
         <div className="text-[#62646a] font-semibold text-sm flex flex-wrap gap-4">
           <div className="flex items-center gap-2">
             <FiClock className="text-xl" />
-            <span>{gigData.deliveryTime} Days ETA </span>
+            <span>{gigData.deliveryTime} Days ETA</span>
           </div>
         </div>
 
@@ -97,31 +95,30 @@ const Pricing = () => {
             <BiRightArrowAlt className="text-2xl ml-2" />
           </button>
         ) : (
-         <div className="relative">
-  <button
-    className={`flex items-center justify-center w-full py-2 font-bold text-lg rounded transition ${
-      userInfo?.isSocialLogin
-        ? 'bg-[#1DBF73] hover:bg-[#17a865] text-white'
-        : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-    }`}
-    onClick={handleRequest}
-    disabled={!userInfo?.isSocialLogin}
-  >
-    <span>{userInfo?.isSocialLogin ? 'Request For Service' : 'Verify to Request'}</span>
-    <BiRightArrowAlt className="text-2xl ml-2" />
-  </button>
+          <div className="relative">
+            <button
+              className={`flex items-center justify-center w-full py-2 font-bold text-lg rounded transition ${
+                userInfo?.isSocialLogin
+                  ? 'bg-[#1DBF73] hover:bg-[#17a865] text-white'
+                  : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+              }`}
+              onClick={handleRequest}
+              disabled={!userInfo?.isSocialLogin}
+            >
+              <span>{userInfo?.isSocialLogin ? 'Request For Service' : 'Verify to Request'}</span>
+              <BiRightArrowAlt className="text-2xl ml-2" />
+            </button>
 
-  {!userInfo?.isSocialLogin && (
-    <div
-      className="absolute inset-0 cursor-pointer"
-      onClick={() => {
-        toast.warn("⚠️ You need to verify your account first. Head to your profile to complete verification.");
-        setTimeout(() => router.push("/profile"), 1500);
-      }}
-    />
-  )}
-</div>
-
+            {!userInfo?.isSocialLogin && (
+              <div
+                className="absolute inset-0 cursor-pointer"
+                onClick={() => {
+                  toast.warn("⚠️ You need to verify your account first. Head to your profile to complete verification.");
+                  setTimeout(() => router.push("/profile"), 1500);
+                }}
+              />
+            )}
+          </div>
         )}
       </div>
 
@@ -141,5 +138,3 @@ const Pricing = () => {
 };
 
 export default Pricing;
-
-
