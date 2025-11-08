@@ -16,13 +16,13 @@ export default function App({ Component, pageProps }) {
   return (
     <StateProvider initialState={initialState} reducer={reducer}>
       <Head>
-        <Script async src="https://www.googletagmanager.com/gtag/js?id=AW-17643560057"></Script>
+        <Script async src="https://www.googletagmanager.com/gtag/js?id=AW-17643560057"/>
         <Script>
-          window.dataLayer = window.dataLayer || [];
+          {`window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
         
-          gtag('config', 'AW-17643560057');
+          gtag('config', 'AW-17643560057');`}
         </Script>
         <link rel="shortcut icon" href="/unnamed.jpg" />
         <title>knell</title>
