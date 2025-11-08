@@ -15,6 +15,14 @@ export default function App({ Component, pageProps }) {
   return (
     <StateProvider initialState={initialState} reducer={reducer}>
       <Head>
+        <script async src="https://www.googletagmanager.com/gtag/js?id=AW-17643560057"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+        
+          gtag('config', 'AW-17643560057');
+        </script>
         <link rel="shortcut icon" href="/unnamed.jpg" />
         <title>knell</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
