@@ -1,11 +1,9 @@
-import React,{ useState } from 'react';
+import React from 'react';
 import Image from 'next/image';
 import { FaStar } from 'react-icons/fa';
 import { useRouter } from 'next/router';
-import { HOST } from '../../utils/constants';
 
 const SearchGridItem = ({ gig }) => {
-  // const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
   const calculateRatings = () => {
@@ -15,27 +13,21 @@ const SearchGridItem = ({ gig }) => {
     return (total / reviews.length).toFixed(1);
   };
 
+  const currencySymbol = gig.currency?.symbol || '₹';
+
   return (
-    // isLoading?
-    //     (<div className="absolute inset-0 z-10 flex items-center justify-center bg-gray-200 animate-pulse">
-    //       <span className="text-sm text-gray-500">Loading...</span>
-    //     </div>
-    //   ):
-    // (
-          // onLoadingComplete={() => setIsLoading(false)}
-      <div
+    <div
       className="w-full sm:max-w-[300px] flex flex-col gap-2 p-2 cursor-pointer hover:shadow-md transition-all rounded-lg"
       onClick={() => router.push(`/gig/${gig.id}`)}
     >
       {/* Gig Image */}
       <div className="relative w-full h-40 sm:h-48 md:h-52 rounded-xl overflow-hidden">
         <Image
-          src={`${gig.images[0]}`}
+          src={gig.images[0]}
           alt="Gig Image"
           fill
           className="object-cover"
           loading="lazy"
-          placeholder="blur"
         />
       </div>
 
@@ -43,13 +35,12 @@ const SearchGridItem = ({ gig }) => {
       <div className="flex items-center gap-2 mt-2">
         {gig.createdBy.profileImage ? (
           <Image
-            src={`${gig.createdBy.profileImage}`}
+            src={gig.createdBy.profileImage}
             alt="Profile"
             height={30}
             width={30}
             className="rounded-full object-cover"
             loading="lazy"
-            placeholder="blur"
           />
         ) : (
           <div className="bg-purple-500 h-[30px] w-[30px] flex items-center justify-center rounded-full">
@@ -59,14 +50,14 @@ const SearchGridItem = ({ gig }) => {
           </div>
         )}
         <span
-  onClick={(e) => {
-    e.stopPropagation(); // prevents the parent `onClick` from firing
-    router.push(`/profile/${gig.createdBy.username}`);
-  }}
-  className="text-sm sm:text-base font-medium text-blue-600 hover:underline cursor-pointer"
->
-  {gig.createdBy.username}
-</span>
+          onClick={(e) => {
+            e.stopPropagation();
+            router.push(`/profile/${gig.createdBy.username}`);
+          }}
+          className="text-sm sm:text-base font-medium text-blue-600 hover:underline cursor-pointer"
+        >
+          {gig.createdBy.username}
+        </span>
       </div>
 
       {/* Gig Title */}
@@ -86,11 +77,10 @@ const SearchGridItem = ({ gig }) => {
       {/* Price */}
       <div>
         <strong className="font-semibold text-sm sm:text-base">
-          From ₹{gig.price}
+          From {currencySymbol}{gig.price}
         </strong>
       </div>
     </div>
-  // )
   );
 };
 
