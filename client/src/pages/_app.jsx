@@ -17,7 +17,7 @@ export default function App({ Component, pageProps }) {
     <StateProvider initialState={initialState} reducer={reducer}>
       <Head>
         {/* <!-- Google tag (gtag.js) --> */}
-        <Script async src="https://www.googletagmanager.com/gtag/js?id=AW-17643560057"/>
+        <Script strategy="afterInteractive" src="https://www.googletagmanager.com/gtag/js?id=AW-17643560057"/>
         <Script>
           {`window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
