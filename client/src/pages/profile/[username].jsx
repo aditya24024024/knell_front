@@ -76,16 +76,14 @@ const PublicProfile = () => {
          (<button
               className="border text-lg font-semibold px-6 py-3 border-[#1DBF73] bg-[#1DBF73] text-white rounded-md"
               type="button"
-              
+              onClick={() => router.push("/profile/set")}
             >
-              Set Profile
+              Edit Profile
             </button>)
       :
       <div></div>}
     </div>
   );
 };
-       
 
-// onClick={setProfile}
 export default PublicProfile;
