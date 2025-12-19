@@ -87,5 +87,5 @@ const PublicProfile = () => {
 };
        
 
-onClick={setProfile}
+// onClick={setProfile}
 export default PublicProfile;
