@@ -72,19 +72,20 @@ const PublicProfile = () => {
           ))}
         </div>
       </div>
-      
+      {userInfo.id===user.id?
+         (<button
+              className="border text-lg font-semibold px-6 py-3 border-[#1DBF73] bg-[#1DBF73] text-white rounded-md"
+              type="button"
+              
+            >
+              Set Profile
+            </button>)
+      :
+      <div></div>}
     </div>
   );
 };
-        // (<button
-        //       className="border text-lg font-semibold px-6 py-3 border-[#1DBF73] bg-[#1DBF73] text-white rounded-md"
-        //       type="button"
-              
-        //     >
-        //       Set Profile
-        //     </button>)
-      // :
-      // <div></div>}
-// {userInfo.id===user.id?
-// onClick={setProfile}
+       
+
+onClick={setProfile}
 export default PublicProfile;
