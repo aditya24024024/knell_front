@@ -70,13 +70,13 @@ const PublicProfile = () => {
         </div>
       </div>
       {userInfo.id===user.id?
-        {<button
+        (<button
               className="border text-lg font-semibold px-6 py-3 border-[#1DBF73] bg-[#1DBF73] text-white rounded-md"
               type="button"
               {/* onClick={setProfile} */}
             >
               Set Profile
-            </button>}
+            </button>)
       :
       <div></div>}
     </div>
