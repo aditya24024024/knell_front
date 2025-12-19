@@ -4,11 +4,12 @@ import Image from "next/image";
 import axios from "axios";
 import { GET_USER_PUBLIC_PROFILE } from "../../utils/constants";
 import SearchGridItem from "../../components/search/SearchGridItem";
+import { useStateProvider } from "../../context/StateContext";
 
 const PublicProfile = () => {
   const router = useRouter();
   const { username } = router.query;
-
+  const [{ userInfo }] = useStateProvider();
   const [user, setUser] = useState(null);
   const [gigs, setGigs] = useState([]);
 
@@ -68,6 +69,16 @@ const PublicProfile = () => {
           ))}
         </div>
       </div>
+      {userInfo.id===user.id?
+        {<button
+              className="border text-lg font-semibold px-6 py-3 border-[#1DBF73] bg-[#1DBF73] text-white rounded-md"
+              type="button"
+              onClick={setProfile}
+            >
+              Set Profile
+            </button>}
+      :
+      <div></div>}
     </div>
   );
 };
