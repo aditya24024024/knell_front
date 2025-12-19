@@ -15,6 +15,7 @@ const PublicProfile = () => {
 
   useEffect(() => {
     if (!username) return;
+    if (!userInfo) console.log("no user info");
     console.log(userInfo);
     const fetchUserProfile = async () => {
       try {
