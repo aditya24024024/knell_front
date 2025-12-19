@@ -15,7 +15,7 @@ const PublicProfile = () => {
 
   useEffect(() => {
     if (!username) return;
-
+    console.log(userInfo);
     const fetchUserProfile = async () => {
       try {
         const { data } = await axios.get(`${GET_USER_PUBLIC_PROFILE}/${username}`);
@@ -69,7 +69,7 @@ const PublicProfile = () => {
           ))}
         </div>
       </div>
-      {userInfo.id===user.id?
+      
         (<button
               className="border text-lg font-semibold px-6 py-3 border-[#1DBF73] bg-[#1DBF73] text-white rounded-md"
               type="button"
@@ -77,10 +77,11 @@ const PublicProfile = () => {
             >
               Set Profile
             </button>)
-      :
-      <div></div>}
     </div>
   );
 };
-
+      // :
+      // <div></div>}
+// {userInfo.id===user.id?
+// onClick={setProfile}
 export default PublicProfile;
