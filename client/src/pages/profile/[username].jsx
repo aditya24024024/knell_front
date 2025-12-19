@@ -9,16 +9,15 @@ import { useStateProvider } from "../../context/StateContext";
 const PublicProfile = () => {
   const router = useRouter();
   const { username } = router.query;
-  const [state] = useStateProvider();
   const [{ userInfo }] = useStateProvider();
   const [user, setUser] = useState(null);
   const [gigs, setGigs] = useState([]);
 
   useEffect(() => {
     if (!username) return;
-    if (!userInfo) console.log("no user info");
-    console.log(state);
-    console.log(userInfo);
+    // if (!userInfo) console.log("no user info");
+    // console.log(state);
+    // console.log(userInfo);
     const fetchUserProfile = async () => {
       try {
         const { data } = await axios.get(`${GET_USER_PUBLIC_PROFILE}/${username}`);
