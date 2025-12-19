@@ -61,10 +61,10 @@ const Profile = () => {
     try {
       const response = await axios.post(SET_USER_INFO, { ...data }, { withCredentials: true });
 
-      if (response?.data?.usernameError) {
-        setErrorMessage("Enter a Unique Username");
-        return;
-      }
+      // if (response?.data?.usernameError) {
+      //   setErrorMessage("Enter a Unique Username");
+      //   return;
+      // }
 
       if (response?.data?.emptyFieldError) {
         setErrorMessage("Please enter all the required fields");
