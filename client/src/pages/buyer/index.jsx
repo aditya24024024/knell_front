@@ -28,7 +28,7 @@ function BuyerDashboard() {
   const [unreadCount, setUnreadCount] = useState(null);
 
   useEffect(() => {
-    console.log(userInfo);
+    // console.log(userInfo);
     if (!userInfo) return;
 
     const fetchDashboardData = async () => {
