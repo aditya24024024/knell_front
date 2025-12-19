@@ -29,6 +29,7 @@ function BuyerDashboard() {
 
   useEffect(() => {
     if (!userInfo) return;
+    console.log(userInfo);
 
     const fetchDashboardData = async () => {
       try {
