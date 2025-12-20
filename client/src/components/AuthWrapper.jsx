@@ -200,11 +200,11 @@ function AuthWrapper({ type }) {
                     onClick={() => {
                       dispatch({
                                 type: reducerCases.RESET_PASS,
-                                resetPass: true,
+                                resetPass: false,
                               });
                               dispatch({
                                 type: reducerCases.TOGGLE_LOGIN_MODAL,
-                                showLoginModal: false,
+                                showLoginModal: true,
                               });
                               dispatch({
                                 type: reducerCases.TOGGLE_SIGNUP_MODAL,
