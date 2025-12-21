@@ -234,7 +234,7 @@ const [{ showLoginModal, showSignupModal, isSeller, userInfo, hamburger, otpmoda
 
   return (
     <>
-      {userInfo?.isProfileSet && UsernameWrapper}
+      {!(userInfo?.isProfileSet) && UsernameWrapper}
       {showLoginModal && <AuthWrapper type="login" />}
       {(showSignupModal || resetPass) && <AuthWrapper type="signup" />}
       {otpmodal && <OtpWrapper/>}
