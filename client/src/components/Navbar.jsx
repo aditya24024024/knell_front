@@ -176,9 +176,9 @@ const [{ showLoginModal, showSignupModal, isSeller, userInfo, hamburger, otpmoda
     // } else {
     //   setIsLoaded(true);
     // }
-        // console.log(userInfo);
+        console.log(userInfo);
       if (!userInfo) {
-        // console.log("setting user info");
+        console.log("setting user info");
     const getUserInfo = async () => {
       try {
         const {
@@ -234,7 +234,7 @@ const [{ showLoginModal, showSignupModal, isSeller, userInfo, hamburger, otpmoda
 
   return (
     <>
-      {!(userInfo?.isProfileSet) && UsernameWrapper}
+      {!(userInfo?.isProfileSet) && <UsernameWrapper/>}
       {showLoginModal && <AuthWrapper type="login" />}
       {(showSignupModal || resetPass) && <AuthWrapper type="signup" />}
       {otpmodal && <OtpWrapper/>}
