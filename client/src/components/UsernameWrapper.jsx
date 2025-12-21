@@ -1,8 +1,6 @@
 import { useState } from "react";
-import {  } from "../utils/constants";
+import { SET_USERNAME } from "../utils/constants";
 import axios from "axios";
-import { useStateProvider } from "../context/StateContext";
-import { reducerCases } from "../context/constants";
 import { toast } from "react-toastify";
 
 export default function UsernameWrapper() {
