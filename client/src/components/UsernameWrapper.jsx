@@ -15,7 +15,11 @@ export default function UsernameWrapper() {
         { withCredentials: true }
       );
       if (response?.data?.emptyFieldError) {
-        setErrorMessage("Please enter all the required fields");
+        setErrorMessage("Username can not be empty.");
+        return;
+      }
+      if (response?.data?.usernameError) {
+        setErrorMessage("Username already taken.");
         return;
       }
       window.location.reload();
