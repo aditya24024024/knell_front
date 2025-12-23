@@ -14,6 +14,10 @@ export default function UsernameWrapper() {
         { username },
         { withCredentials: true }
       );
+      if (response?.data?.emptyFieldError) {
+        setErrorMessage("Please enter all the required fields");
+        return;
+      }
       window.location.reload();
     } catch (err) {
       if (err?.response && err?.response?.data) {
