@@ -16,7 +16,6 @@ const Profile = () => {
   const [preview, setPreview] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
   const [data, setData] = useState({
-    username: "",
     fullName: "",
     description: "",
   });
@@ -60,11 +59,6 @@ const Profile = () => {
   const setProfile = async () => {
     try {
       const response = await axios.post(SET_USER_INFO, { ...data }, { withCredentials: true });
-
-      // if (response?.data?.usernameError) {
-      //   setErrorMessage("Enter a Unique Username");
-      //   return;
-      // }
 
       if (response?.data?.emptyFieldError) {
         setErrorMessage("Please enter all the required fields");
@@ -200,7 +194,7 @@ const Profile = () => {
 
             {/* Username & Full Name */}
             <div className="flex flex-col sm:flex-row gap-4 w-full max-w-[500px]">
-              <div className="flex-1">
+              {/* <div className="flex-1">
                 <label className={labelClassName} htmlFor="username">Username</label>
                 <input
                   className={inputClassName}
@@ -211,7 +205,7 @@ const Profile = () => {
                   onChange={handleChange}
                   placeholder="Username"
                 />
-              </div>
+              </div> */}
               <div className="flex-1">
                 <label className={labelClassName} htmlFor="fullName">Full Name</label>
                 <input
