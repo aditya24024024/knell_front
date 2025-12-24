@@ -13,7 +13,8 @@ const Pricing = () => {
   const [{ gigData, userInfo, showLoginModal, showSignupModal }, dispatch] =
     useStateProvider();
   const router = useRouter();
-  const { gigid } = router.query;
+  const gigid = gigData?.id;
+
 
   const [requestSent, setRequestSent] = useState(false);
 
