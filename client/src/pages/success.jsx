@@ -1,37 +1,42 @@
-import { ORDER_SUCCESS_ROUTE } from "../utils/constants";
+import { CREATE_ORDER } from "../utils/constants";
 import axios from "axios";
 import { useRouter } from "next/router";
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 
 function Success() {
   const router = useRouter();
-  const { payment_intent } = router.query;
+  const {
+    razorpay_payment_id,
+    razorpay_order_id,
+    razorpay_signature,
+  } = router.query;
 
   useEffect(() => {
-    const changeOrderStatus = async () => {
-      try {
-        await axios.put(
-          ORDER_SUCCESS_ROUTE,
-          { paymentIntent: payment_intent },
-          { withCredentials: true }
-        );
-      } catch (err) {
-        console.error(err);
-      }
+    const verify = async () => {
+      await axios.post(
+        CREATE_ORDER,
+        {
+          razorpay_payment_id,
+          razorpay_order_id,
+          razorpay_signature,
+        },
+        { withCredentials: true }
+      );
+
+      setTimeout(() => router.push("/buyer/orders"), 4000);
     };
-    if (payment_intent) {
-      changeOrderStatus();
-      setTimeout(() => router.push("/buyer/orders"), 5000);
-    } else {
-      router.push("/");
-    }
-  }, [payment_intent, router]);
+
+    if (razorpay_payment_id) verify();
+  }, [razorpay_payment_id, router]);
+
   return (
     <div className="h-[80vh] flex items-center px-20 pt-20 flex-col">
       <h1 className="text-4xl text-center">
-        Payment successful. You are being redirected to the orders page.
+        Payment successful 🎉
       </h1>
-      <h1 className="text-4xl text-center">Please do not close the page.</h1>
+      <h1 className="text-2xl text-center mt-4">
+        Verifying payment…
+      </h1>
     </div>
   );
 }
