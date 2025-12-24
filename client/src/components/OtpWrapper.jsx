@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 export default function OtpWrapper() {
   const [otp, setOtp] = useState("");
   const [errorMessage, setErrorMessage] = useState("")
-  const [{ unverifiedmail, resetPass }, dispatch] = useStateProvider()
+  const [{ unverifiedmail, resetPass, showUsernameModal }, dispatch] = useStateProvider()
 
 
   async function verifyOtp() {
@@ -30,6 +30,7 @@ export default function OtpWrapper() {
       dispatch({ type: reducerCases.SET_UNVERIFIED_USER, unverifiedmail: undefined });
       dispatch({ type: reducerCases.OTP_MODAL, otpmodal: false });
       if (resetPass) toast.success("Password Updated.");
+      else dispatch({ type: reducerCases.SHOW_USERNAME_MODAL, showUsernameModal: true });
       window.location.reload();
     } catch (err) {
       if (err?.response && err?.response?.data) {
