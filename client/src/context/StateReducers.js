@@ -13,7 +13,7 @@ export const initialState = {
   unverifiedmail: undefined,
   otpmodal: false,
   showTermsModal: false,
-
+  is_username_set:false
 };
 
 const reducer = (state, action) => {
@@ -22,6 +22,11 @@ const reducer = (state, action) => {
       return {
         ...state,
         userInfo: action.userInfo,
+      };
+    case reducerCases.SET_USERNAME:
+      return {
+        ...state,
+        is_username_set: action.is_username_set,
       };
     case reducerCases.RESET_PASS:
       return {
