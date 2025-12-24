@@ -43,42 +43,83 @@ const Pricing = () => {
     });
   };
 
-  const handleRequest = async () => {
-    if (!userInfo?.isSocialLogin) {
-      toast.error(
-        '⚠️ You are not verified! Please complete verification in your profile.'
-      );
-      setTimeout(() => router.push('/profile'), 1500);
-      return;
+const handleRequest = async () => {
+  if (!userInfo?.isSocialLogin) {
+    toast.error(
+      "⚠️ You are not verified! Please complete verification in your profile."
+    );
+    setTimeout(() => router.push("/profile"), 1500);
+    return;
+  }
+
+  try {
+    // 1️⃣ Create Razorpay order (backend)
+    const { data } = await axios.post(
+      CREATE_ORDER,
+      { gigid },
+      { withCredentials: true }
+    );
+
+    const options = {
+      key: data.key,
+      amount: data.amount,
+      currency: data.currency,
+      name: "Knell",
+      description: "Service Request Payment",
+      order_id: data.orderId,
+      handler: async function (response) {
+        try {
+          // 2️⃣ Verify payment
+          await axios.post(
+            CREATE_ORDER,
+            {
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_signature: response.razorpay_signature,
+            },
+            { withCredentials: true }
+          );
+
+          toast.success("✅ Paid request sent successfully!");
+          router.push("/buyer/orders");
+        } catch (err) {
+          toast.error("Payment verification failed");
+        }
+      },
+      prefill: {
+        email: userInfo.email,
+        name: userInfo.fullName,
+      },
+      theme: {
+        color: "#1DBF73",
+      },
+      modal: {
+        ondismiss: () => {
+          toast.info("Payment not completed");
+        },
+      },
+    };
+
+    // 3️⃣ OPEN RAZORPAY 🔥
+    const razorpay = new window.Razorpay(options);
+    razorpay.open();
+  } catch (err) {
+    const status = err.response?.status;
+
+    if (status === 401)
+      toast.error("You already have an active request for this gig.");
+    else if (status === 409 || status === 411) {
+      toast.error("Please login again.");
+      handleLogin();
+    } else if (status === 410) {
+      toast.error("Please sign up first.");
+      handleSignup();
+    } else {
+      toast.error("Order creation failed. Please try again.");
     }
+  }
+};
 
-    try {
-      await axios.post(
-        CREATE_ORDER,
-        { gigid },
-        { withCredentials: true }
-      );
-
-      toast.success(
-        'Request sent! You will be notified once the seller accepts.'
-      );
-      setRequestSent(true);
-    } catch (err) {
-      const status = err.response?.status;
-
-      if (status === 401)
-        toast.error('You already have a pending request for this gig.');
-      else if (status === 409 || status === 411) {
-        toast.error('Session expired. Please login again.');
-        handleLogin();
-      } else if (status === 410) {
-        toast.error('Please sign up first.');
-        handleSignup();
-      } else {
-        toast.error('Order request failed. Please try again.');
-      }
-    }
-  };
 
   if (!gigData) return null;
 
