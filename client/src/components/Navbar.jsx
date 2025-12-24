@@ -26,7 +26,7 @@ const Navbar = () => {
   const [searchData, setSearchData] = useState("")
   const [isContextMenuVisible, setIsContextMenuVisible] = useState(false)
 
-const [{ showLoginModal, showSignupModal, isSeller, userInfo, hamburger, otpmodal, showTermsModal, resetPass, showUsernameModal }, dispatch] = useStateProvider();
+const [{ showLoginModal, showSignupModal, isSeller, userInfo, hamburger, otpmodal, showTermsModal, resetPass}, dispatch] = useStateProvider();
 
 
   const handleLogin = () => {
@@ -234,8 +234,8 @@ const [{ showLoginModal, showSignupModal, isSeller, userInfo, hamburger, otpmoda
 
   return (
     <>
-      {/* (userInfo?.email) && !(userInfo?.username && <UsernameWrapper/> */}
-      {showUsernameModal && <UsernameWrapper/>}
+      (userInfo?.email) && !(userInfo?.username) && <UsernameWrapper/>
+      {/* showUsernameModal && <UsernameWrapper/> */}
       {showLoginModal && <AuthWrapper type="login" />}
       {(showSignupModal || resetPass) && <AuthWrapper type="signup" />}
       {otpmodal && <OtpWrapper/>}
