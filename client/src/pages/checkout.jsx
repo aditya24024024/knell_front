@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
 import { CREATE_ORDER } from "../utils/constants";
@@ -6,10 +6,12 @@ import { CREATE_ORDER } from "../utils/constants";
 const Checkout = () => {
   const router = useRouter();
   const { gigId } = router.query;
-  const [order, setOrder] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const loadRazorpay = () =>
     new Promise((resolve) => {
+      if (window.Razorpay) return resolve(true);
+
       const script = document.createElement("script");
       script.src = "https://checkout.razorpay.com/v1/checkout.js";
       script.onload = () => resolve(true);
@@ -17,58 +19,65 @@ const Checkout = () => {
       document.body.appendChild(script);
     });
 
-  const requestService = async () => {
-    const { data } = await axios.post(
-      CREATE_ORDER,
-      { gigid: gigId },
-      { withCredentials: true }
-    );
-
-    setOrder(data);
-  };
-
   const payNow = async () => {
-    await loadRazorpay();
+    try {
+      setLoading(true);
 
-    const options = {
-      key: order.key,
-      amount: order.amount,
-      currency: order.currency,
-      name: "Knell",
-      description: "Service Payment",
-      order_id: order.orderId,
+      const isLoaded = await loadRazorpay();
+      if (!isLoaded) {
+        alert("Razorpay SDK failed to load");
+        return;
+      }
 
-      handler: (response) => {
-        router.push(
-          `/success?razorpay_payment_id=${response.razorpay_payment_id}&razorpay_order_id=${response.razorpay_order_id}&razorpay_signature=${response.razorpay_signature}`
-        );
-      },
-    };
+      // 🔥 CREATE ORDER ON CLICK
+      const { data } = await axios.post(
+        CREATE_ORDER,
+        { gigid: gigId },
+        { withCredentials: true }
+      );
 
-    new window.Razorpay(options).open();
+      const options = {
+        key: data.key,
+        amount: data.amount,
+        currency: data.currency,
+        name: "Knell",
+        description: "Gig Purchase",
+        order_id: data.orderId,
+
+        handler: (response) => {
+          router.push(
+            `/success?razorpay_payment_id=${response.razorpay_payment_id}&razorpay_order_id=${response.razorpay_order_id}&razorpay_signature=${response.razorpay_signature}`
+          );
+        },
+
+        theme: {
+          color: "#000000",
+        },
+      };
+
+      const razorpay = new window.Razorpay(options);
+      razorpay.open();
+    } catch (err) {
+      console.error(err);
+      alert("Payment failed");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div className="min-h-[80vh] mx-20 flex flex-col gap-8 items-center">
-      <h1 className="text-3xl">Request this service</h1>
+    <div className="min-h-[80vh] mx-20 flex flex-col gap-10 items-center">
+      <h1 className="text-3xl">
+        Seller accepted your request. Complete payment.
+      </h1>
 
-      {!order && (
-        <button
-          onClick={requestService}
-          className="bg-black text-white px-6 py-3 rounded"
-        >
-          Request Service
-        </button>
-      )}
-
-      {order && (
-        <button
-          onClick={payNow}
-          className="bg-green-600 text-white px-6 py-3 rounded"
-        >
-          Pay ₹{order.amount / 100}
-        </button>
-      )}
+      <button
+        onClick={payNow}
+        disabled={loading}
+        className="bg-black text-white px-6 py-3 rounded-lg disabled:opacity-50"
+      >
+        {loading ? "Opening Razorpay..." : "Pay Now"}
+      </button>
     </div>
   );
 };
