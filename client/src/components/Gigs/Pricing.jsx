@@ -54,23 +54,27 @@ const handleRequest = async () => {
   }
 
   try {
-    // 1️⃣ Create Razorpay order (backend)
+    // ✅ USE gigData.id
     const { data } = await axios.post(
       CREATE_ORDER,
-      { gigid },
+      { gigid: gigData.id },
       { withCredentials: true }
     );
+
+    if (!window.Razorpay) {
+      toast.error("Razorpay SDK not loaded");
+      return;
+    }
 
     const options = {
       key: data.key,
       amount: data.amount,
       currency: data.currency,
       name: "Knell",
-      description: "Service Request Payment",
+      description: "Paid Service Request",
       order_id: data.orderId,
-      handler: async function (response) {
+      handler: async (response) => {
         try {
-          // 2️⃣ Verify payment
           await axios.post(
             CREATE_ORDER,
             {
@@ -88,38 +92,23 @@ const handleRequest = async () => {
         }
       },
       prefill: {
-        email: userInfo.email,
         name: userInfo.fullName,
+        email: userInfo.email,
       },
-      theme: {
-        color: "#1DBF73",
-      },
+      theme: { color: "#1DBF73" },
       modal: {
-        ondismiss: () => {
-          toast.info("Payment not completed");
-        },
+        ondismiss: () => toast.info("Payment cancelled"),
       },
     };
 
-    // 3️⃣ OPEN RAZORPAY 🔥
     const razorpay = new window.Razorpay(options);
     razorpay.open();
   } catch (err) {
-    const status = err.response?.status;
-
-    if (status === 401)
-      toast.error("You already have an active request for this gig.");
-    else if (status === 409 || status === 411) {
-      toast.error("Please login again.");
-      handleLogin();
-    } else if (status === 410) {
-      toast.error("Please sign up first.");
-      handleSignup();
-    } else {
-      toast.error("Order creation failed. Please try again.");
-    }
+    console.error(err);
+    toast.error("Order creation failed. Please try again.");
   }
 };
+
 
 
   if (!gigData) return null;
