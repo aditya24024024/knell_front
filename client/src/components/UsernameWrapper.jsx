@@ -2,10 +2,12 @@ import { useState } from "react";
 import { SET_USERNAME } from "../utils/constants";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { useStateProvider } from "../context/StateContext";
 
 export default function UsernameWrapper() {
   const [errorMessage, setErrorMessage] = useState("")
   const [username, setusername] = useState("")
+  const [{showUsernameModal}, dispatch] = useStateProvider();
 
   async function setup_username() {
     try {
@@ -22,6 +24,7 @@ export default function UsernameWrapper() {
         setErrorMessage("Username already taken.");
         return;
       }
+      dispatch({ type: reducerCases.SHOW_USERNAME_MODAL, showUsernameModal: false });
       window.location.reload();
     } catch (err) {
       if (err?.response && err?.response?.data) {
