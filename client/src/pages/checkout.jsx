@@ -8,18 +8,8 @@ const Checkout = () => {
   const { gigId } = router.query;
   const [order, setOrder] = useState(null);
 
-  useEffect(() => {
-    if (!gigId) return;
-
-    axios
-      .post(CREATE_ORDER, { gigid: gigId }, { withCredentials: true })
-      .then((res) => setOrder(res.data))
-      .catch(console.error);
-  }, [gigId]);
-
   const loadRazorpay = () =>
     new Promise((resolve) => {
-      if (window.Razorpay) return resolve(true);
       const script = document.createElement("script");
       script.src = "https://checkout.razorpay.com/v1/checkout.js";
       script.onload = () => resolve(true);
@@ -27,30 +17,55 @@ const Checkout = () => {
       document.body.appendChild(script);
     });
 
-  const payNow = async () => {
-    const loaded = await loadRazorpay();
-    if (!loaded) return alert("Razorpay SDK failed");
+  const requestService = async () => {
+    const { data } = await axios.post(
+      CREATE_ORDER,
+      { gigid: gigId },
+      { withCredentials: true }
+    );
 
-    const rzp = new window.Razorpay({
+    setOrder(data);
+  };
+
+  const payNow = async () => {
+    await loadRazorpay();
+
+    const options = {
       key: order.key,
       amount: order.amount,
       currency: order.currency,
       name: "Knell",
+      description: "Service Payment",
       order_id: order.orderId,
-      handler: (res) =>
-        router.push(
-          `/success?razorpay_payment_id=${res.razorpay_payment_id}&razorpay_order_id=${res.razorpay_order_id}&razorpay_signature=${res.razorpay_signature}`
-        ),
-    });
 
-    rzp.open();
+      handler: (response) => {
+        router.push(
+          `/success?razorpay_payment_id=${response.razorpay_payment_id}&razorpay_order_id=${response.razorpay_order_id}&razorpay_signature=${response.razorpay_signature}`
+        );
+      },
+    };
+
+    new window.Razorpay(options).open();
   };
 
   return (
-    <div className="min-h-[80vh] mx-20 flex flex-col gap-10 items-center">
-      <h1 className="text-3xl">Please complete the payment</h1>
+    <div className="min-h-[80vh] mx-20 flex flex-col gap-8 items-center">
+      <h1 className="text-3xl">Request this service</h1>
+
+      {!order && (
+        <button
+          onClick={requestService}
+          className="bg-black text-white px-6 py-3 rounded"
+        >
+          Request Service
+        </button>
+      )}
+
       {order && (
-        <button onClick={payNow} className="bg-black text-white px-6 py-3 rounded">
+        <button
+          onClick={payNow}
+          className="bg-green-600 text-white px-6 py-3 rounded"
+        >
           Pay ₹{order.amount / 100}
         </button>
       )}
