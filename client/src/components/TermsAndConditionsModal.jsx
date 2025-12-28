@@ -29,7 +29,10 @@ Customers: Users who seek to connect with service providers for specific, non-ro
 - Knell does not verify or guarantee the identity, skills, or background of any user.
 
 5. Payments  
-Knell does not process payments or take commissions.
+Knell is currently functioning as a startup and charges a mere 5% on all transactions alongwith the compulsory GST taxation.
+- The customer makes the payment first and the service provider completes the service, if no action is taken by the seller the payment goes under review and the customer is granted a refund in under a week.
+- The payment is released to the vendor when they mark the service as completed from their side and the customer has left a review on the said service.
+- For any issues related to the payments; please contact the helpline number.
 
 6. Limitation of Liability  
 Knell shall not be held liable for:  
