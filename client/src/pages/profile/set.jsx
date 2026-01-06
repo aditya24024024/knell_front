@@ -50,7 +50,7 @@ const Profile = () => {
 
         setIsLoaded(true);
       } catch (err) {
-        console.error("Failed to fetch updated user info:", err);
+        // console.error("Failed to fetch updated user info:", err);
       }
     };
 
