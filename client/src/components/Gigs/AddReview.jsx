@@ -27,7 +27,7 @@ function AddReview() {
         });
       }
     } catch (err) {
-      console.error("Error adding review:", err);
+      // console.error("Error adding review:", err);
     }
   };
 
