@@ -25,7 +25,7 @@ const Gig = () => {
         const response = await axios.get(`${GET_GIG_DATA}/${gigid}`);
         dispatch({ type: reducerCases.SET_GIG_DATA, gigData: response.data.gig });
       } catch (err) {
-        console.error("Failed to fetch gig data:", err);
+        // console.error("Failed to fetch gig data:", err);
       }
     };
     if (gigid) fetchGigData();
@@ -43,7 +43,7 @@ const Gig = () => {
           hasOrdered: response.data.hasUserOrderedGig,
         });
       } catch (err) {
-        console.error("Failed to check gig order status:", err);
+        // console.error("Failed to check gig order status:", err);
       }
     };
     if (userInfo && gigid) checkGigOrdered();
