@@ -135,7 +135,7 @@ function BuyerOrders() {
         setOrders(data.orders || []);
         setHasFetched(true);
       } catch (error) {
-        console.error("Error fetching orders:", error);
+        // console.error("Error fetching orders:", error);
         setOrders([]);
       } finally {
         setLoading(false);
