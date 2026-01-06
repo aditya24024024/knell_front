@@ -58,7 +58,7 @@ const Checkout = () => {
       const razorpay = new window.Razorpay(options);
       razorpay.open();
     } catch (err) {
-      console.error(err);
+      // console.error(err);
       alert("Payment failed");
     } finally {
       setLoading(false);
