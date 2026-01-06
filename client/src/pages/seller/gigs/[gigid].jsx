@@ -117,7 +117,7 @@ const Editgig = () => {
           });
         });
       } catch (err) {
-        console.error('Failed to fetch gig data:', err);
+        // console.error('Failed to fetch gig data:', err);
       }
     };
 
