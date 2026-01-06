@@ -57,7 +57,7 @@ function Requests() {
       toast.info("Please reload the site");
     }
     } catch (err) {
-      console.error(err);
+      // console.error(err);
     }
   };
 
@@ -76,7 +76,7 @@ function Requests() {
       toast.info("Please reload the site");
     }
     } catch (err) {
-      console.error(err);
+      // console.error(err);
     }
   };
 
@@ -95,7 +95,7 @@ function Requests() {
       toast.info("Please reload the site");
     }
     } catch (err) {
-      console.error(err);
+      // console.error(err);
     }
   };
 
