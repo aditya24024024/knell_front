@@ -98,7 +98,7 @@ const Profile = () => {
         setTimeout(() => window.location.reload(), 1000);
       }, 1000);
     } catch (err) {
-      console.error(err);
+      // console.error(err);
       toast.error("Some error occurred");
     }
   };
