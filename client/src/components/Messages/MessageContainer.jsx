@@ -27,13 +27,13 @@ function MessageContainer() {
     });
 
     if (userInfo?.id) {
-          console.log("Joining socket room with ID:", userInfo.id);
+          // console.log("Joining socket room with ID:", userInfo.id);
       socket.emit("join", userInfo.id); // Join the user's room
     }
 
     // Cleanup on component unmount
     return () => {
-          console.log("Disconnecting socket room with ID:", userInfo.id);
+          // console.log("Disconnecting socket room with ID:", userInfo.id);
       socket.disconnect();
     };
   }, [userInfo]);
