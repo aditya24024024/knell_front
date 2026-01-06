@@ -30,7 +30,7 @@ function UnreadMessages() {
         });
         setMessages(data.messages || []);
       } catch (err) {
-        console.error("Error fetching unread messages", err);
+        // console.error("Error fetching unread messages", err);
       } finally {
         setLoading(false);
       }
@@ -44,7 +44,7 @@ function UnreadMessages() {
       await axios.put(`${MARK_AS_READ_ROUTE}/${id}`, {}, { withCredentials: true });
       setMessages((prev) => prev.filter((msg) => msg.id !== id));
     } catch (err) {
-      console.error("Failed to mark message as read", err);
+      // console.error("Failed to mark message as read", err);
     }
   };
 
