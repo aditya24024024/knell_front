@@ -81,7 +81,7 @@ const CreateGig = () => {
           router.push('/seller/gigs');
         }
       } catch (err) {
-        console.error('Gig creation failed:', err);
+        // console.error('Gig creation failed:', err);
       }
     } else {
       alert('Please fill in all required fields.');
