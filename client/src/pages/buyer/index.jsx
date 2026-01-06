@@ -40,7 +40,7 @@ function BuyerDashboard() {
         setOrdersCount(ordersRes.data.orders?.length || 0);
         setUnreadCount(unreadRes.data.unreadCount || 0);
       } catch (err) {
-        console.error("Dashboard data fetch failed:", err);
+        // console.error("Dashboard data fetch failed:", err);
       }
     };
 
