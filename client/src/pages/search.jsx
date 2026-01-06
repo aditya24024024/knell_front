@@ -21,7 +21,7 @@ const Search = () => {
         );
         setGigs(gigs);
       } catch (err) {
-        console.error(err);
+        // console.error(err);
       }
     };
     if (category || q) getData();
