@@ -30,7 +30,7 @@ function Orders() {
         } = await axios.get(GET_SELLER_ORDERS_ROUTE, { withCredentials: true });
         setOrders(orders);
       } catch (err) {
-        console.error(err);
+        // console.error(err);
       } finally {
         setLoading(false);
       }
