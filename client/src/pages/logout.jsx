@@ -26,7 +26,7 @@ function Logout() {
       window.location.href = window.location.origin;
 
     } catch (err) {
-      console.error("Logout failed:", err);
+      // console.error("Logout failed:", err);
     }
   })();
 }, [removeCookie, dispatch]);
