@@ -176,9 +176,9 @@ const [{ showLoginModal, showSignupModal, isSeller, userInfo, hamburger, otpmoda
     // } else {
     //   setIsLoaded(true);
     // }
-        console.log(userInfo);
+        // console.log(userInfo);
       if (!userInfo) {
-        console.log("setting user info");
+        // console.log("setting user info");
     const getUserInfo = async () => {
       try {
         const {
@@ -208,7 +208,7 @@ const [{ showLoginModal, showSignupModal, isSeller, userInfo, hamburger, otpmoda
           router.push("/profile");
         }
       } catch (err) {
-        console.log("Auth check failed", err);
+        // console.log("Auth check failed", err);
         setIsLoaded(true); 
       }
     };
