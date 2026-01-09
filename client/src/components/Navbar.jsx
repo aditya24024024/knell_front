@@ -100,25 +100,6 @@ const [{ showLoginModal, showSignupModal, isSeller, userInfo, hamburger, otpmoda
     router.push("/adminusers");
   }
 
-  const ContextMenuData = [
-    {
-      name: "Profile",
-      callback: (e) => {
-        e.stopPropagation();
-        setIsContextMenuVisible(false);
-        router.push("/profile");
-      },
-    },
-    {
-      name: "Logout",
-      callback: (e) => {
-        e.stopPropagation();
-        setIsContextMenuVisible(false);
-        router.push("/logout");
-      },
-    },
-  ];
-
   useEffect(() => {
     if (router.pathname === "/") {
       const positionNavbar = () => {
@@ -425,7 +406,7 @@ const [{ showLoginModal, showSignupModal, isSeller, userInfo, hamburger, otpmoda
         <button onClick={handleModeSwitch} className="text-left">
           {isSeller ? "Switch To Buyer" : "Switch To Seller"}
         </button>
-        <button onClick={() => router.push("/profile")} className="text-left">Profile</button>
+        <button onClick={() => {router.push("/profile/set");closeHamburger();}} className="text-left">Profile</button>
         <button onClick={() => router.push("/logout")} className="text-left">Logout</button>
       </>
     )}
