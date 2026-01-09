@@ -62,6 +62,27 @@ const PublicProfile = () => {
         )}
       </div>
 
+      {userInfo?.id===user?.id?
+         (<div className="flex gap-4">
+  <button
+    className="border text-lg font-semibold px-6 py-3 border-[#1DBF73] bg-[#1DBF73] text-white rounded-md"
+    type="button"
+    onClick={() => router.push("/profile/set")}
+  >
+    Edit Profile
+  </button>
+
+  <button
+    className="border text-lg font-semibold px-6 py-3 border-[#1DBF73] text-[#1DBF73] rounded-md"
+    type="button"
+    onClick={() => router.push("/logout")}
+  >
+    Logout
+  </button>
+</div>
+)
+      :
+      <div></div>}
       {/* Gigs List */}
       <div>
         <h3 className="text-xl font-semibold mb-4">Gigs by {user.username}</h3>
@@ -74,15 +95,5 @@ const PublicProfile = () => {
     </div>
   );
 };
-      // {userInfo?.id===user?.id?
-      //    (<button
-      //         className="border text-lg font-semibold px-6 py-3 border-[#1DBF73] bg-[#1DBF73] text-white rounded-md"
-      //         type="button"
-      //         onClick={() => router.push("/profile/set")}
-      //       >
-      //         Edit Profile
-      //       </button>)
-      // :
-      // <div></div>}
 
 export default PublicProfile;
