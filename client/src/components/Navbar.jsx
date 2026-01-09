@@ -318,7 +318,7 @@ const [{ showLoginModal, showSignupModal, isSeller, userInfo, hamburger, otpmoda
                 <li className="cursor-pointer" onClick={handleModeSwitch}>
                   {isSeller ? "Switch To Buyer" : "Switch To Seller"}
                 </li>
-                <li className="cursor-pointer" onClick={() => router.push("/profile/set")}>
+                <li className="cursor-pointer" onClick={() => router.push("/profile/${userInfo?.username}")}>
                   {userInfo?.imageName ? (
                     <Image src={userInfo.imageName} alt="Profile" width={40} height={40} className="rounded-full" />
                   ) : (
@@ -389,7 +389,7 @@ const [{ showLoginModal, showSignupModal, isSeller, userInfo, hamburger, otpmoda
         <button onClick={handleModeSwitch} className="text-left">
           {isSeller ? "Switch To Buyer" : "Switch To Seller"}
         </button>
-        <button onClick={() => {router.push("/profile/set");closeHamburger();}} className="text-left">Profile</button>
+        <button onClick={() => {closeHamburger();router.push("/profile/set");}} className="text-left">Profile</button>
         <button onClick={() => router.push("/logout")} className="text-left">Logout</button>
       </>
     )}
