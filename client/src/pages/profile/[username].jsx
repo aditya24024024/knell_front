@@ -60,8 +60,6 @@ const PublicProfile = () => {
         {user.description && (
           <p className="max-w-xl text-center text-gray-700">{user.description}</p>
         )}
-      </div>
-
       {userInfo?.id===user?.id?
          (<div className="flex gap-4">
   <button
@@ -83,6 +81,8 @@ const PublicProfile = () => {
 )
       :
       <div></div>}
+      </div>
+
       {/* Gigs List */}
       <div>
         <h3 className="text-xl font-semibold mb-4">Gigs by {user.username}</h3>
