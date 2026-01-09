@@ -9,7 +9,6 @@ import Image from 'next/image';
 import { reducerCases } from '../context/constants';
 import { useStateProvider } from '../context/StateContext';
 import img from './unnamed 1.svg'
-import ContextMenu from './ContextMenu';
 import AuthWrapper from './AuthWrapper';
 import { GiHamburgerMenu } from "react-icons/gi";
 import OtpWrapper from './OtpWrapper'
@@ -22,10 +21,8 @@ const Navbar = () => {
   const [isLoaded, setIsLoaded] = useState(false)
   const [navFixed, setNavFixed] = useState(false)
   // const [showTermsModal, setShowTermsModal] = useState(false);
-
   const [searchData, setSearchData] = useState("")
-  const [isContextMenuVisible, setIsContextMenuVisible] = useState(false)
-
+  
 const [{ showLoginModal, showSignupModal, isSeller, userInfo, hamburger, otpmodal, showTermsModal, resetPass}, dispatch] = useStateProvider();
 
 
@@ -199,19 +196,6 @@ const [{ showLoginModal, showSignupModal, isSeller, userInfo, hamburger, otpmoda
   }
   }, [userInfo, dispatch]);
 
-  useEffect(() => {
-    const clickListener = (e) => {
-      e.stopPropagation();
-      if (isContextMenuVisible) setIsContextMenuVisible(false);
-    };
-    if (isContextMenuVisible) {
-      window.addEventListener("click", clickListener);
-    }
-    return () => {
-      window.removeEventListener("click", clickListener);
-    };
-  }, [isContextMenuVisible]);
-
 
   return (
     <>
@@ -345,7 +329,6 @@ const [{ showLoginModal, showSignupModal, isSeller, userInfo, hamburger, otpmoda
                 </li>
               </ul>
             )}
-            {isContextMenuVisible && <ContextMenu data={ContextMenuData} />}
           </div>
 
           {/* ✅ Mobile Dropdown Nav */}
