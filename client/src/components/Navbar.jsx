@@ -389,7 +389,7 @@ const [{ showLoginModal, showSignupModal, isSeller, userInfo, hamburger, otpmoda
         <button onClick={handleModeSwitch} className="text-left">
           {isSeller ? "Switch To Buyer" : "Switch To Seller"}
         </button>
-        <button onClick={() => {closeHamburger();router.push("/profile/set");}} className="text-left">Profile</button>
+        <button onClick={() => {closeHamburger();router.push("/profile/" + userInfo?.username);}} className="text-left">Profile</button>
         <button onClick={() => router.push("/logout")} className="text-left">Logout</button>
       </>
     )}
