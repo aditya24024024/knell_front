@@ -78,6 +78,12 @@ function Index() {
           value={dashboardData?.unreadMessages}
           onClick={() => router.push("/seller/unread-messages")}
         />
+        <DashboardCard
+          label="Wallet"
+          value="View"
+          onClick={() => router.push("/seller/wallet")}
+        />
+
         {/* Uncomment these when backend data is ready
         <DashboardCard label="Earnings Today" value={`₹${dashboardData?.dailyRevenue}`} />
         <DashboardCard label="Earnings Monthly" value={`₹${dashboardData?.monthlyRevenue}`} />
