@@ -33,7 +33,7 @@ function PopularServices() {
         {
             name: "Online Meet",
             label: "Lets Hop On!!!!!",
-            image: "/music.png",
+            image: "/onlinemeet.png",
         },
         {
             name: "Shopper",
