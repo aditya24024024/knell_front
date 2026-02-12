@@ -31,8 +31,8 @@ function PopularServices() {
             image: "/aditya.png",
         },
         {
-            name: "Musician",
-            label: "Lets Jam!!!!!",
+            name: "Online Meet",
+            label: "Lets Hop On!!!!!",
             image: "/music.png",
         },
         {
