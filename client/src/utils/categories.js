@@ -12,8 +12,8 @@ export const categories = [
     { name: "Photography", logo: "/service-22.svg" },
     { name: "Shopper", logo: "/service-12.svg" },
     { name: "Musician", logo: "/service-20.svg" },
-    { name: "editor", logo: "/service-6.svg" },
-    { name: "Online Meet", logo: "/service-6.svg" },
+    { name: "editor", logo: "/service-23.svg" },
+    { name: "Online Meet", logo: "/service-24.svg" },
    
     
   ];
