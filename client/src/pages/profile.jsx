@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { optimizeImage } from "../utils/cloudinary";
 
 const Profile = () => {
   const router = useRouter();
@@ -151,12 +152,15 @@ const Profile = () => {
               <label className={labelClassName}>Select a profile picture</label>
               <div className="bg-purple-500 h-36 w-36 flex items-center justify-center rounded-full relative">
                 {preview ? (
-                  <Image
-                    src={preview}
-                    alt="profile"
-                    fill
-                    className="rounded-full object-cover"
-                  />
+                  <img
+  src={
+    preview?.includes("res.cloudinary.com")
+      ? optimizeImage(preview, 200)
+      : preview
+  }
+  alt="profile"
+  className="rounded-full object-cover w-full h-full"
+/>
                 ) : (
                   <span className="text-6xl text-white">
                     {userInfo?.email?.[0]?.toUpperCase() || "U"}
