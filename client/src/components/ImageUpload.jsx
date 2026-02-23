@@ -1,23 +1,38 @@
 import Image from 'next/image';
+import imageCompression from "browser-image-compression";
 import React, { useState } from 'react';
 
 const ImageUpload = ({ files, setFile }) => {
   const [message, setMessage] = useState("");
 
-  const handleFile = (e) => {
-    setMessage("");
-    const selectedFiles = Array.from(e.target.files);
+  const handleFiles = async (e) => {
+  const selectedFiles = Array.from(e.target.files);
 
-    selectedFiles.forEach((file) => {
-      const fileType = file.type;
-      const validImageTypes = ["image/gif", "image/jpeg", "image/png", "image/webp"];
-      if (validImageTypes.includes(fileType)) {
-        setFile((prev) => [...prev, file]);
-      } else {
-        setMessage("Only images (jpg, png, gif, webp) are accepted.");
+  const compressedFiles = await Promise.all(
+    selectedFiles.map(async (file) => {
+      const options = {
+        maxSizeMB: 0.4,          //  BIGGEST CREDIT SAVER
+        maxWidthOrHeight: 1280,  // responsive size
+        useWebWorker: true,
+      };
+
+      try {
+        const compressed = await imageCompression(file, options);
+
+        return new File(
+          [compressed],
+          file.name,
+          { type: "image/webp" }
+        );
+      } catch (error) {
+        console.error("Compression error:", error);
+        return file;
       }
-    });
-  };
+    })
+  );
+
+  setFile((prev) => [...prev, ...compressedFiles]);
+};
 
   const removeImage = (fileName) => {
     setFile(files.filter((file) => file.name !== fileName));

@@ -7,6 +7,7 @@ import { ADD_GIG_ROUTE } from '../../../utils/constants';
 import { useRouter } from 'next/router';
 
 const CreateGig = () => {
+  const [loading, setLoading] = useState(false);
   const [cookies] = useCookies();
   const router = useRouter();
   const [files, setFile] = useState([]);
@@ -43,50 +44,58 @@ const CreateGig = () => {
   };
 
   const addGig = async () => {
-    const { title, description, category, price, time, shortDesc } = data;
-    if (
-      title &&
-      category &&
-      description &&
-      features.length &&
-      files.length &&
-      price > 0 &&
-      time > 0 &&
-      shortDesc
-    ) {
-      try {
-        const formData = new FormData();
-        files.forEach((file) => formData.append('images', file));
+  if (loading) return; // prevents double click
 
-        const gigData = {
-          title,
-          description,
-          category,
-          features,
-          price,
-          time,
-          shortDesc,
-        };
+  const { title, description, category, price, time, shortDesc } = data;
 
-        const res = await axios.post(ADD_GIG_ROUTE, formData, {
-          withCredentials: true,
-          headers: {
-            'Content-Type': 'multipart/form-data',
-            Authorization: `Bearer ${cookies.jwt}`,
-          },
-          params: gigData,
-        });
+  if (
+    title &&
+    category &&
+    description &&
+    features.length &&
+    files.length &&
+    price > 0 &&
+    time > 0 &&
+    shortDesc
+  ) {
+    try {
+      setLoading(true);
 
-        if (res.status === 201) {
-          router.push('/seller/gigs');
-        }
-      } catch (err) {
-        // console.error('Gig creation failed:', err);
+      const formData = new FormData();
+      files.forEach((file) => formData.append('images', file));
+
+      const gigData = {
+        title,
+        description,
+        category,
+        features,
+        price,
+        time,
+        shortDesc,
+      };
+
+      const res = await axios.post(ADD_GIG_ROUTE, formData, {
+        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${cookies.jwt}`,
+        },
+        params: gigData,
+      });
+
+      if (res.status === 201) {
+        alert("✅ Gig created successfully!");
+
+        // CLEAR REDIRECTION
+        router.replace("/seller/gigs");
       }
-    } else {
-      alert('Please fill in all required fields.');
+    } catch (err) {
+      alert("Failed to create gig");
+      setLoading(false);
     }
-  };
+  } else {
+    alert("Please fill in all required fields.");
+  }
+};
 
   return (
     <div className="min-h-screen pt-28 px-6 sm:px-10 md:px-32">
@@ -269,12 +278,14 @@ const CreateGig = () => {
 
         <div className="mt-6">
           <button
-            type="button"
-            onClick={addGig}
-            className="bg-[#1DBF73] hover:bg-[#17a866] text-white text-lg font-semibold px-8 py-3 rounded-md"
-          >
-            Create Gig
-          </button>
+  type="button"
+  onClick={addGig}
+  disabled={loading}
+  className={`text-white text-lg font-semibold px-8 py-3 rounded-md
+  ${loading ? "bg-gray-400 cursor-not-allowed" : "bg-[#1DBF73] hover:bg-[#17a866]"}`}
+>
+  {loading ? "Creating Gig..." : "Create Gig"}
+</button>
         </div>
       </form>
     </div>
