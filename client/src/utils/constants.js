@@ -48,6 +48,7 @@ export const GET_UNREAD_MESSAGES = `${MESSAGES_ROUTES}/unread-messages`;
 export const MARK_AS_READ_ROUTE = `${MESSAGES_ROUTES}/mark-as-read`;
 
 export const GET_SELLER_DASHBOARD_DATA = `${DASHBOARD_DATA_ROUTES}/seller`;
+export const GET_SELLER_WALLET_ROUTE = "/api/wallet/get-seller-wallet";
 
 export const ADMIN_ROUTE=`${GIG_ROUTES}/get-all-gig-data`;
 export const DELETE_GIG=`${GIG_ROUTES}/delete-gig`;

@@ -1,3 +1,6 @@
+"use client";
+
+
 import ImageUpload from '../../../components/ImageUpload';
 import { categories } from '../../../utils/categories';
 import React, { useState } from 'react';
