@@ -19,6 +19,7 @@ const Profile = () => {
     username: "",
     fullName: "",
     description: "",
+    mobile: "",
   });
   const [showVerificationTab, setShowVerificationTab] = useState(false);
   const MEET_LINK = "https://meet.google.com/xiy-zezv-hhw";
@@ -44,6 +45,7 @@ const Profile = () => {
           username: user?.username || "",
           description: user?.description || "",
           fullName: user?.fullName || "",
+          mobile: user?.mobile || "",
         };
         setData(handleData);
         if (user?.image) setPreview(user.image);
@@ -225,6 +227,22 @@ const Profile = () => {
                 />
               </div>
             </div>
+
+            {/*mobile no*/}
+            <div className="w-full max-w-[500px]">
+  <label className={labelClassName} htmlFor="mobile">
+    Mobile Number
+  </label>
+  <input
+    className={inputClassName}
+    type="tel"
+    name="mobile"
+    id="mobile"
+    value={data.mobile}
+    onChange={handleChange}
+    placeholder="Enter mobile number"
+  />
+</div>
 
             {/* Description */}
             <div className="w-full max-w-[500px]">
