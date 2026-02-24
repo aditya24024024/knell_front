@@ -63,7 +63,7 @@ const ImageUpload = ({ files, setFile }) => {
           </div>
           <input
             type="file"
-            onChange={handleFile}
+            onChange={handleFiles}
             className="hidden"
             multiple
             accept="image/*"
