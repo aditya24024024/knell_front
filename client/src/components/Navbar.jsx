@@ -194,7 +194,7 @@ const [{ showLoginModal, showSignupModal, isSeller, userInfo, hamburger, otpmoda
   } else {
     setIsLoaded(true);
   }
-  }, []);
+ }, [userInfo]);
 
 
   return (
