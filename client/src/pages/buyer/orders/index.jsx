@@ -90,9 +90,14 @@ function BuyerOrders() {
                 <Link href={`/gig/${order.gig?.id}`} className="px-4 py-2 text-sm bg-blue-100 hover:bg-blue-200 rounded-lg text-blue-800">
                   View Gig
                 </Link>
-                <Link href={`/buyer/orders/messages/${order.id}`} className="px-4 py-2 text-sm bg-yellow-100 hover:bg-yellow-200 rounded-lg text-yellow-800">
-                  Message
-                </Link>
+                {order.status !== 'Pending' && (
+  <Link href={`/buyer/orders/messages/${order.id}`} className="px-4 py-2 text-sm bg-yellow-100 hover:bg-yellow-200 rounded-lg text-yellow-800">
+    Message
+  </Link>
+)}
+{order.status === 'Pending' && (
+  <span className="text-sm text-gray-400 italic">Complete payment to message</span>
+)}
                 {/* Mark Complete button — only shown when seller has delivered */}
                 {order.status === 'Delivered' && (
                   <button
