@@ -29,74 +29,35 @@ function Requests() {
     const getOrders = async () => {
       try {
         setLoading(true);
-        const {
-          data: { orders },
-        } = await axios.get(GET_SELLER_REQUEST_ORDERS_ROUTE, {
-          withCredentials: true,
-        });
+        const { data: { orders } } = await axios.get(GET_SELLER_REQUEST_ORDERS_ROUTE, { withCredentials: true });
         setOrders(orders);
       } catch (err) {
-        // console.error(err);
       } finally {
         setLoading(false);
       }
     };
     if (userInfo) getOrders();
   }, [userInfo]);
-  
+
   const decline = async (orderId) => {
     try {
-      const res = await axios.get(`${DECLINE_ROUTE}?orderId=${orderId}`, {
-        withCredentials: true,
-      });
-       if (res) {
-      setTimeout(() => {
-        window.location.reload();
-      }, 300);
-    } else {
-      toast.info("Please reload the site");
-    }
-    } catch (err) {
-      // console.error(err);
-    }
+      await axios.get(`${DECLINE_ROUTE}?orderId=${orderId}`, { withCredentials: true });
+      setTimeout(() => window.location.reload(), 300);
+    } catch (err) {}
   };
 
   const accept = async (orderId) => {
     try {
-    const res = await axios.put(
-      ORDER_SUCCESS_ROUTE,
-      { orderId },
-      { withCredentials: true }
-    );
-      if (res) {
-      setTimeout(() => {
-        window.location.reload();
-      }, 300);
-    } else {
-      toast.info("Please reload the site");
-    }
-    } catch (err) {
-      // console.error(err);
-    }
+      await axios.put(ORDER_SUCCESS_ROUTE, { orderId }, { withCredentials: true });
+      setTimeout(() => window.location.reload(), 300);
+    } catch (err) {}
   };
 
-  const complete = async (orderId) => {
+  const markDelivered = async (orderId) => {
     try {
-      const res= await axios.put(
-        ORDER_COMPLETE_ROUTE,
-        { orderId },
-        { withCredentials: true }
-      );
-      if (res) {
-      setTimeout(() => {
-        window.location.reload();
-      }, 300);
-    } else {
-      toast.info("Please reload the site");
-    }
-    } catch (err) {
-      // console.error(err);
-    }
+      await axios.put(ORDER_COMPLETE_ROUTE, { orderId }, { withCredentials: true });
+      setTimeout(() => window.location.reload(), 300);
+    } catch (err) {}
   };
 
   return (
@@ -112,70 +73,61 @@ function Requests() {
       ) : (
         <div className="flex flex-col gap-4">
           {orders.map((order) => (
-            <div
-              key={order.id}
-              className="flex items-center justify-between bg-white border rounded-xl shadow px-4 py-4"
-            >
+            <div key={order.id} className="flex items-center justify-between bg-white border rounded-xl shadow px-4 py-4">
               <div className="flex items-center gap-4">
-                <img
-                  src={order.buyer?.profileImage || "/user.png"}
-                  alt="Profile"
-                  className="w-14 h-14 rounded-full object-cover"
-                />
+                <img src={order.buyer?.profileImage || "/user.png"} alt="Profile" className="w-14 h-14 rounded-full object-cover" />
                 <div className="flex flex-col">
                   <p className="font-semibold">
-                    <Link
-                      href={`/profile/${order.buyer?.username || ""}`}
-                      className="text-black hover:underline"
-                    >
+                    <Link href={`/profile/${order.buyer?.username || ""}`} className="text-black hover:underline">
                       {order.buyer?.username || "Unknown"}
                     </Link>{" "}
                     has requested your service: <b>{order.gig.title}</b>
                   </p>
-                  <span className="text-gray-500 text-sm">
-                    {timeAgo(order.createdAt)}
-                  </span>
+                  <span className="text-gray-500 text-sm">{timeAgo(order.createdAt)}</span>
                   <span className="text-sm text-gray-600">
-                    Category: {order.gig.category} | Price: ₹{order.price} | Delivery:{" "}
-                    {order.gig.deliveryTime} days
+                    Category: {order.gig.category} | Price: ₹{order.price} | Delivery: {order.gig.deliveryTime} days
+                  </span>
+                  {/* Status badge */}
+                  <span className={`text-xs font-semibold mt-1 w-fit px-2 py-0.5 rounded-full ${
+                    order.status === 'Paid' ? 'bg-blue-100 text-blue-700' :
+                    order.status === 'Request Accepted' ? 'bg-purple-100 text-purple-700' :
+                    order.status === 'Delivered' ? 'bg-green-100 text-green-700' :
+                    'bg-gray-100 text-gray-600'
+                  }`}>
+                    {order.status}
                   </span>
                 </div>
               </div>
 
-              <div className="flex gap-2 flex-wrap justify-end">
-                <Link
-                  href={`/buyer/orders/messages/${order.id}`}
-                  className="px-4 py-2 text-sm bg-yellow-100 hover:bg-yellow-200 rounded-lg text-yellow-800"
-                >
+              <div className="flex gap-2 flex-wrap justify-end items-center">
+                <Link href={`/buyer/orders/messages/${order.id}`} className="px-4 py-2 text-sm bg-yellow-100 hover:bg-yellow-200 rounded-lg text-yellow-800">
                   Message
                 </Link>
-                {order.status !== "Request Accepted" ? (
+
+                {/* Paid → show Accept/Decline */}
+                {order.status === 'Paid' && (
                   <>
-                    <button
-                      onClick={() => accept(order.id)}
-                      className="px-4 py-2 text-sm bg-blue-500 hover:bg-blue-600 text-white rounded-lg"
-                    >
-                      Confirm
+                    <button onClick={() => accept(order.id)} className="px-4 py-2 text-sm bg-blue-500 hover:bg-blue-600 text-white rounded-lg">
+                      Accept
                     </button>
-                    <button
-                      onClick={() => decline(order.id)}
-                      className="px-4 py-2 text-sm bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-lg"
-                    >
-                      Delete
+                    <button onClick={() => decline(order.id)} className="px-4 py-2 text-sm bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-lg">
+                      Decline
                     </button>
                   </>
-                ) : (
-                  <>
-                    <span className="text-green-600 font-semibold text-sm">
-                      Accepted
-                    </span>
-                    <button
-                      onClick={() => complete(order.id)}
-                      className="px-4 py-2 text-sm bg-green-500 hover:bg-green-600 text-white rounded-lg"
-                    >
-                      Complete
-                    </button>
-                  </>
+                )}
+
+                {/* Request Accepted → show Mark Delivered */}
+                {order.status === 'Request Accepted' && (
+                  <button onClick={() => markDelivered(order.id)} className="px-4 py-2 text-sm bg-green-500 hover:bg-green-600 text-white rounded-lg">
+                    Mark Delivered
+                  </button>
+                )}
+
+                {/* Delivered → waiting for buyer */}
+                {order.status === 'Delivered' && (
+                  <span className="text-blue-600 font-semibold text-sm">
+                    ✓ Delivered — Waiting for buyer
+                  </span>
                 )}
               </div>
             </div>
