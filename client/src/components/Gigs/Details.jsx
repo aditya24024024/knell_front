@@ -1,12 +1,20 @@
 import { useStateProvider } from '../../context/StateContext';
-import { HOST } from '../../utils/constants';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import { FaStar } from 'react-icons/fa';
 import Reviews from './Reviews';
 import AddReview from './AddReview';
 import { useRouter } from 'next/router';
-// import Head from "next/head";
+
+const optimizeImage = (url) => {
+  if (!url || !url.includes('cloudinary')) return url;
+  return url.replace('/upload/', '/upload/q_auto,f_auto,w_800/');
+};
+
+const optimizeAvatar = (url) => {
+  if (!url || !url.includes('cloudinary')) return url;
+  return url.replace('/upload/', '/upload/q_auto,f_auto,w_200/');
+};
 
 const Details = () => {
   const [{ gigData, hasOrdered }] = useStateProvider();
@@ -30,9 +38,6 @@ const Details = () => {
   if (!gigData || !currentImage) return null;
 
   return (
-    // <Head>
-    //   <meta name="desciption" content={gigData.features}/>
-    // </Head>
     <div className="col-span-2 flex flex-col gap-6">
       {/* Title */}
       <h2 className="text-2xl font-bold text-[#404145]">{gigData.title}</h2>
@@ -44,7 +49,7 @@ const Details = () => {
       >
         {gigData.createdBy.profileImage ? (
           <Image
-            src={`${gigData.createdBy.profileImage}`}
+            src={optimizeAvatar(gigData.createdBy.profileImage)}
             alt="profile"
             height={40}
             width={40}
@@ -83,7 +88,7 @@ const Details = () => {
       <div className="flex flex-col gap-4">
         <div className="w-full max-w-[800px] overflow-hidden rounded">
           <Image
-            src={`${currentImage}`}
+            src={optimizeImage(currentImage)}
             alt="Gig"
             height={800}
             width={800}
@@ -94,7 +99,7 @@ const Details = () => {
           {gigData.images.map((img) => (
             <Image
               key={img}
-              src={`${img}`}
+              src={optimizeImage(img)}
               alt="Thumbnail"
               height={100}
               width={100}
@@ -122,7 +127,7 @@ const Details = () => {
         <div className="flex gap-4 items-center">
           {gigData.createdBy.profileImage ? (
             <Image
-              src={`${gigData.createdBy.profileImage}`}
+              src={optimizeAvatar(gigData.createdBy.profileImage)}
               alt="profile"
               height={100}
               width={100}
@@ -161,7 +166,7 @@ const Details = () => {
           </div>
         </div>
       </div>
-      
+
       <Reviews />
       {hasOrdered && <AddReview />}
     </div>
