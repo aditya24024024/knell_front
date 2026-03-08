@@ -3,6 +3,16 @@ import Image from 'next/image';
 import { FaStar } from 'react-icons/fa';
 import { useRouter } from 'next/router';
 
+const optimizeImage = (url) => {
+  if (!url || !url.includes('cloudinary')) return url;
+  return url.replace('/upload/', '/upload/q_auto,f_auto,w_600/');
+};
+
+const optimizeAvatar = (url) => {
+  if (!url || !url.includes('cloudinary')) return url;
+  return url.replace('/upload/', '/upload/q_auto,f_auto,w_100/');
+};
+
 const SearchGridItem = ({ gig }) => {
   const router = useRouter();
 
@@ -23,7 +33,7 @@ const SearchGridItem = ({ gig }) => {
       {/* Gig Image */}
       <div className="relative w-full h-40 sm:h-48 md:h-52 rounded-xl overflow-hidden">
         <Image
-          src={gig.images[0]}
+          src={optimizeImage(gig.images[0])}
           alt="Gig Image"
           fill
           className="object-cover"
@@ -35,7 +45,7 @@ const SearchGridItem = ({ gig }) => {
       <div className="flex items-center gap-2 mt-2">
         {gig.createdBy.profileImage ? (
           <Image
-            src={gig.createdBy.profileImage}
+            src={optimizeAvatar(gig.createdBy.profileImage)}
             alt="Profile"
             height={30}
             width={30}
