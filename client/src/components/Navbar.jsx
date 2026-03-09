@@ -14,6 +14,7 @@ import { GiHamburgerMenu } from "react-icons/gi";
 import OtpWrapper from './OtpWrapper'
 import UsernameWrapper from './UsernameWrapper'
 import TermsAndConditionsModal from './TermsAndConditionsModal';
+import { optimizeImage } from '../utils/cloudinary';
 
 const Navbar = () => {
   const [cookies] = useCookies()
@@ -320,7 +321,7 @@ const [{ showLoginModal, showSignupModal, isSeller, userInfo, hamburger, otpmoda
                 </li>
                 <li className="cursor-pointer" onClick={() => router.push("/profile/" + userInfo?.username)}>
                   {userInfo?.imageName ? (
-                    <Image src={userInfo.imageName} alt="Profile" width={40} height={40} className="rounded-full" />
+                    <Image src={optimizeImage(userInfo.imageName, 80)} alt="Profile" width={40} height={40} className="rounded-full" />
                   ) : (
                     <div className="bg-purple-500 h-10 w-10 flex items-center justify-center rounded-full">
                       <span className="text-xl text-white">{userInfo?.email[0].toUpperCase()}</span>

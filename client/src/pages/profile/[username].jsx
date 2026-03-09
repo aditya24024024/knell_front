@@ -5,6 +5,7 @@ import axios from "axios";
 import { GET_USER_PUBLIC_PROFILE } from "../../utils/constants";
 import SearchGridItem from "../../components/search/SearchGridItem";
 import { useStateProvider } from "../../context/StateContext";
+import { optimizeImage } from "../../utils/cloudinary";
 
 const PublicProfile = () => {
   const router = useRouter();
@@ -40,7 +41,7 @@ const PublicProfile = () => {
       <div className="flex flex-col items-center gap-4 text-center mb-10">
         {user.profileImage ? (
           <Image
-            src={`${user.profileImage}`}
+            src={optimizeImage(user.profileImage, 100)}
             width={100}
             height={100}
             className="rounded-full object-cover"

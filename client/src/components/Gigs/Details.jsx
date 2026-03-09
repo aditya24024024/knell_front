@@ -5,16 +5,9 @@ import { FaStar } from 'react-icons/fa';
 import Reviews from './Reviews';
 import AddReview from './AddReview';
 import { useRouter } from 'next/router';
+import { optimizeImage } from '../../utils/cloudinary';
 
-const optimizeImage = (url) => {
-  if (!url || !url.includes('cloudinary')) return url;
-  return url.replace('/upload/', '/upload/q_auto,f_auto,w_800/');
-};
-
-const optimizeAvatar = (url) => {
-  if (!url || !url.includes('cloudinary')) return url;
-  return url.replace('/upload/', '/upload/q_auto,f_auto,w_200/');
-};
+const optimizeAvatar = (url, size = 100) => optimizeImage(url, size);
 
 const Details = () => {
   const [{ gigData, hasOrdered }] = useStateProvider();
@@ -88,10 +81,11 @@ const Details = () => {
       <div className="flex flex-col gap-4">
         <div className="w-full max-w-[800px] overflow-hidden rounded">
           <Image
-            src={optimizeImage(currentImage)}
+            src={optimizeImage(currentImage, 800)}
             alt="Gig"
             height={800}
             width={800}
+            sizes="(max-width: 1024px) 100vw, 66vw"
             className="w-full h-auto rounded-lg hover:scale-105 transition-transform duration-500 object-cover"
           />
         </div>
