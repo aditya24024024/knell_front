@@ -398,8 +398,9 @@ const [{ showLoginModal, showSignupModal, isSeller, userInfo, hamburger, otpmoda
 )}
         </nav>
       )}
-    </>
+    </> 
   );
 };
+
 
 export default Navbar;
