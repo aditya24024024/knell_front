@@ -401,6 +401,6 @@ const [{ showLoginModal, showSignupModal, isSeller, userInfo, hamburger, otpmoda
     </> 
   );
 };
-
+ 
 
 export default Navbar;
