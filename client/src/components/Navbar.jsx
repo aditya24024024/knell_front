@@ -169,10 +169,14 @@ const [{ showLoginModal, showSignupModal, isSeller, userInfo, hamburger, otpmoda
             withCredentials: true, 
           }
         );
-        // console.log("afkmd");
-        // console.log("user",{user});
+
+        if (!user || !user.email) {
+          setIsLoaded(true);
+          return;
+        }
+
         let projectedUserInfo = { ...user };
-        if (user.image) {
+        if (user.image && typeof user.image === 'string') {
           projectedUserInfo.imageName = user.image;
         }
 
@@ -320,7 +324,7 @@ const [{ showLoginModal, showSignupModal, isSeller, userInfo, hamburger, otpmoda
                   {isSeller ? "Switch To Buyer" : "Switch To Seller"}
                 </li>
                 <li className="cursor-pointer" onClick={() => router.push("/profile/" + userInfo?.username)}>
-                  {userInfo?.imageName ? (
+                  {userInfo?.imageName && typeof userInfo.imageName === 'string' ? (
                     <Image src={optimizeImage(userInfo.imageName, 80)} alt="Profile" width={40} height={40} className="rounded-full" />
                   ) : (
                     <div className="bg-purple-500 h-10 w-10 flex items-center justify-center rounded-full">
@@ -398,9 +402,8 @@ const [{ showLoginModal, showSignupModal, isSeller, userInfo, hamburger, otpmoda
 )}
         </nav>
       )}
-    </> 
+    </>
   );
 };
- 
 
 export default Navbar;
