@@ -7,7 +7,7 @@ import AddReview from './AddReview';
 import { useRouter } from 'next/router';
 import { optimizeImage } from '../../utils/cloudinary';
 
-const optimizeAvatar = (url, size = 100) => optimizeImage(url, size);
+const optimizeAvatar = (url) => optimizeImage(url, 'sm');
 
 const Details = () => {
   const [{ gigData, hasOrdered }] = useStateProvider();
@@ -81,7 +81,7 @@ const Details = () => {
       <div className="flex flex-col gap-4">
         <div className="w-full max-w-[800px] overflow-hidden rounded">
           <Image
-            src={optimizeImage(currentImage, 800)}
+            src={optimizeImage(currentImage, 'lg')}
             alt="Gig"
             height={800}
             width={800}
@@ -93,7 +93,7 @@ const Details = () => {
           {gigData.images.map((img) => (
             <Image
               key={img}
-              src={optimizeImage(img)}
+              src={optimizeImage(img, 'md')}
               alt="Thumbnail"
               height={100}
               width={100}

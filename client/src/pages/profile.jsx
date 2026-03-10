@@ -155,7 +155,7 @@ const Profile = () => {
                   <img
   src={
     preview?.includes("res.cloudinary.com")
-      ? optimizeImage(preview, 200)
+      ? optimizeImage(preview, 'sm')
       : preview
   }
   alt="profile"

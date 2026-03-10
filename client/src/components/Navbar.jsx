@@ -176,7 +176,7 @@ const [{ showLoginModal, showSignupModal, isSeller, userInfo, hamburger, otpmoda
         }
 
         let projectedUserInfo = { ...user };
-        if (user.image && typeof user.image === 'string') {
+        if (user.image) {
           projectedUserInfo.imageName = user.image;
         }
 
@@ -324,8 +324,8 @@ const [{ showLoginModal, showSignupModal, isSeller, userInfo, hamburger, otpmoda
                   {isSeller ? "Switch To Buyer" : "Switch To Seller"}
                 </li>
                 <li className="cursor-pointer" onClick={() => router.push("/profile/" + userInfo?.username)}>
-                  {userInfo?.imageName && typeof userInfo.imageName === 'string' ? (
-                    <Image src={optimizeImage(userInfo.imageName, 80)} alt="Profile" width={40} height={40} className="rounded-full" />
+                  {userInfo?.imageName ? (
+                    <Image src={optimizeImage(userInfo.imageName, 'sm')} alt="Profile" width={40} height={40} className="rounded-full" />
                   ) : (
                     <div className="bg-purple-500 h-10 w-10 flex items-center justify-center rounded-full">
                       <span className="text-xl text-white">{userInfo?.email[0].toUpperCase()}</span>

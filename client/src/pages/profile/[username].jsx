@@ -41,7 +41,7 @@ const PublicProfile = () => {
       <div className="flex flex-col items-center gap-4 text-center mb-10">
         {user.profileImage ? (
           <Image
-            src={optimizeImage(user.profileImage, 100)}
+            src={optimizeImage(user.profileImage, 'sm')}
             width={100}
             height={100}
             className="rounded-full object-cover"

@@ -4,7 +4,7 @@ import { FaStar } from 'react-icons/fa';
 import { useRouter } from 'next/router';
 import { optimizeImage } from '../../utils/cloudinary';
 
-const optimizeAvatar = (url) => optimizeImage(url, 60);
+const optimizeAvatar = (url) => optimizeImage(url, 'sm');
 
 const SearchGridItem = ({ gig }) => {
   const router = useRouter();
@@ -26,7 +26,7 @@ const SearchGridItem = ({ gig }) => {
       {/* Gig Image */}
       <div className="relative w-full h-40 sm:h-48 md:h-52 rounded-xl overflow-hidden">
         <Image
-          src={optimizeImage(gig.images[0], 600)}
+          src={optimizeImage(gig.images[0], 'md')}
           alt="Gig Image"
           fill
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 300px"
