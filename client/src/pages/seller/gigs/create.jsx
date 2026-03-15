@@ -7,11 +7,13 @@ import { useCookies } from 'react-cookie';
 import axios from 'axios';
 import { ADD_GIG_ROUTE } from '../../../utils/constants';
 import { useRouter } from 'next/router';
+import { useStateProvider } from '../../../context/StateContext';
 
 const CreateGig = () => {
   const [loading, setLoading] = useState(false);
   const [cookies] = useCookies();
   const router = useRouter();
+  const [{ userInfo }] = useStateProvider();
   const [files, setFile] = useState([]);
   const [features, setFeatures] = useState([]);
   const [data, setData] = useState({
@@ -48,6 +50,11 @@ const CreateGig = () => {
 
   const addGig = async () => {
     if (loading) return;
+
+    if (!userInfo?.isSocialLogin) {
+      alert("⚠️ You must be a verified user to create a gig. Please get verified first.");
+      return;
+    }
 
     const { title, description, category, price, time, shortDesc, video } = data;
 
@@ -98,6 +105,25 @@ const CreateGig = () => {
       alert("Please fill in all required fields.");
     }
   };
+
+  // Show blocked UI for unverified users
+  if (userInfo && !userInfo.isSocialLogin) {
+    return (
+      <div className="min-h-screen pt-28 px-6 sm:px-10 md:px-32 flex flex-col items-center justify-center gap-6">
+        <div className="bg-yellow-50 border border-yellow-300 rounded-xl p-8 max-w-md text-center">
+          <div className="text-4xl mb-4">⚠️</div>
+          <h2 className="text-2xl font-bold text-yellow-800 mb-2">Verification Required</h2>
+          <p className="text-yellow-700 mb-6">You need to verify your account before you can create a gig.</p>
+          <button
+            onClick={() => router.push('/profile/set')}
+            className="bg-[#1DBF73] text-white font-semibold px-6 py-3 rounded-md hover:bg-[#17a866]"
+          >
+            Get Verified
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen pt-28 px-6 sm:px-10 md:px-32">
