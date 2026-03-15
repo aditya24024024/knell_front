@@ -1,6 +1,5 @@
 "use client";
 
-
 import ImageUpload from '../../../components/ImageUpload';
 import { categories } from '../../../utils/categories';
 import React, { useState } from 'react';
@@ -23,6 +22,7 @@ const CreateGig = () => {
     feature: '',
     price: 0,
     shortDesc: '',
+    video: '',
   });
 
   const inputClassName =
@@ -47,58 +47,57 @@ const CreateGig = () => {
   };
 
   const addGig = async () => {
-  if (loading) return; // prevents double click
+    if (loading) return;
 
-  const { title, description, category, price, time, shortDesc } = data;
+    const { title, description, category, price, time, shortDesc, video } = data;
 
-  if (
-    title &&
-    category &&
-    description &&
-    features.length &&
-    files.length &&
-    price > 0 &&
-    time > 0 &&
-    shortDesc
-  ) {
-    try {
-      setLoading(true);
+    if (
+      title &&
+      category &&
+      description &&
+      features.length &&
+      files.length &&
+      price > 0 &&
+      time > 0 &&
+      shortDesc
+    ) {
+      try {
+        setLoading(true);
 
-      const formData = new FormData();
-      files.forEach((file) => formData.append('images', file));
+        const formData = new FormData();
+        files.forEach((file) => formData.append('images', file));
 
-      const gigData = {
-        title,
-        description,
-        category,
-        features,
-        price,
-        time,
-        shortDesc,
-      };
+        const gigData = {
+          title,
+          description,
+          category,
+          features,
+          price,
+          time,
+          shortDesc,
+          ...(video.trim() ? { video: video.trim() } : {}),
+        };
 
-      const res = await axios.post(ADD_GIG_ROUTE, formData, {
-        withCredentials: true,
-        headers: {
-          Authorization: `Bearer ${cookies.jwt}`,
-        },
-        params: gigData,
-      });
+        const res = await axios.post(ADD_GIG_ROUTE, formData, {
+          withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${cookies.jwt}`,
+          },
+          params: gigData,
+        });
 
-      if (res.status === 201) {
-        alert("✅ Gig created successfully!");
-
-        // CLEAR REDIRECTION
-        router.replace("/seller/gigs");
+        if (res.status === 201) {
+          alert("✅ Gig created successfully!");
+          router.replace("/seller/gigs");
+        }
+      } catch (err) {
+        alert("Failed to create gig");
+        setLoading(false);
       }
-    } catch (err) {
-      alert("Failed to create gig");
-      setLoading(false);
+    } else {
+      alert("Please fill in all required fields.");
     }
-  } else {
-    alert("Please fill in all required fields.");
-  }
-};
+  };
 
   return (
     <div className="min-h-screen pt-28 px-6 sm:px-10 md:px-32">
@@ -112,109 +111,62 @@ const CreateGig = () => {
       <form className="flex flex-col gap-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div>
-            <label htmlFor="title" className={labelClassName}>
-              Gig Title
-            </label>
+            <label htmlFor="title" className={labelClassName}>Gig Title</label>
             <input
-              id="title"
-              name="title"
-              type="text"
+              id="title" name="title" type="text"
               placeholder="e.g. AI chatbot partner"
-              value={data.title}
-              onChange={handleChange}
+              value={data.title} onChange={handleChange}
               className={inputClassName}
             />
           </div>
-
           <div>
-            <label htmlFor="category" className={labelClassName}>
-              Select a Category
-            </label>
+            <label htmlFor="category" className={labelClassName}>Select a Category</label>
             <select
-              id="category"
-              name="category"
-              value={data.category}
-              onChange={handleChange}
+              id="category" name="category"
+              value={data.category} onChange={handleChange}
               className={inputClassName}
             >
-              <option disabled value="">
-                Choose a category
-              </option>
+              <option disabled value="">Choose a category</option>
               {categories.map(({ name }) => (
-                <option key={name} value={name}>
-                  {name}
-                </option>
+                <option key={name} value={name}>{name}</option>
               ))}
             </select>
           </div>
         </div>
 
         <div>
-          <label htmlFor="description" className={labelClassName}>
-            Gig Description
-          </label>
+          <label htmlFor="description" className={labelClassName}>Gig Description</label>
           <textarea
-            id="description"
-            name="description"
-            rows="4"
+            id="description" name="description" rows="4"
             placeholder="Describe what your gig offers..."
-            value={data.description}
-            onChange={handleChange}
+            value={data.description} onChange={handleChange}
             className="p-4 w-full text-sm border border-gray-300 rounded-lg bg-gray-50"
-          ></textarea>
+          />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div>
-            <label htmlFor="time" className={labelClassName}>
-              Delivery Time (in days)
-            </label>
+            <label htmlFor="time" className={labelClassName}>Delivery Time (in days)</label>
             <input
-              id="time"
-              name="time"
-              type="number"
-              placeholder="e.g. 3"
-              value={data.time}
-              onChange={handleChange}
+              id="time" name="time" type="number" placeholder="e.g. 3"
+              value={data.time} onChange={handleChange}
               className={inputClassName}
             />
           </div>
-
-          {/* Uncomment if you want to use revisions */}
-          {/* <div>
-            <label htmlFor="revisions" className={labelClassName}>
-              Revisions
-            </label>
-            <input
-              id="revisions"
-              name="revisions"
-              type="number"
-              placeholder="Max revisions"
-              value={data.revisions}
-              onChange={handleChange}
-              className={inputClassName}
-            />
-          </div> */}
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div>
-            <label htmlFor="features" className={labelClassName}>
-              Add Features
-            </label>
+            <label htmlFor="features" className={labelClassName}>Add Features</label>
             <div className="flex items-center gap-3 mb-3">
               <input
-                id="features"
-                name="feature"
-                type="text"
+                id="features" name="feature" type="text"
                 placeholder="e.g. Funny, smart, musical"
-                value={data.feature}
-                onChange={handleChange}
+                value={data.feature} onChange={handleChange}
                 className={inputClassName}
               />
               <button
-                type="button"
-                onClick={addFeature}
+                type="button" onClick={addFeature}
                 className="text-white bg-blue-600 hover:bg-blue-700 font-medium rounded-md text-sm px-5 py-3"
               >
                 Add
@@ -227,68 +179,60 @@ const CreateGig = () => {
                   className="px-4 py-2 border border-gray-300 rounded-full text-sm bg-white flex items-center gap-2"
                 >
                   <span>{feature}</span>
-                  <button
-                    type="button"
-                    className="text-red-600"
-                    onClick={() => removeFeature(i)}
-                  >
-                    ×
-                  </button>
+                  <button type="button" className="text-red-600" onClick={() => removeFeature(i)}>×</button>
                 </li>
               ))}
             </ul>
           </div>
 
           <div>
-            <label htmlFor="images" className={labelClassName}>
-              Upload Images
-            </label>
+            <label htmlFor="images" className={labelClassName}>Upload Images</label>
             <ImageUpload files={files} setFile={setFile} />
           </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div>
-            <label htmlFor="shortDesc" className={labelClassName}>
-              Short Description
-            </label>
+            <label htmlFor="shortDesc" className={labelClassName}>Short Description</label>
             <input
-              id="shortDesc"
-              name="shortDesc"
-              type="text"
+              id="shortDesc" name="shortDesc" type="text"
               placeholder="Catchy one-liner"
-              value={data.shortDesc}
-              onChange={handleChange}
+              value={data.shortDesc} onChange={handleChange}
               className={inputClassName}
             />
           </div>
-
           <div>
-            <label htmlFor="price" className={labelClassName}>
-              Price (in ₹)
-            </label>
+            <label htmlFor="price" className={labelClassName}>Price (in ₹)</label>
             <input
-              id="price"
-              name="price"
-              type="number"
-              placeholder="e.g. 500"
-              value={data.price}
-              onChange={handleChange}
+              id="price" name="price" type="number" placeholder="e.g. 500"
+              value={data.price} onChange={handleChange}
               className={inputClassName}
             />
           </div>
         </div>
 
+        {/* Video Link */}
+        <div>
+          <label htmlFor="video" className={labelClassName}>
+            Video Link <span className="text-sm text-gray-500 font-normal">(optional)</span>
+          </label>
+          <p className="text-sm text-gray-500 mb-2">Paste a YouTube or Google Drive link to showcase your work</p>
+          <input
+            id="video" name="video" type="url"
+            placeholder="https://youtube.com/watch?v=..."
+            value={data.video} onChange={handleChange}
+            className={inputClassName}
+          />
+        </div>
+
         <div className="mt-6">
           <button
-  type="button"
-  onClick={addGig}
-  disabled={loading}
-  className={`text-white text-lg font-semibold px-8 py-3 rounded-md
-  ${loading ? "bg-gray-400 cursor-not-allowed" : "bg-[#1DBF73] hover:bg-[#17a866]"}`}
->
-  {loading ? "Creating Gig..." : "Create Gig"}
-</button>
+            type="button" onClick={addGig} disabled={loading}
+            className={`text-white text-lg font-semibold px-8 py-3 rounded-md
+            ${loading ? "bg-gray-400 cursor-not-allowed" : "bg-[#1DBF73] hover:bg-[#17a866]"}`}
+          >
+            {loading ? "Creating Gig..." : "Create Gig"}
+          </button>
         </div>
       </form>
     </div>

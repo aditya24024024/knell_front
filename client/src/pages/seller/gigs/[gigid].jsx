@@ -5,7 +5,6 @@ import { useCookies } from 'react-cookie';
 import axios from 'axios';
 import { EDIT_GIG_DATA, GET_GIG_DATA } from '../../../utils/constants';
 import { useRouter } from 'next/router';
-import { HOST } from '../../../context/constants';
 import { toast } from 'react-toastify';
 
 const Editgig = () => {
@@ -27,6 +26,7 @@ const Editgig = () => {
     feature: '',
     price: 0,
     shortDesc: '',
+    video: '',
   });
 
   const handleChange = (e) => {
@@ -47,23 +47,17 @@ const Editgig = () => {
   };
 
   const editGig = async () => {
-    const { category, description, price, time, title, shortDesc } = data;
+    const { category, description, price, time, title, shortDesc, video } = data;
 
-    if (
-      category &&
-      description &&
-      title &&
-      features.length &&
-      files.length &&
-      price > 0 &&
-      shortDesc &&
-      time > 0
-    ) {
+    if (category && description && title && features.length && files.length && price > 0 && shortDesc && time > 0) {
       try {
         const formData = new FormData();
         files.forEach((file) => formData.append('images', file));
 
-        const gigData = { title, description, category, features, price, time, shortDesc };
+        const gigData = {
+          title, description, category, features, price, time, shortDesc,
+          video: video.trim() || '',
+        };
 
         const response = await axios.put(`${EDIT_GIG_DATA}/${gigid}`, formData, {
           withCredentials: true,
@@ -79,7 +73,6 @@ const Editgig = () => {
           router.push('/seller/gigs');
         }
       } catch (err) {
-        // console.error(err);
         toast.error('Something went wrong while updating the gig.');
       }
     } else {
@@ -90,9 +83,7 @@ const Editgig = () => {
   useEffect(() => {
     const fetchGigData = async () => {
       try {
-        const {
-          data: { gig },
-        } = await axios.get(`${GET_GIG_DATA}/${gigid}`);
+        const { data: { gig } } = await axios.get(`${GET_GIG_DATA}/${gigid}`);
 
         setData({
           title: gig.title,
@@ -102,6 +93,7 @@ const Editgig = () => {
           shortDesc: gig.shortDesc,
           price: gig.price,
           feature: '',
+          video: gig.video || '',
         });
 
         setFeatures(gig.features || []);
@@ -134,23 +126,14 @@ const Editgig = () => {
           <div>
             <label className={labelClassName}>Gig Title</label>
             <input
-              name="title"
-              value={data.title}
-              onChange={handleChange}
-              type="text"
-              className={inputClassName}
-              placeholder="e.g. I will do something I'm really good at"
-              required
+              name="title" value={data.title} onChange={handleChange}
+              type="text" className={inputClassName}
+              placeholder="e.g. I will do something I'm really good at" required
             />
           </div>
           <div>
             <label className={labelClassName}>Select a Category</label>
-            <select
-              name="category"
-              onChange={handleChange}
-              value={data.category}
-              className={inputClassName}
-            >
+            <select name="category" onChange={handleChange} value={data.category} className={inputClassName}>
               <option value="" disabled>Select a category</option>
               {categories.map(({ name }) => (
                 <option key={name} value={name}>{name}</option>
@@ -162,11 +145,8 @@ const Editgig = () => {
         <div>
           <label className={labelClassName}>Gig Description</label>
           <textarea
-            name="description"
-            rows="4"
-            value={data.description}
-            onChange={handleChange}
-            className={inputClassName}
+            name="description" rows="4" value={data.description}
+            onChange={handleChange} className={inputClassName}
             placeholder="Describe your gig..."
           />
         </div>
@@ -175,22 +155,16 @@ const Editgig = () => {
           <div>
             <label className={labelClassName}>ETA (days)</label>
             <input
-              type="number"
-              name="time"
-              value={data.time}
-              onChange={handleChange}
-              className={inputClassName}
+              type="number" name="time" value={data.time}
+              onChange={handleChange} className={inputClassName}
               placeholder="Delivery time"
             />
           </div>
           <div>
             <label className={labelClassName}>Gig Price (₹)</label>
             <input
-              type="number"
-              name="price"
-              value={data.price}
-              onChange={handleChange}
-              className={inputClassName}
+              type="number" name="price" value={data.price}
+              onChange={handleChange} className={inputClassName}
               placeholder="Price"
             />
           </div>
@@ -199,11 +173,8 @@ const Editgig = () => {
         <div>
           <label className={labelClassName}>Short Description</label>
           <input
-            type="text"
-            name="shortDesc"
-            value={data.shortDesc}
-            onChange={handleChange}
-            className={inputClassName}
+            type="text" name="shortDesc" value={data.shortDesc}
+            onChange={handleChange} className={inputClassName}
             placeholder="A quick summary of your gig"
           />
         </div>
@@ -212,16 +183,12 @@ const Editgig = () => {
           <label className={labelClassName}>Gig Features</label>
           <div className="flex gap-4 mb-4">
             <input
-              type="text"
-              name="feature"
-              value={data.feature}
-              onChange={handleChange}
-              className={inputClassName}
+              type="text" name="feature" value={data.feature}
+              onChange={handleChange} className={inputClassName}
               placeholder="Enter a feature"
             />
             <button
-              type="button"
-              onClick={addFeature}
+              type="button" onClick={addFeature}
               className="bg-blue-600 text-white px-5 py-3 rounded-md hover:bg-blue-700"
             >
               Add
@@ -229,17 +196,9 @@ const Editgig = () => {
           </div>
           <ul className="flex flex-wrap gap-2">
             {features.map((feature, index) => (
-              <li
-                key={index}
-                className="bg-gray-100 px-4 py-2 rounded-md flex items-center gap-2 border border-gray-300"
-              >
+              <li key={index} className="bg-gray-100 px-4 py-2 rounded-md flex items-center gap-2 border border-gray-300">
                 <span>{feature}</span>
-                <span
-                  className="text-red-600 cursor-pointer"
-                  onClick={() => removeFeature(index)}
-                >
-                  &times;
-                </span>
+                <span className="text-red-600 cursor-pointer" onClick={() => removeFeature(index)}>&times;</span>
               </li>
             ))}
           </ul>
@@ -250,10 +209,22 @@ const Editgig = () => {
           <ImageUpload files={files} setFile={setFiles} />
         </div>
 
+        {/* Video Link */}
+        <div>
+          <label className={labelClassName}>
+            Video Link <span className="text-sm text-gray-500 font-normal">(optional)</span>
+          </label>
+          <p className="text-sm text-gray-500 mb-2">Paste a YouTube or Google Drive link to showcase your work</p>
+          <input
+            type="url" name="video" value={data.video}
+            onChange={handleChange} className={inputClassName}
+            placeholder="https://youtube.com/watch?v=..."
+          />
+        </div>
+
         <div>
           <button
-            type="button"
-            onClick={editGig}
+            type="button" onClick={editGig}
             className="bg-green-600 hover:bg-green-700 text-white text-lg font-semibold px-6 py-3 rounded-md"
           >
             Update Gig
