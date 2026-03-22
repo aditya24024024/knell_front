@@ -78,7 +78,7 @@ function HeroBanner() {
           e.currentTarget.style.background = "rgba(255,255,255,0.05)";
           e.currentTarget.style.borderColor = "rgba(255,255,255,0.2)";
         }}
-        onClick={() => router.push(`/search?category=${encodeURIComponent(search)}`)}
+        onClick={() => router.push(`/search?q=${encodeURIComponent(search)}`)}
       >
         {label}
       </li>
