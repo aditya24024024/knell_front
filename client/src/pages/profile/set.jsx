@@ -81,6 +81,29 @@ const Profile = () => {
 
   const setProfile = async () => {
     try {
+      // Frontend validation
+      if (!data.fullName || !data.fullName.trim()) {
+        setErrorMessage("Full name is required");
+        return;
+      }
+
+      if (!data.username || !data.username.trim()) {
+        setErrorMessage("Username is required");
+        return;
+      }
+
+      if (!data.mobile || data.mobile.trim().length < 10) {
+        setErrorMessage("Please enter a valid 10-digit mobile number");
+        return;
+      }
+
+      if (!data.description || !data.description.trim()) {
+        setErrorMessage("Please add a description");
+        return;
+      }
+
+      setErrorMessage("");
+
       const response = await axios.post(
         SET_USER_INFO,
         { ...data, links },
@@ -192,7 +215,9 @@ const Profile = () => {
             {/* Full Name */}
             <div className="flex flex-col sm:flex-row gap-4 w-full max-w-[500px]">
               <div className="flex-1">
-                <label className={labelClassName} htmlFor="fullName">Full Name</label>
+                <label className={labelClassName} htmlFor="fullName">
+                  Full Name <span className="text-red-500">*</span>
+                </label>
                 <input
                   className={inputClassName} type="text" name="fullName" id="fullName"
                   value={data.fullName} onChange={handleChange} placeholder="Full Name"
@@ -200,18 +225,34 @@ const Profile = () => {
               </div>
             </div>
 
+            {/* Username */}
+            <div className="w-full max-w-[500px]">
+              <label className={labelClassName} htmlFor="username">
+                Username <span className="text-red-500">*</span>
+              </label>
+              <input
+                className={inputClassName} type="text" name="username" id="username"
+                value={data.username} onChange={handleChange} placeholder="Choose a username"
+              />
+            </div>
+
             {/* Mobile */}
             <div className="w-full max-w-[500px]">
-              <label className={labelClassName} htmlFor="mobile">Mobile Number</label>
+              <label className={labelClassName} htmlFor="mobile">
+                Mobile Number <span className="text-red-500">*</span>
+              </label>
               <input
                 className={inputClassName} type="tel" name="mobile" id="mobile"
-                value={data.mobile} onChange={handleChange} placeholder="Enter mobile number"
+                value={data.mobile} onChange={handleChange} placeholder="Enter 10-digit mobile number"
+                maxLength={10}
               />
             </div>
 
             {/* Description */}
             <div className="w-full max-w-[500px]">
-              <label className={labelClassName} htmlFor="description">Description</label>
+              <label className={labelClassName} htmlFor="description">
+                Description <span className="text-red-500">*</span>
+              </label>
               <textarea
                 className={inputClassName} name="description" id="description"
                 value={data.description} onChange={handleChange} placeholder="Tell us about yourself"
