@@ -35,28 +35,38 @@ function HeroBanner() {
         ))}
       </div>
 
-      {/* Overlay for readability */}
-      <div className="absolute inset-0 bg-black/40 z-0" />
+      {/* Overlay */}
+      <div className="absolute inset-0 bg-black/50 z-0" />
 
       {/* Foreground Content */}
-      <div className="relative z-10 w-full lg:w-[650px] flex flex-col justify-center h-full gap-4 px-6 md:ml-10 lg:ml-20 text-white">
+      <div className="relative z-10 w-full lg:w-[700px] flex flex-col justify-center h-full gap-5 px-6 md:ml-10 lg:ml-20 text-white">
+        
+        {/* Creator badge */}
+        <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-1.5 w-fit">
+          <span className="text-[#1DBF73] text-sm font-semibold">🎮 Built for Creators & Streamers</span>
+        </div>
+
         <h1
           className="text-3xl sm:text-4xl md:text-5xl leading-snug font-bold"
           style={{ fontFamily: "Bobby Jones" }}
         >
-          HIRE THE PERFECT <i><br />PERSON FOR YOU</i>
+          LEVEL UP YOUR <i><br />CONTENT GAME</i>
         </h1>
+
+        <p className="text-white/80 text-base sm:text-lg max-w-md">
+          Find editors, designers & developers who get the creator world. Hire in minutes, pay in ₹.
+        </p>
 
         {/* Popular items */}
         <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 text-sm">
           <span className="font-semibold">Popular:</span>
           <ul className="flex flex-wrap gap-2 sm:gap-4">
-            {["Freelancer", "Dance Companion", "Pet Companion"].map((item) => (
+            {["Video Editing", "Thumbnail Design", "Shorts & Reels Editing"].map((item) => (
               <li
                 key={item}
                 className="text-sm py-1 px-3 border border-white rounded-full hover:bg-white hover:text-black transition-all duration-300 cursor-pointer"
                 onClick={() =>
-                  router.push(`/search?category=${(item || "default").toLowerCase()}`)
+                  router.push(`/search?category=${encodeURIComponent(item.toLowerCase())}`)
                 }
               >
                 {item}
