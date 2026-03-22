@@ -57,23 +57,34 @@ function HeroBanner() {
           Find editors, designers & developers who get the creator world. Hire in minutes, pay in ₹.
         </p>
 
-        {/* Popular items */}
-        <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 text-sm">
-          <span className="font-semibold">Popular:</span>
-          <ul className="flex flex-wrap gap-2 sm:gap-4">
-            {["Video Editing", "Thumbnail Design", "Shorts & Reels Editing"].map((item) => (
-              <li
-                key={item}
-                className="text-sm py-1 px-3 border border-white rounded-full hover:bg-white hover:text-black transition-all duration-300 cursor-pointer"
-                onClick={() =>
-                  router.push(`/search?category=${encodeURIComponent(item.toLowerCase())}`)
-                }
-              >
-                {item}
-              </li>
-            ))}
-          </ul>
-        </div>
+     {/* Popular items */}
+<div className="flex flex-col sm:flex-row gap-2 sm:gap-4 text-sm">
+  <span className="text-white/50 font-medium">Popular:</span>
+  <ul className="flex flex-wrap gap-2">
+    {[
+      { label: "Video Editing", search: "edit" },
+      { label: "Web Development", search: "web" },
+      { label: "Freelancer", search: "freelancer" },
+    ].map(({ label, search }) => (
+      <li
+        key={label}
+        className="py-1 px-4 rounded-full text-sm cursor-pointer transition-all duration-200 text-white/80 hover:text-black hover:font-medium"
+        style={{ border: "1px solid rgba(255,255,255,0.2)", background: "rgba(255,255,255,0.05)" }}
+        onMouseEnter={e => {
+          e.currentTarget.style.background = "#1DBF73";
+          e.currentTarget.style.borderColor = "#1DBF73";
+        }}
+        onMouseLeave={e => {
+          e.currentTarget.style.background = "rgba(255,255,255,0.05)";
+          e.currentTarget.style.borderColor = "rgba(255,255,255,0.2)";
+        }}
+        onClick={() => router.push(`/search?category=${encodeURIComponent(search)}`)}
+      >
+        {label}
+      </li>
+    ))}
+  </ul>
+</div>
       </div>
     </div>
   );
