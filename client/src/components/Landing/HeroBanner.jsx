@@ -63,7 +63,7 @@ function HeroBanner() {
   <ul className="flex flex-wrap gap-2">
     {[
       { label: "Video Editing", search: "edit" },
-      { label: "Web Development", search: "web" },
+      { label: "Thumbnail Design", search: "thumbnail" },
       { label: "Freelancer", search: "freelancer" },
     ].map(({ label, search }) => (
       <li
