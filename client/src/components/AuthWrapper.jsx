@@ -66,7 +66,7 @@ function AuthWrapper({ type }) {
       };
     } catch (err) {
       if (err?.response && err?.response?.data) {
-        setErrorMessage(err.response.data);
+        setErrorMessage(err.response.data?.message || "Something went wrong.");
       } else {
         setErrorMessage("Something went wrong. Please try again.");
       }
