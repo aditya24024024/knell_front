@@ -105,9 +105,9 @@ const Search = () => {
           <div style={{
             display: "grid",
             gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))",
-            gap: "1px",
-            background: "rgba(93,201,74,0.08)",
-            border: "1px solid rgba(93,201,74,0.1)",
+            gap: "1.5rem",
+background: "transparent",
+border: "none",
             marginBottom: "2rem",
           }}>
             {gigs.map((gig) => (
