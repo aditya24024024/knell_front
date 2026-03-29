@@ -17,11 +17,8 @@ const getLinkIcon = (url) => {
 };
 
 const getLinkLabel = (url) => {
-  try {
-    return new URL(url).hostname.replace('www.', '');
-  } catch {
-    return url;
-  }
+  try { return new URL(url).hostname.replace('www.', ''); }
+  catch { return url; }
 };
 
 const PublicProfile = () => {
@@ -38,85 +35,167 @@ const PublicProfile = () => {
         const { data } = await axios.get(`${GET_USER_PUBLIC_PROFILE}/${username}`);
         setUser(data.user);
         setGigs(data.gigs);
-      } catch (err) {
-        // console.error("Failed to fetch profile:", err);
-      }
+      } catch (err) {}
     };
     fetchUserProfile();
   }, [username]);
 
-  if (!user) return <p className="p-10 text-center">Loading profile...</p>;
+  if (!user) return (
+    <div style={{ background: "#09090b", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
+      <div style={{
+        width: 32, height: 32,
+        border: "3px solid rgba(93,201,74,0.2)",
+        borderTop: "3px solid #5dc94a",
+        borderRadius: "50%",
+        animation: "knell-spin 0.8s linear infinite",
+      }} />
+      <style jsx global>{`@keyframes knell-spin { to { transform: rotate(360deg); } }`}</style>
+    </div>
+  );
+
+  const isOwnProfile = userInfo?.id === user?.id;
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8">
-      {/* User Info */}
-      <div className="flex flex-col items-center gap-4 text-center mb-10">
-        {user.profileImage ? (
-          <Image
-            src={optimizeImage(user.profileImage, 'sm')}
-            width={100} height={100}
-            className="rounded-full object-cover" alt="Profile"
-          />
-        ) : (
-          <div className="bg-purple-500 w-[100px] h-[100px] rounded-full flex items-center justify-center text-white text-4xl font-bold">
-            {user.email[0]?.toUpperCase()}
+    <div style={{ background: "#09090b", minHeight: "100vh", paddingTop: "6rem", paddingBottom: "5rem" }}>
+      <div style={{ maxWidth: 1100, margin: "0 auto", padding: "0 3rem" }}>
+
+        {/* Profile header */}
+        <div style={{
+          display: "flex", flexDirection: "column", alignItems: "center",
+          textAlign: "center", marginBottom: "4rem",
+          padding: "3rem 2rem",
+          border: "1px solid rgba(93,201,74,0.12)",
+          background: "#0f1014",
+          position: "relative",
+        }}>
+          {/* Avatar */}
+          <div style={{ marginBottom: "1.25rem" }}>
+            {user.profileImage ? (
+              <Image
+                src={optimizeImage(user.profileImage, 'sm')}
+                width={100} height={100}
+                style={{ borderRadius: "50%", objectFit: "cover", border: "2px solid rgba(93,201,74,0.3)" }}
+                alt="Profile"
+              />
+            ) : (
+              <div style={{
+                background: "#3a8a2c", width: 100, height: 100,
+                borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center",
+                border: "2px solid rgba(93,201,74,0.3)",
+              }}>
+                <span style={{ color: "#ede9dc", fontSize: "2.5rem", fontWeight: 700 }}>
+                  {user.email[0]?.toUpperCase()}
+                </span>
+              </div>
+            )}
           </div>
-        )}
-        <div>
-          <h2 className="text-2xl font-bold">{user.fullName}</h2>
-          <p className="text-gray-600">@{user.username}</p>
-        </div>
 
-        {user.description && (
-          <p className="max-w-xl text-center text-gray-700">{user.description}</p>
-        )}
+          {/* Name & username */}
+          <h2 style={{ fontFamily: "Bebas Neue, sans-serif", fontSize: "clamp(1.5rem, 3vw, 2.5rem)", color: "#ede9dc", letterSpacing: "0.04em", marginBottom: "0.25rem" }}>
+            {user.fullName}
+          </h2>
+          <span style={{ fontFamily: "Space Mono, monospace", fontSize: "0.68rem", letterSpacing: "0.15em", color: "#5dc94a", marginBottom: "1rem" }}>
+            @{user.username}
+          </span>
 
-        {/* Links */}
-        {user.links?.length > 0 && (
-          <div className="flex flex-wrap justify-center gap-2 mt-1">
-            {user.links.map((link, i) => (
-              <a
-                key={i}
-                href={link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 px-4 py-1.5 border border-gray-300 rounded-full text-sm text-gray-700 hover:border-[#1DBF73] hover:text-[#1DBF73] transition-colors"
+          {/* Verified badge */}
+          {user.isSocialLogin && (
+            <div style={{ fontFamily: "Space Mono, monospace", fontSize: "0.58rem", letterSpacing: "0.1em", color: "#5dc94a", border: "1px solid rgba(93,201,74,0.25)", padding: "0.25rem 0.75rem", marginBottom: "1rem" }}>
+              ✓ Verified Seller
+            </div>
+          )}
+
+          {/* Description */}
+          {user.description && (
+            <p style={{ color: "#9ca3af", fontSize: "0.88rem", lineHeight: 1.7, maxWidth: 500, marginBottom: "1.25rem", fontWeight: 300 }}>
+              {user.description}
+            </p>
+          )}
+
+          {/* Social links */}
+          {user.links?.length > 0 && (
+            <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "0.5rem", marginBottom: "1.5rem" }}>
+              {user.links.map((link, i) => (
+                <a
+                  key={i} href={link} target="_blank" rel="noopener noreferrer"
+                  style={{
+                    display: "inline-flex", alignItems: "center", gap: "0.4rem",
+                    padding: "0.35rem 0.85rem",
+                    border: "1px solid rgba(93,201,74,0.2)",
+                    color: "#6b7a62", textDecoration: "none", fontSize: "0.75rem",
+                    fontFamily: "Space Mono, monospace", letterSpacing: "0.08em",
+                    transition: "all 0.2s",
+                  }}
+                  onMouseEnter={(e) => { e.currentTarget.style.borderColor = "#5dc94a"; e.currentTarget.style.color = "#5dc94a"; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(93,201,74,0.2)"; e.currentTarget.style.color = "#6b7a62"; }}
+                >
+                  <span>{getLinkIcon(link)}</span>
+                  <span>{getLinkLabel(link)}</span>
+                </a>
+              ))}
+            </div>
+          )}
+
+          {/* Own profile actions */}
+          {isOwnProfile && (
+            <div style={{ display: "flex", gap: "0.75rem" }}>
+              <button
+                onClick={() => router.push("/profile/set")}
+                style={{
+                  fontFamily: "Space Mono, monospace", fontSize: "0.65rem", letterSpacing: "0.12em",
+                  textTransform: "uppercase", background: "#3a8a2c", color: "#ede9dc",
+                  border: "none", padding: "0.65rem 1.5rem", cursor: "pointer", transition: "background 0.2s",
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.background = "#4ea83d")}
+                onMouseLeave={(e) => (e.currentTarget.style.background = "#3a8a2c")}
               >
-                <span>{getLinkIcon(link)}</span>
-                <span>{getLinkLabel(link)}</span>
-              </a>
-            ))}
+                Edit Profile
+              </button>
+              <button
+                onClick={() => router.push("/logout")}
+                style={{
+                  fontFamily: "Space Mono, monospace", fontSize: "0.65rem", letterSpacing: "0.12em",
+                  textTransform: "uppercase", background: "transparent", color: "#5dc94a",
+                  border: "1px solid rgba(93,201,74,0.3)", padding: "0.65rem 1.5rem",
+                  cursor: "pointer", transition: "all 0.2s",
+                }}
+                onMouseEnter={(e) => { e.currentTarget.style.borderColor = "#5dc94a"; e.currentTarget.style.background = "rgba(93,201,74,0.08)"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(93,201,74,0.3)"; e.currentTarget.style.background = "transparent"; }}
+              >
+                Logout
+              </button>
+            </div>
+          )}
+        </div>
+
+        {/* Gigs section */}
+        {gigs.length > 0 && (
+          <div>
+            <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "2rem" }}>
+              <span style={{ fontFamily: "Space Mono, monospace", fontSize: "0.6rem", letterSpacing: "0.25em", textTransform: "uppercase", color: "#5dc94a" }}>
+                Gigs by {user.username}
+              </span>
+              <div style={{ flex: 1, height: 1, background: "rgba(93,201,74,0.15)" }} />
+            </div>
+            <div style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))",
+              gap: 1,
+              background: "rgba(93,201,74,0.08)",
+              border: "1px solid rgba(93,201,74,0.1)",
+            }}>
+              {gigs.map((gig) => (
+                <SearchGridItem key={gig.id} gig={gig} />
+              ))}
+            </div>
           </div>
         )}
 
-        {userInfo?.id === user?.id ? (
-          <div className="flex gap-4">
-            <button
-              className="border text-lg font-semibold px-6 py-3 border-[#1DBF73] bg-[#1DBF73] text-white rounded-md"
-              type="button"
-              onClick={() => router.push("/profile/set")}
-            >
-              Edit Profile
-            </button>
-            <button
-              className="border text-lg font-semibold px-6 py-3 border-[#1DBF73] text-[#1DBF73] rounded-md"
-              type="button"
-              onClick={() => router.push("/logout")}
-            >
-              Logout
-            </button>
+        {gigs.length === 0 && (
+          <div style={{ textAlign: "center", padding: "3rem", border: "1px solid rgba(93,201,74,0.1)", color: "#3d4438", fontFamily: "Space Mono, monospace", fontSize: "0.65rem", letterSpacing: "0.15em" }}>
+            No gigs listed yet
           </div>
-        ) : <div></div>}
-      </div>
-
-      {/* Gigs List */}
-      <div>
-        <h3 className="text-xl font-semibold mb-4">Gigs by {user.username}</h3>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-          {gigs.map((gig) => (
-            <SearchGridItem key={gig.id} gig={gig} />
-          ))}
-        </div>
+        )}
       </div>
     </div>
   );
