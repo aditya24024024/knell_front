@@ -3,43 +3,36 @@ import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { categories } from "../../utils/categories";
 
-// Extended category list with icons and tags for filtering
-const allCategories = [
-  { name: "Stream Overlays", icon: "🎮", tag: "streaming", status: "Coming Soon" },
-  { name: "Alert Packs", icon: "🔔", tag: "streaming", status: "Coming Soon" },
-  { name: "Emotes & Badges", icon: "😄", tag: "streaming", status: "Coming Soon" },
-  { name: "Video Editing", icon: "🎬", tag: "video", status: "Active", category: "editor" },
-  { name: "Shorts / Reels", icon: "⚡", tag: "video", status: "Active", category: "editor" },
-  { name: "VOD Highlights", icon: "🎞️", tag: "video", status: "Active", category: "editor" },
-  { name: "Thumbnails", icon: "🖼️", tag: "design", status: "Active", category: "Freelancer" },
-  { name: "Channel Art", icon: "🎨", tag: "design", status: "Active", category: "Freelancer" },
-  { name: "Logo Design", icon: "✏️", tag: "design", status: "Active", category: "Freelancer" },
-  { name: "Motion Graphics", icon: "🌀", tag: "design", status: "Active", category: "Freelancer" },
-  { name: "Web Dev", icon: "🌐", tag: "development", status: "Active", category: "Freelancer" },
-  { name: "Bots & Tools", icon: "🤖", tag: "development", status: "Active", category: "Freelancer" },
-  { name: "Music & SFX", icon: "🎵", tag: "audio", status: "Active", category: "Musician" },
-  { name: "Voiceover", icon: "🎙️", tag: "audio", status: "Active", category: "Freelancer" },
-  { name: "Tutoring", icon: "📚", tag: "writing", status: "Active", category: "Tutor/Counselor" },
-  { name: "Pet Companion", icon: "🐾", tag: "companions", status: "Active", category: "Pet Companion " },
-  { name: "Shopper", icon: "🛍️", tag: "companions", status: "Active", category: "Shopper" },
-  { name: "Photography", icon: "📸", tag: "design", status: "Active", category: "Photography" },
-];
+// Map your existing categories to filter tags
+const tagMap = {
+  "Social Companion ": "companions",
+  "Tutor/Counselor": "education",
+  "Gaming Companion ": "companions",
+  "Pet Companion ": "companions",
+  "Old Age Companion": "companions",
+  "Freelancer": "design",
+  "Travel Companion": "companions",
+  "Pub Crawler": "companions",
+  "Dance Companion": "companions",
+  "Photography": "design",
+  "Shopper": "companions",
+  "Musician": "audio",
+  "editor": "video",
+  "Online Meet": "companions",
+};
 
-const FILTERS = ["All", "Streaming", "Video", "Design", "Development", "Audio", "Writing", "Companions"];
+const FILTERS = ["All", "Video", "Design", "Audio", "Education", "Companions"];
 
 export default function BrowseCategories() {
   const router = useRouter();
   const [active, setActive] = useState("All");
 
-  const filtered = active === "All"
-    ? allCategories
-    : allCategories.filter((c) => c.tag === active.toLowerCase());
-
-  const handleClick = (cat) => {
-    if (cat.status !== "Active") return;
-    const target = cat.category || cat.name;
-    router.push(`/search?category=${encodeURIComponent(target)}`);
-  };
+  const filtered = categories.filter(({ name }) => {
+    if (!name?.trim()) return false;
+    if (active === "All") return true;
+    const tag = tagMap[name] || "other";
+    return tag === active.toLowerCase();
+  });
 
   return (
     <div style={{
@@ -71,11 +64,7 @@ export default function BrowseCategories() {
       </div>
 
       {/* Filter pills */}
-      <div style={{
-        display: "flex", gap: "0.5rem", flexWrap: "wrap",
-        marginBottom: "2rem",
-        overflowX: "auto",
-      }}>
+      <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap", marginBottom: "2rem" }}>
         {FILTERS.map((f) => (
           <button
             key={f}
@@ -108,71 +97,70 @@ export default function BrowseCategories() {
         background: "rgba(93,201,74,0.08)",
         border: "1px solid rgba(93,201,74,0.1)",
       }}>
-        {filtered.map((cat) => (
+        {filtered.map(({ name, logo }) => (
           <div
-            key={cat.name}
-            onClick={() => handleClick(cat)}
+            key={name}
+            onClick={() => router.push(`/search?category=${encodeURIComponent(name)}`)}
             style={{
               background: "#09090b",
               padding: "1.5rem 1rem",
               display: "flex",
               flexDirection: "column",
               alignItems: "flex-start",
-              gap: "0.5rem",
-              cursor: cat.status === "Active" ? "pointer" : "default",
+              gap: "0.75rem",
+              cursor: "pointer",
               transition: "background 0.2s",
-              opacity: cat.status === "Active" ? 1 : 0.6,
             }}
             onMouseEnter={(e) => {
-              if (cat.status === "Active") e.currentTarget.style.background = "#15171c";
+              e.currentTarget.style.background = "#15171c";
+              e.currentTarget.querySelector(".cat-name").style.color = "#5dc94a";
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.background = "#09090b";
+              e.currentTarget.querySelector(".cat-name").style.color = "#dbd7ca";
             }}
           >
-            <span style={{ fontSize: "1.5rem" }}>{cat.icon}</span>
             <div style={{
-              fontFamily: "Space Mono, monospace",
-              fontSize: "0.6rem",
-              letterSpacing: "0.1em",
-              textTransform: "uppercase",
-              color: "#dbd7ca",
-              lineHeight: 1.4,
+              filter: "brightness(0) invert(1) sepia(1) saturate(3) hue-rotate(80deg) opacity(0.75)",
             }}>
-              {cat.name}
+              <Image src={logo} alt={name} height={36} width={36} />
             </div>
-            <div style={{
-              fontFamily: "Space Mono, monospace",
-              fontSize: "0.52rem",
-              letterSpacing: "0.08em",
-              color: cat.status === "Active" ? "#5dc94a" : "#6b7a62",
-            }}>
-              {cat.status}
-            </div>
+            <span
+              className="cat-name"
+              style={{
+                fontFamily: "Space Mono, monospace",
+                fontSize: "0.6rem",
+                letterSpacing: "0.1em",
+                textTransform: "uppercase",
+                color: "#dbd7ca",
+                lineHeight: 1.4,
+                transition: "color 0.2s",
+              }}
+            >
+              {name.trim()}
+            </span>
           </div>
         ))}
 
-        {/* More coming soon cell */}
+        {/* More coming soon */}
         <div style={{
           background: "#09090b",
           padding: "1.5rem 1rem",
           display: "flex",
-          flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          gap: "0.4rem",
-          minHeight: 120,
+          minHeight: 110,
         }}>
           <div style={{
             fontFamily: "Space Mono, monospace",
-            fontSize: "0.58rem",
+            fontSize: "0.55rem",
             letterSpacing: "0.1em",
             textTransform: "uppercase",
             color: "#3d4438",
             textAlign: "center",
             lineHeight: 1.6,
           }}>
-            + More Categories<br />Coming Soon
+            + More<br />Coming Soon
           </div>
         </div>
       </div>
