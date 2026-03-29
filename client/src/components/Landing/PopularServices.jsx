@@ -68,9 +68,9 @@ export default function PopularServices() {
           <div style={{
             display: "grid",
             gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))",
-            gap: 1,
-            background: "rgba(93,201,74,0.08)",
-            border: "1px solid rgba(93,201,74,0.1)",
+            gap: "1.5rem",
+background: "transparent",
+border: "none",
           }}>
             {[...Array(8)].map((_, i) => (
               <div key={i} style={{ background: "#0f1014", padding: "1rem" }}>
@@ -87,9 +87,9 @@ export default function PopularServices() {
           <div style={{
             display: "grid",
             gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))",
-            gap: 1,
-            background: "rgba(93,201,74,0.08)",
-            border: "1px solid rgba(93,201,74,0.1)",
+          gap: "1.5rem",
+background: "transparent",
+border: "none",
           }}>
             {gigs.map((gig) => {
               const rating = getAvgRating(gig.reviews);
