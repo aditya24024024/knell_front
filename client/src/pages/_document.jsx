@@ -4,6 +4,10 @@ export default function Document() {
   return (
     <Html lang="en">
       <Head>
+        <link
+  href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:wght@400;700&display=swap"
+  rel="stylesheet"
+/>
         <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
       </Head>
       <body className="antialiased">

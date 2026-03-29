@@ -57,3 +57,5 @@ export const DELETE_GIG=`${GIG_ROUTES}/delete-gig`;
 export const OTP_VERIFICATION = `${MAIL_ROUTES}/verify-otp`;
 export const OTP_SEND = `${MAIL_ROUTES}/send-otp`;
 export const SEND_FORGOT_OTP = `${MAIL_ROUTES}/send-forgot-otp`;
+
+export const FEATURED_GIGS_ROUTE = `${GIG_ROUTES}/featured`;

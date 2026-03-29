@@ -13,5 +13,14 @@ export default {
       },
     },
   },
+
+  theme: {
+  extend: {
+    fontFamily: {
+      display: ["Bebas Neue", "sans-serif"],
+      mono2: ["Space Mono", "monospace"],
+    },
+  },
+},
   plugins: [],
 };

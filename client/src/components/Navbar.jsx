@@ -3,12 +3,11 @@ import Link from "next/link";
 import { useRouter } from 'next/router';
 import { useCookies } from 'react-cookie';
 import axios from 'axios';
-import { GET_USER_INFO, HOST } from '../utils/constants';
+import { GET_USER_INFO } from '../utils/constants';
 import { IoSearchOutline } from "react-icons/io5";
 import Image from 'next/image';
 import { reducerCases } from '../context/constants';
 import { useStateProvider } from '../context/StateContext';
-import img from './unnamed 1.svg'
 import AuthWrapper from './AuthWrapper';
 import { GiHamburgerMenu } from "react-icons/gi";
 import OtpWrapper from './OtpWrapper'
@@ -21,51 +20,32 @@ const Navbar = () => {
   const router = useRouter()
   const [isLoaded, setIsLoaded] = useState(false)
   const [navFixed, setNavFixed] = useState(false)
-  // const [showTermsModal, setShowTermsModal] = useState(false);
   const [searchData, setSearchData] = useState("")
-  
-const [{ showLoginModal, showSignupModal, isSeller, userInfo, hamburger, otpmodal, showTermsModal, resetPass}, dispatch] = useStateProvider();
 
+  const [{ showLoginModal, showSignupModal, isSeller, userInfo, hamburger, otpmodal, showTermsModal, resetPass }, dispatch] = useStateProvider();
 
   const handleLogin = () => {
-    if (showSignupModal) {
-      dispatch({ type: reducerCases.TOGGLE_SIGNUP_MODAL, showSignupModal: false });
-    }
+    if (showSignupModal) dispatch({ type: reducerCases.TOGGLE_SIGNUP_MODAL, showSignupModal: false });
     dispatch({ type: reducerCases.TOGGLE_LOGIN_MODAL, showLoginModal: true });
   }
 
   const handleSignup = () => {
-  if (showLoginModal) {
-    dispatch({ type: reducerCases.TOGGLE_LOGIN_MODAL, showLoginModal: false });
-  }
-  dispatch({ type: reducerCases.TOGGLE_TERMS_MODAL, showTermsModal: true });
- // Show Terms modal first
-};
+    if (showLoginModal) dispatch({ type: reducerCases.TOGGLE_LOGIN_MODAL, showLoginModal: false });
+    dispatch({ type: reducerCases.TOGGLE_TERMS_MODAL, showTermsModal: true });
+  };
 
-
-  const toggleHamburger = () => {
-    dispatch({ type: reducerCases.TOGGLE_HAMBURGER });
-  }
-
-  const closeHamburger = () => {
-    dispatch({ type: reducerCases.CLOSE_HAMBURGER });
-  }
+  const toggleHamburger = () => dispatch({ type: reducerCases.TOGGLE_HAMBURGER });
+  const closeHamburger = () => dispatch({ type: reducerCases.CLOSE_HAMBURGER });
 
   const handleOrdersNavigate = () => {
     closeHamburger();
-    if (isSeller) router.push("/seller");
-    else router.push("/buyer");
+    router.push(isSeller ? "/seller" : "/buyer");
   }
 
   const handleModeSwitch = () => {
     closeHamburger();
-    if (isSeller) {
-      dispatch({ type: reducerCases.SWITCH_MODE });
-      router.push("/buyer");
-    } else {
-      dispatch({ type: reducerCases.SWITCH_MODE });
-      router.push("/seller");
-    }
+    dispatch({ type: reducerCases.SWITCH_MODE });
+    router.push(isSeller ? "/buyer" : "/seller");
   }
 
   const handler = (event) => {
@@ -77,26 +57,13 @@ const [{ showLoginModal, showSignupModal, isSeller, userInfo, hamburger, otpmoda
 
   const links = [
     { linkName: "Explore", handler: "https://www.instagram.com/knell.co.in/", type: "link" },
-    //{ linkName: "English", handler: "#", type: "link" },
-    //{ linkName: "Become a Seller", handler: "#", type: "link" },
     { linkName: "Log In", handler: handleLogin, type: "button" },
     { linkName: "Join", handler: handleSignup, type: "button2" },
   ];
 
-  const admin = () => {
-    closeHamburger();
-    router.push("/admin");
-  }
-  
-  const adminorders = () => {
-    closeHamburger();
-    router.push("/adminorders");
-  }
-  
-  const adminusers = () => {
-    closeHamburger();
-    router.push("/adminusers");
-  }
+  const admin = () => { closeHamburger(); router.push("/admin"); }
+  const adminorders = () => { closeHamburger(); router.push("/adminorders"); }
+  const adminusers = () => { closeHamburger(); router.push("/adminusers"); }
 
   useEffect(() => {
     if (router.pathname === "/") {
@@ -111,195 +78,146 @@ const [{ showLoginModal, showSignupModal, isSeller, userInfo, hamburger, otpmoda
   }, [router.pathname]);
 
   useEffect(() => {
-    // if (!userInfo) {
-    // console.log("nav")
-    //   // console.log(cookies.jwt);
-    //   // console.log(cookies);
-    //   const getUserInfo = async () => {
-    //     try {
-    //       const {
-    //         data: { user },
-    //       } = await axios.post(
-    //         GET_USER_INFO,
-    //         {},
-    //         {
-    //           withCredentials: true,
-    //           // headers: {
-    //           // Authorization: `Bearer ${cookies.jwt}`,
-    //           // },
-    //         }
-    //       );
-
-    //       let projectedUserInfo = { ...user };
-    //       if (user.image) {
-    //         projectedUserInfo = {
-    //           ...projectedUserInfo,
-    //           imageName: HOST + "/" + user.image,
-    //         };
-    //       }
-    //       delete projectedUserInfo.image;
-    //       dispatch({
-    //         type: reducerCases.SET_USER,
-    //         userInfo: projectedUserInfo,
-    //       });
-    //       setIsLoaded(true);
-    //       if (user.isProfileSet === false) {
-    //         router.push("/profile");
-    //       }
-    //     } catch (err) {
-    //       console.log(err);
-    //     }
-    //   };
-
-    //   getUserInfo();
-    // } else {
-    //   setIsLoaded(true);
-    // }
-        // console.log(userInfo);
-      if (!userInfo) {
-        // console.log("setting user info");
-    const getUserInfo = async () => {
-      try {
-        const {
-          data: { user },
-        } = await axios.post(
-          GET_USER_INFO,
-          {},
-          {
-            withCredentials: true, 
-          }
-        );
-
-        if (!user || !user.email) {
+    if (!userInfo) {
+      const getUserInfo = async () => {
+        try {
+          const { data: { user } } = await axios.post(GET_USER_INFO, {}, { withCredentials: true });
+          if (!user || !user.email) { setIsLoaded(true); return; }
+          let projectedUserInfo = { ...user };
+          if (user.image) projectedUserInfo.imageName = user.image;
+          dispatch({ type: reducerCases.SET_USER, userInfo: projectedUserInfo });
           setIsLoaded(true);
-          return;
+          if (user.isProfileSet === false) router.push("/profile");
+        } catch (err) {
+          setIsLoaded(true);
         }
+      };
+      getUserInfo();
+    } else {
+      setIsLoaded(true);
+    }
+  }, [userInfo]);
 
-        let projectedUserInfo = { ...user };
-        if (user.image) {
-          projectedUserInfo.imageName = user.image;
-        }
-
-        dispatch({
-          type: reducerCases.SET_USER,
-          userInfo: projectedUserInfo,
-        });
-
-        setIsLoaded(true);
-
-        if (user.isProfileSet === false) {
-          router.push("/profile");
-        }
-      } catch (err) {
-        // console.log("Auth check failed", err);
-        setIsLoaded(true); 
-      }
-    };
-    getUserInfo();
-  } else {
-    setIsLoaded(true);
-  }
- }, [userInfo]);
-
+  const isAdminUser = userInfo?.email === "akshajvasudeva@gmail.com" || userInfo?.email === "Kalakartik23@gmail.com";
 
   return (
     <>
-      {(userInfo?.email) && !(userInfo?.username) && <UsernameWrapper/>}
-      {/* showUsernameModal && <UsernameWrapper/> */}
+      {(userInfo?.email) && !(userInfo?.username) && <UsernameWrapper />}
       {showLoginModal && <AuthWrapper type="login" />}
       {(showSignupModal || resetPass) && <AuthWrapper type="signup" />}
-      {otpmodal && <OtpWrapper/>}
+      {otpmodal && <OtpWrapper />}
       {showTermsModal && <TermsAndConditionsModal />}
 
-      
-{/* ✅ Terms and Conditions Modal */}
-{/* {showTermsModal && (
-  <div className="fixed top-0 left-0 w-full h-full z-[200] bg-black bg-opacity-60 flex justify-center items-center">
-    <div className="bg-white rounded-lg shadow-xl p-6 max-w-lg w-full relative">
-      <h2 className="text-xl font-semibold mb-4">Terms and Conditions</h2>
-      <p className="text-sm text-gray-700 mb-4 overflow-y-auto max-h-64">
-        By signing up to Knell, you agree to our Terms of Service and Privacy Policy.
-        Please read them carefully before continuing.
-      </p>
-      <div className="flex justify-end gap-4">
-        <button
-          className="bg-gray-200 text-gray-700 px-4 py-2 rounded"
-          onClick={() => setShowTermsModal(false)}
-        >
-          Cancel
-        </button>
-        <button
-          className="bg-[#1DBF73] text-white px-4 py-2 rounded"
-          onClick={() => {
-            setShowTermsModal(false);
-            dispatch({ type: reducerCases.TOGGLE_SIGNUP_MODAL, showSignupModal: true });
+      {isLoaded && (
+        <nav
+          className={`w-full px-4 sm:px-8 md:px-16 lg:px-24 py-4 sm:py-5 top-0 z-30 transition-all duration-300 flex items-center justify-between ${navFixed || userInfo ? "fixed" : "absolute"}`}
+          style={{
+            background: "#09090b",
+            borderBottom: "1px solid rgba(93,201,74,0.15)",
           }}
         >
-          I Agree
-        </button>
-      </div>
-    </div>
-  </div>
-)} */}
-
-      {isLoaded && (
-        <nav className={`w-full px-4 sm:px-8 md:px-16 lg:px-24 py-4 sm:py-6 top-0 z-30 transition-all duration-300 
-          ${navFixed || userInfo ? "fixed bg-white border-b border-gray-200" : "absolute bg-transparent border-transparent"} 
-          flex items-center justify-between`}>
-
-          {/* ✅ Hamburger for mobile (left-aligned) */}
-          <div className="sm:hidden mr-4 text-2xl text-gray-700 cursor-pointer" onClick={toggleHamburger}>
+          {/* Mobile hamburger */}
+          <div className="sm:hidden mr-4 text-2xl cursor-pointer" style={{ color: "#6b7a62" }} onClick={toggleHamburger}>
             <GiHamburgerMenu />
           </div>
 
-          {/* ✅ Logo */}
-          <div className="w-[50px] h-[50px] rounded-full overflow-hidden">
-            <button onClick={() => router.push("/")}>
-              <Image
-                src={img}
-                className={`${!navFixed ? "bg-white" : "bg-[#404145]"} rounded-full`}
-                alt="Knell"
-                width={50}
-                height={50}
-              />
-            </button>
-          </div>
+          {/* KNELL text logo */}
+          <button
+            onClick={() => router.push("/")}
+            style={{
+              fontFamily: "Bebas Neue, sans-serif",
+              fontSize: "1.75rem",
+              letterSpacing: "0.15em",
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+              flexShrink: 0,
+              lineHeight: 1,
+            }}
+          >
+            <span style={{ color: "#5dc94a" }}>KN</span>
+            <span style={{ color: "#ede9dc" }}>E</span>
+            <span style={{ color: "#5dc94a" }}>LL</span>
+          </button>
 
-          {/* ✅ Search Bar */}
-          <div className={`flex w-full sm:w-auto ${navFixed || userInfo ? "opacity-100" : "opacity-0"}`}>
+          {/* Search bar — only visible when scrolled or logged in */}
+          <div
+            className={`flex w-full sm:w-auto transition-opacity duration-300 ${navFixed || userInfo ? "opacity-100" : "opacity-0 pointer-events-none"}`}
+            style={{ margin: "0 1.5rem", flex: "0 1 480px" }}
+          >
             <input
               type="text"
               placeholder="What service are you looking for today?"
-              className="w-full sm:w-[20rem] md:w-[25rem] lg:w-[30rem] py-2.5 px-4 border"
               value={searchData}
               onChange={(e) => setSearchData(e.target.value)}
               onKeyDown={handler}
+              style={{
+                width: "100%",
+                padding: "0.6rem 1rem",
+                background: "#15171c",
+                border: "1px solid rgba(93,201,74,0.2)",
+                borderRight: "none",
+                color: "#dbd7ca",
+                fontFamily: "Inter, sans-serif",
+                fontSize: "0.85rem",
+                outline: "none",
+              }}
             />
             <button
-              className="bg-gray-900 py-1.5 text-white w-16 flex justify-center items-center"
-              onClick={() => {
-                router.push(`/search?q=${searchData}`);
-                setSearchData("");
+              onClick={() => { router.push(`/search?q=${searchData}`); setSearchData(""); }}
+              style={{
+                background: "#3a8a2c",
+                border: "none",
+                padding: "0.6rem 1rem",
+                color: "#ede9dc",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                flexShrink: 0,
+                transition: "background 0.2s",
               }}
+              onMouseEnter={(e) => (e.currentTarget.style.background = "#4ea83d")}
+              onMouseLeave={(e) => (e.currentTarget.style.background = "#3a8a2c")}
             >
-              <IoSearchOutline className="h-6 w-6" />
+              <IoSearchOutline style={{ width: 20, height: 20 }} />
             </button>
           </div>
 
-          {/* ✅ Desktop Nav Links */}
+          {/* Desktop nav links */}
           <div className="hidden sm:flex items-center gap-6">
             {!userInfo ? (
-              <ul className="flex gap-6 items-center">
+              <ul className="flex gap-6 items-center" style={{ listStyle: "none" }}>
                 {links.map(({ linkName, handler, type }) => (
-                  <li key={linkName} className={`${navFixed ? "text-black" : "text-white"} font-medium`}>
-                    {type === "link" && <Link href={handler}>{linkName}</Link>}
-                    {type === "button" && <button onClick={handler}>{linkName}</button>}
+                  <li key={linkName}>
+                    {type === "link" && (
+                      <Link href={handler} style={{ color: "#9ca3af", fontWeight: 500, fontSize: "0.9rem" }}>
+                        {linkName}
+                      </Link>
+                    )}
+                    {type === "button" && (
+                      <button onClick={handler} style={{ color: "#9ca3af", fontWeight: 500, fontSize: "0.9rem", background: "none", border: "none", cursor: "pointer" }}>
+                        {linkName}
+                      </button>
+                    )}
                     {type === "button2" && (
                       <button
                         onClick={handler}
-                        className={`border text-md font-semibold py-1 px-3 rounded-sm ${
-                          navFixed ? "border-[#1DBF73] text-[#1DBF73]" : "border-white text-white"
-                        } hover:bg-[#1DBF73] hover:text-white transition-all duration-500`}
+                        style={{
+                          fontFamily: "Space Mono, monospace",
+                          fontSize: "0.7rem",
+                          letterSpacing: "0.12em",
+                          textTransform: "uppercase",
+                          border: "1px solid #5dc94a",
+                          color: "#5dc94a",
+                          fontWeight: 600,
+                          padding: "0.4rem 1rem",
+                          background: "transparent",
+                          cursor: "pointer",
+                          transition: "all 0.2s",
+                        }}
+                        onMouseEnter={(e) => { e.currentTarget.style.background = "#3a8a2c"; e.currentTarget.style.color = "#ede9dc"; }}
+                        onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#5dc94a"; }}
                       >
                         {linkName}
                       </button>
@@ -308,27 +226,23 @@ const [{ showLoginModal, showSignupModal, isSeller, userInfo, hamburger, otpmoda
                 ))}
               </ul>
             ) : (
-              <ul className="flex gap-6 items-center">
-                {(userInfo?.email === "akshajvasudeva@gmail.com"||userInfo?.email ==="Kalakartik23@gmail.com") && (
-                  <li className="cursor-pointer text-[#1DBF73] font-medium" onClick={admin}>Admin</li>
+              <ul className="flex gap-6 items-center" style={{ listStyle: "none" }}>
+                {isAdminUser && <li className="cursor-pointer font-medium" style={{ color: "#5dc94a" }} onClick={admin}>Admin</li>}
+                {isAdminUser && <li className="cursor-pointer font-medium" style={{ color: "#5dc94a" }} onClick={adminusers}>All Users</li>}
+                {isAdminUser && <li className="cursor-pointer font-medium" style={{ color: "#5dc94a" }} onClick={adminorders}>All Orders</li>}
+                {isSeller && (
+                  <li className="cursor-pointer" style={{ color: "#5dc94a" }} onClick={() => router.push("/seller/gigs/create")}>Create Gig</li>
                 )}
-                {(userInfo?.email === "akshajvasudeva@gmail.com"||userInfo?.email ==="Kalakartik23@gmail.com") && (
-                  <li className="cursor-pointer text-[#1DBF73] font-medium" onClick={adminusers}>All Users</li>
-                )}
-                {(userInfo?.email === "akshajvasudeva@gmail.com"||userInfo?.email ==="Kalakartik23@gmail.com") && (
-                  <li className="cursor-pointer text-[#1DBF73] font-medium" onClick={adminorders}>All Orders</li>
-                )}
-                {isSeller && <li className="cursor-pointer text-[#1DBF73]" onClick={() => router.push("/seller/gigs/create")}>Create Gig</li>}
-                <li className="cursor-pointer text-[#1DBF73]" onClick={handleOrdersNavigate}>Orders</li>
-                <li className="cursor-pointer" onClick={handleModeSwitch}>
+                <li className="cursor-pointer" style={{ color: "#5dc94a" }} onClick={handleOrdersNavigate}>Orders</li>
+                <li className="cursor-pointer" style={{ color: "#9ca3af" }} onClick={handleModeSwitch}>
                   {isSeller ? "Switch To Buyer" : "Switch To Seller"}
                 </li>
                 <li className="cursor-pointer" onClick={() => router.push("/profile/" + userInfo?.username)}>
                   {userInfo?.imageName ? (
-                    <Image src={optimizeImage(userInfo.imageName, 'sm')} alt="Profile" width={40} height={40} className="rounded-full" />
+                    <Image src={optimizeImage(userInfo.imageName, 'sm')} alt="Profile" width={38} height={38} className="rounded-full" />
                   ) : (
-                    <div className="bg-purple-500 h-10 w-10 flex items-center justify-center rounded-full">
-                      <span className="text-xl text-white">{userInfo?.email[0].toUpperCase()}</span>
+                    <div style={{ background: "#3a8a2c", width: 38, height: 38, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                      <span style={{ color: "#ede9dc", fontSize: "1rem", fontWeight: 600 }}>{userInfo?.email[0].toUpperCase()}</span>
                     </div>
                   )}
                 </li>
@@ -336,70 +250,35 @@ const [{ showLoginModal, showSignupModal, isSeller, userInfo, hamburger, otpmoda
             )}
           </div>
 
-          {/* ✅ Mobile Dropdown Nav */}
-{hamburger && (
-  <div className="absolute left-0 top-full w-full bg-white shadow-md z-50 flex flex-col p-4 gap-3 sm:hidden">
-    {!userInfo ? (
-      <>
-        {/* 🚀 Explore Link - opens Instagram */}
-        <a
-          href="https://www.instagram.com/knell.co.in/"
-          target="_blank"
-          rel="noopener noreferrer"
-          onClick={closeHamburger}
-          className="text-left"
-        >
-          Explore
-        </a>
-
-        {/* Render remaining links normally */}
-        {links
-          .filter(({ linkName }) => linkName !== "Explore")
-          .map(({ linkName, handler }) => (
-            <button
-              key={linkName}
-              onClick={() => {
-                handler();
-                closeHamburger();
-              }}
-              className="text-left"
-            >
-              {linkName}
-            </button>
-          ))}
-      </>
-    ) : (
-      <>
-        {(userInfo?.email === "akshajvasudeva@gmail.com"||userInfo?.email ==="Kalakartik23@gmail.com") && (
-          <button onClick={admin} className="text-left">Admin</button>
-        )}
-        {(userInfo?.email === "akshajvasudeva@gmail.com"||userInfo?.email ==="Kalakartik23@gmail.com") && (
-          <button onClick={adminusers} className="text-left">All Users</button>
-        )}
-        {(userInfo?.email === "akshajvasudeva@gmail.com"||userInfo?.email ==="Kalakartik23@gmail.com") && (
-          <button onClick={adminorders} className="text-left">All Orders</button>
-        )}
-        {isSeller && (
-          <button
-            onClick={() => {
-              router.push("/seller/gigs/create");
-              closeHamburger();
-            }}
-            className="text-left"
-          >
-            Create Gig
-          </button>
-        )}
-        <button onClick={handleOrdersNavigate} className="text-left">Orders</button>
-        <button onClick={handleModeSwitch} className="text-left">
-          {isSeller ? "Switch To Buyer" : "Switch To Seller"}
-        </button>
-        <button onClick={() => {closeHamburger();router.push("/profile/" + userInfo?.username);}} className="text-left">Profile</button>
-        <button onClick={() => router.push("/logout")} className="text-left">Logout</button>
-      </>
-    )}
-  </div>
-)}
+          {/* Mobile dropdown */}
+          {hamburger && (
+            <div className="absolute left-0 top-full w-full z-50 flex flex-col p-4 gap-3 sm:hidden"
+              style={{ background: "#0f1014", borderTop: "1px solid rgba(93,201,74,0.15)" }}>
+              {!userInfo ? (
+                <>
+                  <a href="https://www.instagram.com/knell.co.in/" target="_blank" rel="noopener noreferrer"
+                    onClick={closeHamburger} style={{ color: "#9ca3af" }}>Explore</a>
+                  {links.filter(({ linkName }) => linkName !== "Explore").map(({ linkName, handler }) => (
+                    <button key={linkName} onClick={() => { handler(); closeHamburger(); }}
+                      className="text-left" style={{ color: "#9ca3af", background: "none", border: "none", cursor: "pointer" }}>
+                      {linkName}
+                    </button>
+                  ))}
+                </>
+              ) : (
+                <>
+                  {isAdminUser && <button onClick={admin} className="text-left" style={{ color: "#5dc94a" }}>Admin</button>}
+                  {isAdminUser && <button onClick={adminusers} className="text-left" style={{ color: "#5dc94a" }}>All Users</button>}
+                  {isAdminUser && <button onClick={adminorders} className="text-left" style={{ color: "#5dc94a" }}>All Orders</button>}
+                  {isSeller && <button onClick={() => { router.push("/seller/gigs/create"); closeHamburger(); }} className="text-left" style={{ color: "#5dc94a" }}>Create Gig</button>}
+                  <button onClick={handleOrdersNavigate} className="text-left" style={{ color: "#9ca3af" }}>Orders</button>
+                  <button onClick={handleModeSwitch} className="text-left" style={{ color: "#9ca3af" }}>{isSeller ? "Switch To Buyer" : "Switch To Seller"}</button>
+                  <button onClick={() => { closeHamburger(); router.push("/profile/" + userInfo?.username); }} className="text-left" style={{ color: "#9ca3af" }}>Profile</button>
+                  <button onClick={() => router.push("/logout")} className="text-left" style={{ color: "#6b7a62" }}>Logout</button>
+                </>
+              )}
+            </div>
+          )}
         </nav>
       )}
     </>
