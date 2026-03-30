@@ -3,34 +3,35 @@ import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { categories } from "../../utils/categories";
 
-// Map your existing categories to filter tags
 const tagMap = {
-  "Social Companion ": "companions",
-  "Tutor/Counselor": "education",
-  "Gaming Companion ": "companions",
-  "Pet Companion ": "companions",
-  "Old Age Companion": "companions",
-  "Freelancer": "design",
-  "Travel Companion": "companions",
-  "Pub Crawler": "companions",
-  "Dance Companion": "companions",
-  "Photography": "design",
-  "Shopper": "companions",
-  "Musician": "audio",
-  "editor": "video",
-  "Online Meet": "companions",
+  "Social Companion ":   "companions",
+  "Tutor/Counselor":     "education",
+  "Gaming Companion ":   "companions",
+  "Pet Companion ":      "companions",
+  "Old Age Companion":   "companions",
+  "Freelancer":          "design",
+  "Travel Companion":    "companions",
+  "Pub Crawler":         "companions",
+  "Dance Companion":     "companions",
+  "Photography":         "design",
+  "Shopper":             "companions",
+  "Musician":            "audio",
+  "editor":              "video",
+  "Online Meet":         "companions",
 };
 
-const FILTERS = ["All", "Video", "Design", "Audio", "Education", "Companions"];
+const STREAMER_TAGS = ["video", "design", "audio"];
+const FILTERS = ["Streamer", "Video", "Design", "Audio", "Education", "Companions", "All"];
 
 export default function BrowseCategories() {
   const router = useRouter();
-  const [active, setActive] = useState("All");
+  const [active, setActive] = useState("Streamer");
 
   const filtered = categories.filter(({ name }) => {
     if (!name?.trim()) return false;
-    if (active === "All") return true;
     const tag = tagMap[name] || "other";
+    if (active === "All") return true;
+    if (active === "Streamer") return STREAMER_TAGS.includes(tag);
     return tag === active.toLowerCase();
   });
 
