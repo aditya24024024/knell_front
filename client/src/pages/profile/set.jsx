@@ -7,6 +7,21 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 
+const inputStyle = {
+  display: "block", width: "100%", padding: "0.85rem 1rem",
+  background: "#15171c", border: "1px solid rgba(93,201,74,0.2)",
+  color: "#dbd7ca", fontFamily: "Inter, sans-serif", fontSize: "0.88rem",
+  outline: "none",
+};
+
+const labelStyle = {
+  display: "block", marginBottom: "0.5rem",
+  fontFamily: "Space Mono, monospace", fontSize: "0.62rem",
+  letterSpacing: "0.15em", textTransform: "uppercase", color: "#6b7a62",
+};
+
+const MEET_LINK = "https://meet.google.com/xiy-zezv-hhw";
+
 const Profile = () => {
   const router = useRouter();
   const [{ userInfo }, dispatch] = useStateProvider();
@@ -15,138 +30,71 @@ const Profile = () => {
   const [image, setImage] = useState(null);
   const [preview, setPreview] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
-  const [data, setData] = useState({
-    username: "",
-    fullName: "",
-    description: "",
-    mobile: "",
-  });
+  const [showVerificationTab, setShowVerificationTab] = useState(false);
   const [links, setLinks] = useState([]);
   const [newLink, setNewLink] = useState("");
-  const [showVerificationTab, setShowVerificationTab] = useState(false);
-  const MEET_LINK = "https://meet.google.com/xiy-zezv-hhw";
+  const [data, setData] = useState({
+    username: "", fullName: "", description: "", mobile: "",
+  });
 
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
         const { data: { user } } = await axios.post(GET_USER_INFO, {}, { withCredentials: true });
-
-        dispatch({
-          type: reducerCases.SET_USER,
-          userInfo: { ...user, image: user.image },
-        });
-
+        dispatch({ type: reducerCases.SET_USER, userInfo: { ...user, image: user.image } });
         setData({
           username: user?.username || "",
           description: user?.description || "",
           fullName: user?.fullName || "",
           mobile: user?.mobile || "",
         });
-
         if (user?.image) setPreview(user.image);
         if (user?.links?.length) setLinks(user.links);
-
         setIsLoaded(true);
-      } catch (err) {
-        // console.error("Failed to fetch updated user info:", err);
-      }
+      } catch (err) {}
     };
-
     fetchUserInfo();
   }, [dispatch]);
 
   const addLink = () => {
     const trimmed = newLink.trim();
     if (!trimmed) return;
-    if (links.length >= 5) {
-      toast.warn("You can add up to 5 links.");
-      return;
-    }
+    if (links.length >= 5) { toast.warn("You can add up to 5 links."); return; }
     const url = trimmed.startsWith('http') ? trimmed : `https://${trimmed}`;
     setLinks([...links, url]);
     setNewLink("");
   };
 
-  const removeLink = (index) => {
-    setLinks(links.filter((_, i) => i !== index));
-  };
+  const removeLink = (index) => setLinks(links.filter((_, i) => i !== index));
 
   const getLinkLabel = (url) => {
-    try {
-      return new URL(url).hostname.replace('www.', '');
-    } catch {
-      return url;
-    }
+    try { return new URL(url).hostname.replace('www.', ''); }
+    catch { return url; }
   };
 
   const setProfile = async () => {
     try {
-      // Frontend validation
-      if (!data.fullName || !data.fullName.trim()) {
-        setErrorMessage("Full name is required");
-        return;
-      }
-
-      if (!data.username || !data.username.trim()) {
-        setErrorMessage("Username is required");
-        return;
-      }
-
-      if (!data.mobile || data.mobile.trim().length < 10) {
-        setErrorMessage("Please enter a valid 10-digit mobile number");
-        return;
-      }
-
-      if (!data.description || !data.description.trim()) {
-        setErrorMessage("Please add a description");
-        return;
-      }
-
+      if (!data.fullName?.trim()) { setErrorMessage("Full name is required"); return; }
+      if (!data.username?.trim()) { setErrorMessage("Username is required"); return; }
+      if (!data.mobile || data.mobile.trim().length < 10) { setErrorMessage("Please enter a valid 10-digit mobile number"); return; }
+      if (!data.description?.trim()) { setErrorMessage("Please add a description"); return; }
       setErrorMessage("");
 
-      const response = await axios.post(
-        SET_USER_INFO,
-        { ...data, links },
-        { withCredentials: true }
-      );
-
-      if (response?.data?.usernameError) {
-        setErrorMessage("Enter a Unique Username");
-        return;
-      }
-
-      if (response?.data?.emptyFieldError) {
-        setErrorMessage("Please enter all the required fields");
-        return;
-      }
+      const response = await axios.post(SET_USER_INFO, { ...data, links }, { withCredentials: true });
+      if (response?.data?.usernameError) { setErrorMessage("Enter a unique username"); return; }
+      if (response?.data?.emptyFieldError) { setErrorMessage("Please enter all required fields"); return; }
 
       let imageName = "";
       if (image) {
         const formData = new FormData();
         formData.append("images", image);
-        const { data: { img } } = await axios.post(SET_USER_IMAGE, formData, {
-          withCredentials: true,
-          headers: { "Content-Type": "multipart/form-data" },
-        });
+        const { data: { img } } = await axios.post(SET_USER_IMAGE, formData, { withCredentials: true, headers: { "Content-Type": "multipart/form-data" } });
         imageName = img;
       }
 
-      dispatch({
-        type: reducerCases.SET_USER,
-        userInfo: {
-          ...userInfo,
-          ...data,
-          links,
-          image: imageName || userInfo?.image || false,
-        },
-      });
-
-      toast.success("Profile set up successfully");
-
-      setTimeout(() => {
-        router.push("/");
-        setTimeout(() => window.location.reload(), 1000);
-      }, 1000);
+      dispatch({ type: reducerCases.SET_USER, userInfo: { ...userInfo, ...data, links, image: imageName || userInfo?.image || false } });
+      toast.success("Profile updated successfully");
+      setTimeout(() => { router.push("/"); setTimeout(() => window.location.reload(), 1000); }, 1000);
     } catch (err) {
       toast.error("Some error occurred");
     }
@@ -154,136 +102,135 @@ const Profile = () => {
 
   const handleFile = (e) => {
     const file = e.target.files?.[0];
-    const fileType = file?.type;
     const validImageTypes = ["image/gif", "image/jpeg", "image/png"];
-    if (file && validImageTypes.includes(fileType)) {
+    if (file && validImageTypes.includes(file.type)) {
       setImage(file);
       setPreview(URL.createObjectURL(file));
     }
   };
 
-  const handleChange = (e) => {
-    setData({ ...data, [e.target.name]: e.target.value });
-  };
-
-  const inputClassName =
-    "block p-4 w-full text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500";
-  const labelClassName = "mb-2 text-lg font-medium text-gray-900";
+  const handleChange = (e) => setData({ ...data, [e.target.name]: e.target.value });
 
   return (
     <>
       {isLoaded && (
-        <div className="flex flex-col items-center justify-start min-h-[80vh] px-4 sm:px-6 gap-4 py-8">
-          {errorMessage && (
-            <div><span className="text-red-600 font-bold">{errorMessage}</span></div>
-          )}
+        <div style={{ background: "#09090b", minHeight: "100vh", display: "flex", flexDirection: "column", alignItems: "center", padding: "8rem 1.5rem 4rem", gap: "1.5rem" }}>
 
-          <h2 className="text-2xl sm:text-3xl">Welcome to Knell</h2>
-          <h4 className="text-lg sm:text-xl text-center">Set your profile here</h4>
+          {/* Header */}
+          <div style={{ textAlign: "center", marginBottom: "0.5rem" }}>
+            <div style={{ display: "inline-flex", alignItems: "center", gap: "0.6rem", border: "1px solid rgba(93,201,74,0.25)", padding: "0.35rem 0.9rem", marginBottom: "1.25rem" }}>
+              <div style={{ width: 6, height: 6, background: "#5dc94a", borderRadius: "50%" }} />
+              <span style={{ fontFamily: "Space Mono, monospace", fontSize: "0.6rem", letterSpacing: "0.2em", textTransform: "uppercase", color: "#5dc94a" }}>
+                Your Profile
+              </span>
+            </div>
+            <h2 style={{ fontFamily: "Bebas Neue, sans-serif", fontSize: "clamp(2rem, 4vw, 3rem)", color: "#ede9dc", letterSpacing: "0.02em", lineHeight: 1, marginBottom: "0.5rem" }}>
+              SET UP YOUR PROFILE
+            </h2>
+            <p style={{ color: "#6b7a62", fontSize: "0.85rem", fontWeight: 300 }}>
+              Complete your profile to start hiring or selling on Knell
+            </p>
+          </div>
 
+          {/* Verification status */}
           {userInfo?.isSocialLogin ? (
-            <div className="text-green-600 font-semibold">✅ You are now a verified user.</div>
+            <div style={{ fontFamily: "Space Mono, monospace", fontSize: "0.65rem", letterSpacing: "0.1em", color: "#5dc94a", border: "1px solid rgba(93,201,74,0.25)", padding: "0.4rem 1rem" }}>
+              ✓ Verified Account
+            </div>
           ) : (
-            <div className="text-yellow-600 font-medium">⚠️ Your account is not yet verified.</div>
+            <div style={{ fontFamily: "Space Mono, monospace", fontSize: "0.65rem", letterSpacing: "0.1em", color: "#e8b84b", border: "1px solid rgba(232,184,75,0.25)", padding: "0.4rem 1rem" }}>
+              ⚠ Account not yet verified
+            </div>
           )}
 
-          <div className="flex flex-col items-center w-full gap-6">
-            {/* Profile Picture Upload */}
-            <div
-              className="flex flex-col items-center cursor-pointer"
-              onMouseEnter={() => setImageHover(true)}
-              onMouseLeave={() => setImageHover(false)}
-            >
-              <label className={labelClassName}>Select a profile picture</label>
-              <div className="bg-purple-500 h-36 w-36 flex items-center justify-center rounded-full relative">
+          {errorMessage && (
+            <div style={{ color: "#ef4444", fontFamily: "Space Mono, monospace", fontSize: "0.65rem", letterSpacing: "0.1em", border: "1px solid rgba(239,68,68,0.25)", padding: "0.4rem 1rem" }}>
+              {errorMessage}
+            </div>
+          )}
+
+          {/* Form */}
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "1.5rem", width: "100%", maxWidth: 520 }}>
+
+            {/* Profile picture */}
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.75rem" }}>
+              <span style={labelStyle}>Profile Picture</span>
+              <div
+                style={{ position: "relative", width: 120, height: 120, borderRadius: "50%", overflow: "hidden", border: "2px solid rgba(93,201,74,0.3)", cursor: "pointer" }}
+                onMouseEnter={() => setImageHover(true)}
+                onMouseLeave={() => setImageHover(false)}
+              >
                 {preview ? (
-                  <Image src={preview} alt="profile" fill className="rounded-full object-cover" />
+                  <Image src={preview} alt="profile" fill style={{ objectFit: "cover", borderRadius: "50%" }} />
                 ) : (
-                  <span className="text-6xl text-white">{userInfo?.email?.[0]?.toUpperCase() || "U"}</span>
+                  <div style={{ background: "#3a8a2c", width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                    <span style={{ color: "#ede9dc", fontSize: "2.5rem", fontWeight: 700 }}>{userInfo?.email?.[0]?.toUpperCase() || "U"}</span>
+                  </div>
                 )}
-                <div className={`absolute bg-slate-400 h-full w-full rounded-full flex items-center justify-center transition-all duration-200 ${imageHover ? "opacity-100" : "opacity-0"}`}>
-                  <span className="relative flex items-center justify-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="w-12 h-12 text-white absolute" viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clipRule="evenodd" />
-                    </svg>
-                    <input type="file" onChange={handleFile} className="opacity-0" multiple={false} name="profileImage" />
-                  </span>
+                <div style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.6)", display: "flex", alignItems: "center", justifyContent: "center", opacity: imageHover ? 1 : 0, transition: "opacity 0.2s" }}>
+                  <svg xmlns="http://www.w3.org/2000/svg" style={{ width: 32, height: 32, color: "white", position: "absolute" }} viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clipRule="evenodd" />
+                  </svg>
+                  <input type="file" onChange={handleFile} style={{ opacity: 0, position: "absolute", inset: 0, cursor: "pointer" }} multiple={false} name="profileImage" />
                 </div>
               </div>
             </div>
 
             {/* Full Name */}
-            <div className="flex flex-col sm:flex-row gap-4 w-full max-w-[500px]">
-              <div className="flex-1">
-                <label className={labelClassName} htmlFor="fullName">
-                  Full Name <span className="text-red-500">*</span>
-                </label>
-                <input
-                  className={inputClassName} type="text" name="fullName" id="fullName"
-                  value={data.fullName} onChange={handleChange} placeholder="Full Name"
-                />
-              </div>
+            <div style={{ width: "100%" }}>
+              <label style={labelStyle}>Full Name <span style={{ color: "#ef4444" }}>*</span></label>
+              <input type="text" name="fullName" value={data.fullName} onChange={handleChange} placeholder="Your full name" style={inputStyle} />
             </div>
 
             {/* Username */}
-            <div className="w-full max-w-[500px]">
-              <label className={labelClassName} htmlFor="username">
-                Username <span className="text-red-500">*</span>
-              </label>
-              <input
-                className={inputClassName} type="text" name="username" id="username"
-                value={data.username} onChange={handleChange} placeholder="Choose a username"
-              />
+            <div style={{ width: "100%" }}>
+              <label style={labelStyle}>Username <span style={{ color: "#ef4444" }}>*</span></label>
+              <input type="text" name="username" value={data.username} onChange={handleChange} placeholder="Choose a unique username" style={inputStyle} />
             </div>
 
             {/* Mobile */}
-            <div className="w-full max-w-[500px]">
-              <label className={labelClassName} htmlFor="mobile">
-                Mobile Number <span className="text-red-500">*</span>
-              </label>
-              <input
-                className={inputClassName} type="tel" name="mobile" id="mobile"
-                value={data.mobile} onChange={handleChange} placeholder="Enter 10-digit mobile number"
-                maxLength={10}
-              />
+            <div style={{ width: "100%" }}>
+              <label style={labelStyle}>Mobile Number <span style={{ color: "#ef4444" }}>*</span></label>
+              <input type="tel" name="mobile" value={data.mobile} onChange={handleChange} placeholder="10-digit mobile number" maxLength={10} style={inputStyle} />
             </div>
 
             {/* Description */}
-            <div className="w-full max-w-[500px]">
-              <label className={labelClassName} htmlFor="description">
-                Description <span className="text-red-500">*</span>
-              </label>
-              <textarea
-                className={inputClassName} name="description" id="description"
-                value={data.description} onChange={handleChange} placeholder="Tell us about yourself"
-              />
+            <div style={{ width: "100%" }}>
+              <label style={labelStyle}>Description <span style={{ color: "#ef4444" }}>*</span></label>
+              <textarea name="description" value={data.description} onChange={handleChange} placeholder="Tell us about yourself" rows={4} style={{ ...inputStyle, resize: "vertical" }} />
             </div>
 
             {/* Links */}
-            <div className="w-full max-w-[500px]">
-              <label className={labelClassName}>Portfolio & Social Links <span className="text-sm text-gray-500 font-normal">(optional, max 5)</span></label>
-              <p className="text-sm text-gray-500 mb-3">Add your Instagram, portfolio, or any website</p>
+            <div style={{ width: "100%" }}>
+              <label style={labelStyle}>
+                Portfolio & Social Links{" "}
+                <span style={{ color: "#3d4438", textTransform: "none", letterSpacing: 0 }}>(optional, max 5)</span>
+              </label>
+              <p style={{ color: "#6b7a62", fontSize: "0.75rem", marginBottom: "0.75rem" }}>
+                Add your Instagram, portfolio, or any website
+              </p>
 
               {links.map((link, i) => (
-                <div key={i} className="flex items-center gap-2 mb-2 bg-gray-50 border border-gray-200 rounded-lg px-4 py-2">
-                  <span className="flex-1 text-sm text-gray-700 truncate">{getLinkLabel(link)}</span>
-                  <button type="button" onClick={() => removeLink(i)} className="text-red-500 hover:text-red-700 text-lg font-bold">×</button>
+                <div key={i} style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "0.5rem", background: "#15171c", border: "1px solid rgba(93,201,74,0.15)", padding: "0.6rem 1rem" }}>
+                  <span style={{ flex: 1, fontSize: "0.78rem", color: "#5dc94a", fontFamily: "Space Mono, monospace", letterSpacing: "0.08em", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                    {getLinkLabel(link)}
+                  </span>
+                  <button type="button" onClick={() => removeLink(i)} style={{ color: "#6b7a62", background: "none", border: "none", cursor: "pointer", fontSize: "1.1rem", lineHeight: 1, padding: 0 }}>×</button>
                 </div>
               ))}
 
               {links.length < 5 && (
-                <div className="flex gap-2">
+                <div style={{ display: "flex", gap: "0.5rem" }}>
                   <input
-                    className={inputClassName}
-                    type="url"
-                    placeholder="instagram.com/yourhandle"
-                    value={newLink}
+                    type="url" placeholder="instagram.com/yourhandle" value={newLink}
                     onChange={(e) => setNewLink(e.target.value)}
-                    onKeyDown={(e) => e.key === 'Enter' && addLink()}
+                    onKeyDown={(e) => e.key === "Enter" && addLink()}
+                    style={{ ...inputStyle, flex: 1 }}
                   />
-                  <button
-                    type="button" onClick={addLink}
-                    className="bg-[#1DBF73] text-white px-4 py-2 rounded-lg hover:bg-[#17a866] font-semibold whitespace-nowrap"
+                  <button type="button" onClick={addLink}
+                    style={{ background: "#3a8a2c", color: "#ede9dc", border: "none", padding: "0 1.25rem", fontFamily: "Space Mono, monospace", fontSize: "0.62rem", letterSpacing: "0.1em", textTransform: "uppercase", cursor: "pointer", flexShrink: 0, transition: "background 0.2s" }}
+                    onMouseEnter={(e) => (e.currentTarget.style.background = "#4ea83d")}
+                    onMouseLeave={(e) => (e.currentTarget.style.background = "#3a8a2c")}
                   >
                     Add
                   </button>
@@ -293,28 +240,37 @@ const Profile = () => {
 
             {/* Verification */}
             {!userInfo?.isSocialLogin && (
-              <button className="mt-4 text-blue-600 underline" onClick={() => setShowVerificationTab(!showVerificationTab)}>
+              <button onClick={() => setShowVerificationTab(!showVerificationTab)}
+                style={{ color: "#5dc94a", background: "none", border: "none", cursor: "pointer", fontFamily: "Space Mono, monospace", fontSize: "0.62rem", letterSpacing: "0.1em", textDecoration: "underline" }}>
                 I want to verify my account
               </button>
             )}
 
             {showVerificationTab && (
-              <div className="mt-6 p-5 w-full max-w-[500px] rounded-lg border border-blue-300 bg-blue-50">
-                <h3 className="text-xl font-semibold text-blue-700 mb-2">Account Verification</h3>
-                <p className="mb-3 text-gray-700">To verify your account, please join our live verification session on Google Meet. Admins are available 24/7.</p>
-                <a href={MEET_LINK} target="_blank" rel="noopener noreferrer" className="inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+              <div style={{ width: "100%", padding: "1.25rem", border: "1px solid rgba(93,201,74,0.2)", background: "#0f1014" }}>
+                <h3 style={{ fontFamily: "Bebas Neue, sans-serif", fontSize: "1.2rem", color: "#5dc94a", letterSpacing: "0.05em", marginBottom: "0.75rem" }}>
+                  Account Verification
+                </h3>
+                <p style={{ color: "#9ca3af", fontSize: "0.82rem", lineHeight: 1.7, marginBottom: "1rem" }}>
+                  Join our live verification session on Google Meet. Admins are available 24/7.
+                </p>
+                <a href={MEET_LINK} target="_blank" rel="noopener noreferrer"
+                  style={{ display: "inline-block", background: "#3a8a2c", color: "#ede9dc", padding: "0.6rem 1.25rem", textDecoration: "none", fontFamily: "Space Mono, monospace", fontSize: "0.65rem", letterSpacing: "0.1em", textTransform: "uppercase" }}>
                   Join Verification Meet
                 </a>
-                <p className="text-sm text-gray-500 mt-4">You will be approved manually by an admin after the session.</p>
+                <p style={{ color: "#6b7a62", fontSize: "0.75rem", marginTop: "0.75rem" }}>
+                  You will be approved manually by an admin after the session.
+                </p>
               </div>
             )}
 
             {/* Submit */}
-            <button
-              className="border text-lg font-semibold px-6 py-3 border-[#1DBF73] bg-[#1DBF73] text-white rounded-md"
-              type="button" onClick={setProfile}
+            <button onClick={setProfile} type="button"
+              style={{ width: "100%", padding: "0.9rem", background: "#3a8a2c", color: "#ede9dc", border: "none", fontFamily: "Space Mono, monospace", fontSize: "0.72rem", letterSpacing: "0.12em", textTransform: "uppercase", cursor: "pointer", transition: "background 0.2s" }}
+              onMouseEnter={(e) => (e.currentTarget.style.background = "#4ea83d")}
+              onMouseLeave={(e) => (e.currentTarget.style.background = "#3a8a2c")}
             >
-              Set Profile
+              Save Profile
             </button>
           </div>
         </div>
