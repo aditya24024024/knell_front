@@ -1,97 +1,201 @@
 import Image from 'next/image';
 import imageCompression from "browser-image-compression";
-import React, { useState } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 
 const ImageUpload = ({ files, setFile }) => {
-  const [message, setMessage] = useState("");
+  const [compressing, setCompressing] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [previews, setPreviews] = useState([]);
 
-  const handleFiles = async (e) => {
-  const selectedFiles = Array.from(e.target.files);
+  const handleFiles = useCallback(async (selectedFiles) => {
+    if (!selectedFiles.length) return;
 
-  const compressedFiles = await Promise.all(
-    selectedFiles.map(async (file) => {
-      const options = {
-        maxSizeMB: 0.4,          //  BIGGEST CREDIT SAVER
-        maxWidthOrHeight: 1280,  // responsive size
-        useWebWorker: true,
-      };
+    setCompressing(true);
+    setProgress(0);
 
-      try {
-        const compressed = await imageCompression(file, options);
+    const total = selectedFiles.length;
+    let done = 0;
 
-        return new File(
-          [compressed],
-          file.name,
-          { type: "image/webp" }
-        );
-      } catch (error) {
-        console.error("Compression error:", error);
-        return file;
-      }
-    })
-  );
+    // ✅ 1. Show previews instantly
+    const instantPreviews = selectedFiles.map(f => URL.createObjectURL(f));
+    setPreviews(prev => [...prev, ...instantPreviews]);
 
-  setFile((prev) => [...prev, ...compressedFiles]);
-};
+    // ✅ 2. Add ORIGINAL files immediately (no delay)
+    setFile(prev => [...prev, ...selectedFiles]);
 
-  const removeImage = (fileName) => {
-    setFile(files.filter((file) => file.name !== fileName));
+    // ✅ 3. Compress in background
+    const compressedFiles = await Promise.all(
+      selectedFiles.map(async (file) => {
+        const options = {
+          maxSizeMB: 0.8,
+          maxWidthOrHeight: 1080,
+          useWebWorker: true,
+          fileType: "image/jpeg",
+        };
+
+        try {
+          const compressed = await imageCompression(file, options);
+          done++;
+          setProgress(Math.round((done / total) * 100));
+
+          return new File([compressed], file.name, {
+            type: "image/jpeg",
+          });
+        } catch (error) {
+          console.error("Compression error:", error);
+          done++;
+          setProgress(Math.round((done / total) * 100));
+          return file;
+        }
+      })
+    );
+
+    // ✅ 4. Replace originals with compressed versions
+    setFile(prev =>
+      prev.map(file => {
+        const compressed = compressedFiles.find(f => f.name === file.name);
+        return compressed || file;
+      })
+    );
+
+    setCompressing(false);
+    setProgress(0);
+
+  }, [setFile]);
+
+  const onInputChange = (e) => {
+    const selected = Array.from(e.target.files);
+    handleFiles(selected);
   };
 
+  const onDrop = (e) => {
+    e.preventDefault();
+    const dropped = Array.from(e.dataTransfer.files).filter(f => f.type.startsWith('image/'));
+    handleFiles(dropped);
+  };
+
+  const removeImage = (index) => {
+    setFile(files.filter((_, i) => i !== index));
+    setPreviews(prev => prev.filter((_, i) => i !== index));
+  };
+
+  // ✅ 5. CLEANUP memory (VERY IMPORTANT)
+  useEffect(() => {
+    return () => {
+      previews.forEach(url => URL.revokeObjectURL(url));
+    };
+  }, [previews]);
+
   return (
-    <div className="w-full px-4">
-      <div className="rounded-lg bg-gray-50 w-full p-4">
-        {message && (
-          <div className="text-center text-sm text-red-500 mb-2">{message}</div>
-        )}
-
-        <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-md cursor-pointer hover:bg-gray-100 hover:border-gray-300">
-          <div className="flex flex-col items-center justify-center">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="w-10 h-10 text-gray-400"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-            >
-              <path
-                fillRule="evenodd"
-                d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z"
-                clipRule="evenodd"
-              />
-            </svg>
-            <p className="pt-1 text-sm text-gray-500">Click or drag to upload</p>
+    <div style={{ width: "100%" }}>
+      {/* Drop zone */}
+      <label
+        onDrop={onDrop}
+        onDragOver={(e) => e.preventDefault()}
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          width: "100%",
+          height: 120,
+          border: "1px dashed rgba(93,201,74,0.3)",
+          cursor: compressing ? "not-allowed" : "pointer",
+          background: "#09090b",
+          transition: "all 0.2s",
+          position: "relative",
+        }}
+      >
+        {compressing ? (
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.75rem" }}>
+            <div style={{ width: 200, height: 3, background: "#15171c", borderRadius: 2, overflow: "hidden" }}>
+              <div style={{
+                height: "100%",
+                width: `${progress}%`,
+                background: "#5dc94a",
+                transition: "width 0.3s ease",
+                borderRadius: 2,
+              }} />
+            </div>
+            <span style={{
+              fontFamily: "Space Mono, monospace",
+              fontSize: "0.6rem",
+              letterSpacing: "0.15em",
+              textTransform: "uppercase",
+              color: "#5dc94a",
+            }}>
+              Optimising {progress}%
+            </span>
           </div>
-          <input
-            type="file"
-            onChange={handleFiles}
-            className="hidden"
-            multiple
-            accept="image/*"
-            name="files[]"
-          />
-        </label>
+        ) : (
+          <>
+            <span style={{
+              fontFamily: "Space Mono, monospace",
+              fontSize: "0.6rem",
+              letterSpacing: "0.12em",
+              textTransform: "uppercase",
+              color: "#6b7a62",
+            }}>
+              Click or drag to upload
+            </span>
+          </>
+        )}
+        <input
+          type="file"
+          onChange={onInputChange}
+          style={{ display: "none" }}
+          multiple
+          accept="image/*"
+          name="files[]"
+          disabled={compressing}
+        />
+      </label>
 
-        {/* Image Previews */}
-        <div className="flex flex-wrap gap-3 mt-4">
-          {files.map((file, index) => (
-            <div key={index} className="relative h-20 w-20 rounded-md overflow-hidden border border-gray-300">
+      {/* Previews */}
+      {previews.length > 0 && (
+        <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem", marginTop: "1rem" }}>
+          {previews.map((src, index) => (
+            <div
+              key={index}
+              style={{
+                position: "relative",
+                width: 80,
+                height: 80,
+                border: "1px solid rgba(93,201,74,0.2)",
+                overflow: "hidden",
+                flexShrink: 0,
+              }}
+            >
               <button
                 type="button"
-                onClick={() => removeImage(file.name)}
-                className="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center z-10 hover:bg-red-600"
+                onClick={() => removeImage(index)}
+                style={{
+                  position: "absolute",
+                  top: 2,
+                  right: 2,
+                  background: "rgba(239,68,68,0.9)",
+                  color: "white",
+                  border: "none",
+                  width: 18,
+                  height: 18,
+                  borderRadius: "50%",
+                  cursor: "pointer",
+                  zIndex: 10,
+                }}
               >
                 ×
               </button>
+
               <Image
-                src={URL.createObjectURL(file)}
+                src={src}
                 alt={`preview-${index}`}
-                layout="fill"
-                objectFit="cover"
+                fill
+                style={{ objectFit: "cover" }}
               />
             </div>
           ))}
         </div>
-      </div>
+      )}
     </div>
   );
 };
