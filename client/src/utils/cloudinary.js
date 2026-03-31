@@ -5,7 +5,7 @@
 
 export const optimizeImage = (url, size = 'lg') => {
   if (!url || typeof url !== 'string' || !url.includes('cloudinary')) return url;
-  const sizes = { sm: 100, md: 600, lg: 800 };
+  const sizes = { sm: 100, md: 400, lg: 800 };
   const w = sizes[size] ?? sizes.lg;
   return url.replace('/upload/', `/upload/f_auto,q_auto,w_${w}/`);
 };

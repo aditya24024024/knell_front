@@ -119,6 +119,7 @@ border: "none",
                         fill
                         style={{ objectFit: "cover" }}
                         sizes="(max-width: 768px) 100vw, 25vw"
+                        loading="lazy"
                       />
                     ) : (
                       <div style={{
