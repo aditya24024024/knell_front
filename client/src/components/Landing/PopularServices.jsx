@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { FEATURED_GIGS_ROUTE } from "../../utils/constants";
+import { optimizeImage } from "../../utils/cloudinary";
 
 export default function PopularServices() {
   const router = useRouter();
@@ -93,7 +94,7 @@ border: "none",
           }}>
             {gigs.map((gig) => {
               const rating = getAvgRating(gig.reviews);
-              const image = gig.images?.[0];
+             const image = gig.images?.[0] ? optimizeImage(gig.images[0], 'md') : null;
               return (
                 <div
                   key={gig.id}
