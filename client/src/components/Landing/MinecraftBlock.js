@@ -12,54 +12,90 @@ export default function MinecraftBlock() {
     async function init() {
       const THREE = await import("three");
       const { GLTFLoader } = await import("three/examples/jsm/loaders/GLTFLoader");
+      const { RGBELoader } = await import("three/examples/jsm/loaders/RGBELoader");
 
+      // ✅ RENDERER (FIXED)
       renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
       renderer.setClearColor(0x000000, 0);
-      renderer.outputEncoding = THREE.sRGBEncoding;
+
+      // ✅ NEW COLOR SYSTEM
+      renderer.outputColorSpace = THREE.SRGBColorSpace;
+
+      // ✅ TONE MAPPING (huge visual boost)
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      renderer.toneMappingExposure = 1;
 
       const scene = new THREE.Scene();
+
       const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 100);
       camera.position.set(2.6, 2.0, 2.6);
       camera.lookAt(0, 0.05, 0);
 
-      scene.add(new THREE.AmbientLight(0xffffff, 0.6));
-      const key = new THREE.DirectionalLight(0xffffff, 1.0);
-      key.position.set(6, 9, 5);
+      // ✅ ENVIRONMENT LIGHTING (BIGGEST UPGRADE)
+      const rgbeLoader = new RGBELoader();
+      rgbeLoader.load("/studio.hdr", (hdr) => {
+        hdr.mapping = THREE.EquirectangularReflectionMapping;
+        scene.environment = hdr;
+      });
+
+      // ✅ LIGHTING (cleaned up)
+      scene.add(new THREE.AmbientLight(0xffffff, 0.4));
+
+      const key = new THREE.DirectionalLight(0xffffff, 1.2);
+      key.position.set(5, 6, 5);
       scene.add(key);
-      const fill = new THREE.DirectionalLight(0x4ea83d, 0.3);
-      fill.position.set(-6, 2, -4);
+
+      const fill = new THREE.DirectionalLight(0x4ea83d, 0.25);
+      fill.position.set(-5, 2, -4);
       scene.add(fill);
 
-      // Particles
+      // Particles (unchanged)
       const pGeo = new THREE.BufferGeometry();
       const pArr = new Float32Array(90 * 3);
       for (let i = 0; i < pArr.length; i++) pArr[i] = (Math.random() - 0.5) * 4.5;
       pGeo.setAttribute("position", new THREE.BufferAttribute(pArr, 3));
-      scene.add(new THREE.Points(pGeo, new THREE.PointsMaterial({
-        color: 0x5dc94a, size: 0.012, transparent: true, opacity: 0.4,
-      })));
 
-      // Load GLB from public folder — served by Vercel CDN, zero Cloudinary bandwidth
+      scene.add(new THREE.Points(
+        pGeo,
+        new THREE.PointsMaterial({
+          color: 0x5dc94a,
+          size: 0.012,
+          transparent: true,
+          opacity: 0.4,
+        })
+      ));
+
+      // ✅ LOAD GLB
       const loader = new GLTFLoader();
       loader.load(
         "/knellblock.glb",
         (gltf) => {
           const obj = gltf.scene;
 
-          // Auto-scale to fit ~1.5 units
+          // Auto-scale
           const box = new THREE.Box3().setFromObject(obj);
           const size = box.getSize(new THREE.Vector3());
           const maxDim = Math.max(size.x, size.y, size.z);
           const scale = 1.5 / maxDim;
           obj.scale.setScalar(scale);
 
-          // Center it
+          // Center
           const center = box.getCenter(new THREE.Vector3());
           obj.position.sub(center.multiplyScalar(scale));
 
           obj.traverse((child) => {
-            if (child.isMesh) child.castShadow = true;
+            if (child.isMesh) {
+              child.castShadow = true;
+
+              // ✅ CRISP TEXTURES (VERY IMPORTANT)
+              if (child.material.map) {
+                child.material.map.magFilter = THREE.NearestFilter;
+                child.material.map.minFilter = THREE.NearestFilter;
+                child.material.map.generateMipmaps = false;
+                child.material.map.needsUpdate = true;
+              }
+            }
           });
 
           scene.add(obj);
@@ -72,6 +108,7 @@ export default function MinecraftBlock() {
         }
       );
 
+      // Mouse interaction
       let mx = 0, my = 0;
       const onMouseMove = (e) => {
         mx = (e.clientX / window.innerWidth - 0.5) * 2;
@@ -82,20 +119,25 @@ export default function MinecraftBlock() {
       let t = 0;
       function animate() {
         animId = requestAnimationFrame(animate);
+
         const w = canvas.clientWidth, h = canvas.clientHeight;
         if (canvas.width !== w || canvas.height !== h) {
           renderer.setSize(w, h, false);
           camera.aspect = w / h;
           camera.updateProjectionMatrix();
         }
+
         t += 0.007;
+
         if (model) {
           model.rotation.y = 0.55 + t * 0.38 + mx * 0.28;
           model.rotation.x = -0.08 + my * 0.09;
           model.position.y = Math.sin(t * 0.9) * 0.055;
         }
+
         renderer.render(scene, camera);
       }
+
       animate();
 
       return () => window.removeEventListener("mousemove", onMouseMove);
@@ -117,42 +159,4 @@ export default function MinecraftBlock() {
       style={{ display: "block", width: "100%", height: "100%" }}
     />
   );
-}
-
-function buildProceduralBlock(THREE, scene) {
-  function pixelTex(grid, size) {
-    const c = document.createElement("canvas");
-    c.width = size; c.height = size;
-    const ctx = c.getContext("2d");
-    const side = Math.round(Math.sqrt(grid.length));
-    const ps = size / side;
-    grid.forEach((col, i) => {
-      ctx.fillStyle = col;
-      ctx.fillRect((i % side) * ps, Math.floor(i / side) * ps, ps, ps);
-    });
-    const t = new THREE.CanvasTexture(c);
-    t.magFilter = t.minFilter = THREE.NearestFilter;
-    return t;
-  }
-  const G1="#4ea83d",G2="#5dc94a",G3="#3d8f2f";
-  const D1="#7a5530",D2="#8c6438",D3="#6b4928";
-  const topPx=[G2,G1,G2,G3,G2,G1,G2,G1,G1,G3,G1,G2,G1,G3,G1,G2,G2,G1,G3,G1,G2,G1,G3,G1,G3,G2,G1,G2,G3,G2,G1,G3,G1,G3,G2,G1,G1,G3,G2,G1,G2,G1,G3,G2,G1,G2,G3,G2,G3,G2,G1,G3,G2,G1,G2,G3,G1,G3,G2,G1,G3,G2,G1,G2];
-  const dirtPx=[D1,D2,D1,D3,D1,D2,D1,D1,D2,D1,D3,D1,D2,D1,D3,D2,D1,D3,D1,D2,D1,D1,D2,D1,D3,D1,D2,D1,D3,D2,D1,D3,D1,D2,D1,D3,D1,D2,D3,D1,D2,D1,D3,D1,D2,D1,D1,D2,D1,D3,D1,D2,D1,D3,D2,D1,D3,D1,D2,D1,D3,D1,D2,D3];
-  const sideC=document.createElement("canvas");sideC.width=64;sideC.height=64;
-  const sCtx=sideC.getContext("2d");
-  dirtPx.forEach((col,i)=>{sCtx.fillStyle=col;sCtx.fillRect((i%8)*8,Math.floor(i/8)*8,8,8);});
-  [G2,G1,G2,G3,G2,G1,G2,G1].forEach((col,x)=>{sCtx.fillStyle=col;sCtx.fillRect(x*8,0,8,8);sCtx.fillStyle=x%2?G3:G1;sCtx.fillRect(x*8,8,8,8);});
-  const sT=new THREE.CanvasTexture(sideC);sT.magFilter=sT.minFilter=THREE.NearestFilter;
-  const bellC=document.createElement("canvas");bellC.width=256;bellC.height=256;
-  const bCtx=bellC.getContext("2d");
-  bCtx.fillStyle="#3a8a2c";bCtx.fillRect(0,0,256,256);
-  bCtx.fillStyle="#ede9dc";bCtx.shadowColor="rgba(0,0,0,0.4)";bCtx.shadowBlur=14;
-  bCtx.fillRect(120,44,16,28);bCtx.beginPath();bCtx.arc(128,44,12,0,Math.PI*2);bCtx.fill();
-  bCtx.beginPath();bCtx.arc(128,108,58,Math.PI,0);bCtx.lineTo(196,160);bCtx.lineTo(60,160);bCtx.closePath();bCtx.fill();
-  bCtx.fillRect(58,154,140,16);bCtx.beginPath();bCtx.arc(128,180,16,0,Math.PI*2);bCtx.fill();
-  const bT=new THREE.CanvasTexture(bellC);bT.magFilter=bT.minFilter=THREE.NearestFilter;
-  const mats=[new THREE.MeshLambertMaterial({map:sT}),new THREE.MeshLambertMaterial({map:sT}),new THREE.MeshLambertMaterial({map:pixelTex(topPx,64)}),new THREE.MeshLambertMaterial({map:pixelTex(dirtPx,64)}),new THREE.MeshLambertMaterial({map:bT}),new THREE.MeshLambertMaterial({map:sT})];
-  const block=new THREE.Mesh(new THREE.BoxGeometry(1,1,1),mats);
-  scene.add(block);
-  return block;
 }
