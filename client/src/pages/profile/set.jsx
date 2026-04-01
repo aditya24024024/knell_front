@@ -31,6 +31,7 @@ const Profile = () => {
   const [preview, setPreview] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
   const [showVerificationTab, setShowVerificationTab] = useState(false);
+  const [saving, setSaving] = useState(false);
   const [links, setLinks] = useState([]);
   const [newLink, setNewLink] = useState("");
   const [data, setData] = useState({
@@ -73,16 +74,18 @@ const Profile = () => {
   };
 
   const setProfile = async () => {
+    if (saving) return;
+    setSaving(true);
     try {
-      if (!data.fullName?.trim()) { setErrorMessage("Full name is required"); return; }
-      if (!data.username?.trim()) { setErrorMessage("Username is required"); return; }
-      if (!data.mobile || data.mobile.trim().length < 10) { setErrorMessage("Please enter a valid 10-digit mobile number"); return; }
-      if (!data.description?.trim()) { setErrorMessage("Please add a description"); return; }
+      if (!data.fullName?.trim()) { setErrorMessage("Full name is required");setSaving(false); return; }
+      if (!data.username?.trim()) { setErrorMessage("Username is required");setSaving(false); return; }
+      if (!data.mobile || data.mobile.trim().length < 10) { setErrorMessage("Please enter a valid 10-digit mobile number");setSaving(false); return; }
+      if (!data.description?.trim()) { setErrorMessage("Please add a description");setSaving(false); return; }
       setErrorMessage("");
 
       const response = await axios.post(SET_USER_INFO, { ...data, links }, { withCredentials: true });
-      if (response?.data?.usernameError) { setErrorMessage("Enter a unique username"); return; }
-      if (response?.data?.emptyFieldError) { setErrorMessage("Please enter all required fields"); return; }
+      if (response?.data?.usernameError) { setErrorMessage("Enter a unique username"); setSaving(false);return; }
+      if (response?.data?.emptyFieldError) { setErrorMessage("Please enter all required fields"); setSaving(false); return; }
 
       let imageName = "";
       if (image) {
@@ -98,6 +101,10 @@ const Profile = () => {
     } catch (err) {
       toast.error("Some error occurred");
     }
+    finally {
+      setSaving(false);
+    }
+
   };
 
   const handleFile = (e) => {
@@ -265,13 +272,13 @@ const Profile = () => {
             )}
 
             {/* Submit */}
-            <button onClick={setProfile} type="button"
-              style={{ width: "100%", padding: "0.9rem", background: "#3a8a2c", color: "#ede9dc", border: "none", fontFamily: "Space Mono, monospace", fontSize: "0.72rem", letterSpacing: "0.12em", textTransform: "uppercase", cursor: "pointer", transition: "background 0.2s" }}
-              onMouseEnter={(e) => (e.currentTarget.style.background = "#4ea83d")}
-              onMouseLeave={(e) => (e.currentTarget.style.background = "#3a8a2c")}
-            >
-              Save Profile
-            </button>
+            <button onClick={setProfile} type="button" disabled={saving}
+  style={{ width: "100%", padding: "0.9rem", background: saving ? "#2a2d35" : "#3a8a2c", color: saving ? "#6b7a62" : "#ede9dc", border: "none", fontFamily: "Space Mono, monospace", fontSize: "0.72rem", letterSpacing: "0.12em", textTransform: "uppercase", cursor: saving ? "not-allowed" : "pointer", transition: "background 0.2s" }}
+  onMouseEnter={(e) => { if (!saving) e.currentTarget.style.background = "#4ea83d"; }}
+  onMouseLeave={(e) => { if (!saving) e.currentTarget.style.background = saving ? "#2a2d35" : "#3a8a2c"; }}
+>
+  {saving ? "Saving..." : "Save Profile"}
+</button>
           </div>
         </div>
       )}
