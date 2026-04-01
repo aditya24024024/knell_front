@@ -8,6 +8,8 @@ export default function MinecraftBlock() {
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
+    const isDesktop = window.matchMedia("(min-width: 768px)").matches;
+if (!isDesktop) return;
 
     let renderer, animId, fbxMesh;
 
@@ -109,7 +111,15 @@ export default function MinecraftBlock() {
     }
 
     let cleanup;
+
+const observer = new IntersectionObserver(([entry]) => {
+  if (entry.isIntersecting) {
     init().then((fn) => { cleanup = fn; });
+    observer.disconnect();
+  }
+});
+
+observer.observe(canvas);
 
     return () => {
       if (animId) cancelAnimationFrame(animId);
