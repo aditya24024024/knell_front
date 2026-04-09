@@ -9,7 +9,7 @@ export const categories = [
     { name: "Travel Companion", logo: "/service-14.svg" },
     { name: "Pub Crawler", logo: "/service-19.svg" },
     { name: "Dance Companion", logo: "/service-18.svg" },
-    { name: "Photography", logo: "/service-22.svg" },
+    { name: "Videographer", logo: "/service-22.svg" },
     { name: "Shopper", logo: "/service-12.svg" },
     { name: "Musician", logo: "/service-20.svg" },
     { name: "editor", logo: "/service-23.svg" },

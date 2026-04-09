@@ -13,7 +13,7 @@ const tagMap = {
   "Travel Companion":    "companions",
   "Pub Crawler":         "companions",
   "Dance Companion":     "companions",
-  "Photography":         "design",
+  "Videographer":         "design",
   "Shopper":             "companions",
   "Musician":            "audio",
   "editor":              "video",
