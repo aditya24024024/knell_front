@@ -59,7 +59,9 @@ const SearchGridItem = ({ gig }) => {
             <Image src={optimizeAvatar(gig.createdBy.profileImage)} alt="Profile" height={24} width={24} style={{ borderRadius: "50%", objectFit: "cover" }} loading="lazy" />
           ) : (
             <div style={{ background: "#3a8a2c", width: 24, height: 24, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-              <span style={{ color: "#ede9dc", fontSize: "0.65rem", fontWeight: 700 }}>{gig.createdBy.email[0]?.toUpperCase()}</span>
+              <span style={{ color: "#ede9dc", fontSize: "0.65rem", fontWeight: 700 }}>
+  {(gig.createdBy.fullName || gig.createdBy.username || "?")[0]?.toUpperCase()}
+</span>
             </div>
           )}
           <span
