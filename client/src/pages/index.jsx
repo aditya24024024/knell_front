@@ -23,8 +23,9 @@ function Index() {
           gtag('js', new Date());
           gtag('config', 'AW-17643560057');`}</Script>
       </Head>
-      <div style={{ background: "#09090b" }}>
-        <HeroBanner />
+     <div style={{ background: "#09090b" }}>
+  <p style={{ display: "none" }}>Impact-Site-Verification: 23365d28-d285-4877-8e2c-c2ff11e5f723</p>
+  <HeroBanner />
         <KnellTicker />
         <PopularServices />
         <HowItWorks />
