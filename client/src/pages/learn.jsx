@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Head from "next/head";
 import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
+
 
 const CATEGORIES = [
   { label: "All", value: "all" },
@@ -606,7 +606,6 @@ export default function LearnPage() {
 
       </main>
 
-      <Footer />
     </>
   );
 }
