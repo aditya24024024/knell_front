@@ -57,6 +57,7 @@ const Navbar = () => {
 
   const links = [
     { linkName: "Explore", handler: "https://www.instagram.com/knell.co.in/", type: "link" },
+    { linkName: "Learn", handler: "/learn", type: "link" },
     { linkName: "Log In", handler: handleLogin, type: "button" },
     { linkName: "Join", handler: handleSignup, type: "button2" },
   ];
@@ -234,6 +235,7 @@ const Navbar = () => {
                   <li className="cursor-pointer" style={{ color: "#5dc94a" }} onClick={() => router.push("/seller/gigs/create")}>Create Gig</li>
                 )}
                 <li className="cursor-pointer" style={{ color: "#5dc94a" }} onClick={handleOrdersNavigate}>Orders</li>
+                <li className="cursor-pointer" style={{ color: "#9ca3af" }} onClick={() => router.push("/learn")}>Learn</li>
                 <li className="cursor-pointer" style={{ color: "#9ca3af" }} onClick={handleModeSwitch}>
                   {isSeller ? "Switch To Buyer" : "Switch To Seller"}
                 </li>
@@ -258,7 +260,8 @@ const Navbar = () => {
                 <>
                   <a href="https://www.instagram.com/knell.co.in/" target="_blank" rel="noopener noreferrer"
                     onClick={closeHamburger} style={{ color: "#9ca3af" }}>Explore</a>
-                  {links.filter(({ linkName }) => linkName !== "Explore").map(({ linkName, handler }) => (
+                  <a href="/learn" onClick={closeHamburger} style={{ color: "#9ca3af" }}>Learn</a>
+                  {links.filter(({ linkName }) => linkName !== "Explore" && linkName !== "Learn").map(({ linkName, handler }) => (
                     <button key={linkName} onClick={() => { handler(); closeHamburger(); }}
                       className="text-left" style={{ color: "#9ca3af", background: "none", border: "none", cursor: "pointer" }}>
                       {linkName}
@@ -272,6 +275,7 @@ const Navbar = () => {
                   {isAdminUser && <button onClick={adminorders} className="text-left" style={{ color: "#5dc94a" }}>All Orders</button>}
                   {isSeller && <button onClick={() => { router.push("/seller/gigs/create"); closeHamburger(); }} className="text-left" style={{ color: "#5dc94a" }}>Create Gig</button>}
                   <button onClick={handleOrdersNavigate} className="text-left" style={{ color: "#9ca3af" }}>Orders</button>
+                  <button onClick={() => { closeHamburger(); router.push("/learn"); }} className="text-left" style={{ color: "#9ca3af" }}>Learn</button>
                   <button onClick={handleModeSwitch} className="text-left" style={{ color: "#9ca3af" }}>{isSeller ? "Switch To Buyer" : "Switch To Seller"}</button>
                   <button onClick={() => { closeHamburger(); router.push("/profile/" + userInfo?.username); }} className="text-left" style={{ color: "#9ca3af" }}>Profile</button>
                   <button onClick={() => router.push("/logout")} className="text-left" style={{ color: "#6b7a62" }}>Logout</button>

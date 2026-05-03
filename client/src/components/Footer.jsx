@@ -15,6 +15,7 @@ const socialLinks = [
 const footerLinks = [
   { label: "Privacy", href: "/privacy" },
   { label: "Terms", href: "/terms" },
+  { label: "Learn", href: "/learn" },
   { label: "Support", href: "mailto:support@knell.co.in" },
   { label: "Blog", href: "#" },
   { label: "Careers", href: "#" },
