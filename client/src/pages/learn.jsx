@@ -5,7 +5,7 @@ import Navbar from "../components/Navbar";
 const UDEMY_GENERAL_LINK = "https://trk.udemy.com/vDVzky";
 
 // ─── COURSES ────────────────────────────────────────────────
-// images go in /public/thumbnails/ — filenames match image field below
+// Drop thumbnails in /public/thumbnails/ matching the image filenames below
 const COURSES = [
   {
     id: 1,
@@ -19,7 +19,7 @@ const COURSES = [
     level: "Beginner",
     hours: "8",
     affiliateUrl: "https://trk.udemy.com/yZkgKb",
-    image: "/thumbnails/capcut.png",
+    image: "/thumbnails/capcut.jpg",
     accent: "#4af0d0",
     letter: "C",
   },
@@ -35,7 +35,7 @@ const COURSES = [
     level: "All Levels",
     hours: "18",
     affiliateUrl: "https://trk.udemy.com/m4GRKa",
-    image: "/thumbnails/video-editing-masterclass.png",
+    image: "/thumbnails/video-editing-masterclass.jpg",
     accent: "#5dc94a",
     letter: "V",
   },
@@ -71,9 +71,58 @@ const COURSES = [
     accent: "#ff6b6b",
     letter: "D",
   },
+  {
+    id: 5,
+    title: "Color Grading Masterclass – Cinematic Look",
+    instructor: "Jordy Vandeput",
+    rating: 4.7,
+    reviews: 14300,
+    price: 499,
+    originalPrice: 3499,
+    tag: "Top Rated",
+    level: "Intermediate",
+    hours: "12",
+    affiliateUrl: "https://trk.udemy.com/enN4GZ",
+    image: "/thumbnails/color-grading.png",
+    accent: "#f0c94a",
+    letter: "C",
+  },
+  {
+    id: 6,
+    title: "Motion Graphics – After Effects Zero to Hero",
+    instructor: "Daniel Walter Scott",
+    rating: 4.8,
+    reviews: 16300,
+    price: 599,
+    originalPrice: 4999,
+    tag: "Bestseller",
+    level: "Beginner",
+    hours: "28",
+    affiliateUrl: "https://trk.udemy.com/9VEW3Y",
+    image: "/thumbnails/motion-graphics.png",
+    accent: "#d94af0",
+    letter: "M",
+  },
+  {
+    id: 7,
+    title: "Freelancing Masterclass – Build a Business from Scratch",
+    instructor: "Brad Hussey",
+    rating: 4.6,
+    reviews: 21800,
+    price: 499,
+    originalPrice: 3999,
+    tag: "Bestseller",
+    level: "All Levels",
+    hours: "16",
+    affiliateUrl: "https://trk.udemy.com/6kEb9E",
+    image: "/thumbnails/freelancing.png",
+    accent: "#5dc94a",
+    letter: "F",
+  },
 ];
 
 // ─── CERTIFICATIONS ─────────────────────────────────────────
+// free: true = show "Free" badge, no price. free: false = paid Udemy course
 const CERTIFICATIONS = [
   {
     id: "cert-1",
@@ -84,6 +133,8 @@ const CERTIFICATIONS = [
     image: "/thumbnails/pmp-cert.jpg",
     accent: "#f0c94a",
     icon: "📋",
+    free: false,
+    price: "₹799",
   },
   {
     id: "cert-2",
@@ -94,6 +145,68 @@ const CERTIFICATIONS = [
     image: "/thumbnails/azure-cert.jpg",
     accent: "#4a9af0",
     icon: "☁️",
+    free: false,
+    price: "₹499",
+  },
+  {
+    id: "cert-3",
+    title: "Google Digital Marketing & E-commerce",
+    issuer: "Google",
+    description: "Google's own certificate covering SEO, ads, analytics and e-commerce. Huge name recognition for marketing freelancers.",
+    affiliateUrl: "https://grow.google/certificates/digital-marketing-ecommerce/",
+    image: "https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg",
+    accent: "#4af0d0",
+    icon: null,
+    free: true,
+    price: null,
+  },
+  {
+    id: "cert-4",
+    title: "HubSpot Content Marketing Certification",
+    issuer: "HubSpot Academy",
+    description: "One of the most recognized free certs in marketing. Proves content strategy skills — perfect for creator-marketers on Knell.",
+    affiliateUrl: "https://academy.hubspot.com/courses/content-marketing",
+    image: "https://www.hubspot.com/hubfs/HubSpot_Logos/HubSpot-Inversed-Favicon.png",
+    accent: "#ff6b6b",
+    icon: null,
+    free: true,
+    price: null,
+  },
+  {
+    id: "cert-5",
+    title: "Meta Social Media Marketing Certificate",
+    issuer: "Meta",
+    description: "Covers Instagram, Facebook ads, and analytics — directly relevant to creators and brand managers on Knell.",
+    affiliateUrl: "https://www.coursera.org/professional-certificates/facebook-social-media-marketing",
+    image: "https://upload.wikimedia.org/wikipedia/commons/7/7b/Meta_Platforms_Inc._logo.svg",
+    accent: "#6b7aff",
+    icon: null,
+    free: true,
+    price: null,
+  },
+  {
+    id: "cert-6",
+    title: "Canva Design Certification",
+    issuer: "Canva",
+    description: "Official Canva cert. Instantly recognizable for thumbnail designers, social media creators and graphic freelancers.",
+    affiliateUrl: "https://www.canva.com/designschool/certification/",
+    image: "https://upload.wikimedia.org/wikipedia/en/3/3b/Canva_Logo.png",
+    accent: "#4af0d0",
+    icon: null,
+    free: true,
+    price: null,
+  },
+  {
+    id: "cert-7",
+    title: "YouTube Creator Academy",
+    issuer: "YouTube / Google",
+    description: "YouTube's official learning program for creators. Perfect for streamers and video creators building their channel strategy.",
+    affiliateUrl: "https://creatoracademy.youtube.com/",
+    image: "https://upload.wikimedia.org/wikipedia/commons/b/b8/YouTube_Logo_2017.svg",
+    accent: "#ff6b6b",
+    icon: null,
+    free: true,
+    price: null,
   },
 ];
 
@@ -194,12 +307,10 @@ export default function LearnPage() {
                 background: "radial-gradient(circle, rgba(93,201,74,0.08) 0%, transparent 70%)",
                 pointerEvents: "none",
               }} />
-
               <div style={{ display: "flex", alignItems: "center", gap: "2rem", flexWrap: "wrap" }}>
                 <div style={{
-                  background: "#a435f0",
-                  padding: "0.6rem 1.4rem",
-                  display: "flex", alignItems: "center", gap: "0.5rem", flexShrink: 0,
+                  background: "#a435f0", padding: "0.6rem 1.4rem",
+                  display: "flex", alignItems: "center", flexShrink: 0,
                 }}>
                   <span style={{ fontFamily: "Bebas Neue, sans-serif", fontSize: "1.4rem", color: "white", letterSpacing: "0.1em" }}>UDEMY</span>
                 </div>
@@ -216,7 +327,6 @@ export default function LearnPage() {
                   </p>
                 </div>
               </div>
-
               <div style={{
                 fontFamily: "Space Mono, monospace", fontSize: "0.65rem", letterSpacing: "0.15em",
                 textTransform: "uppercase", background: "#5dc94a", color: "#09090b",
@@ -237,6 +347,13 @@ export default function LearnPage() {
               letterSpacing: "0.3em", textTransform: "uppercase", color: "#5dc94a",
             }}>
               Featured Courses
+            </span>
+            <span style={{
+              marginLeft: "auto",
+              fontFamily: "Space Mono, monospace", fontSize: "0.5rem",
+              letterSpacing: "0.1em", color: "#3d4438",
+            }}>
+              {COURSES.length} courses
             </span>
           </div>
 
@@ -288,7 +405,6 @@ export default function LearnPage() {
                         background: hovered ? "rgba(0,0,0,0.4)" : "rgba(0,0,0,0.1)",
                         transition: "background 0.2s",
                       }} />
-                      {/* badges */}
                       <div style={{
                         position: "absolute", top: "0.6rem", right: "0.6rem",
                         display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "0.3rem",
@@ -331,7 +447,6 @@ export default function LearnPage() {
                         </p>
                       </div>
 
-                      {/* bottom row */}
                       <div style={{
                         display: "flex", alignItems: "center",
                         paddingTop: "0.75rem", borderTop: "1px solid rgba(237,233,220,0.06)", gap: "0.75rem",
@@ -357,7 +472,6 @@ export default function LearnPage() {
                         </div>
                       </div>
 
-                      {/* hover CTA */}
                       <div style={{
                         fontFamily: "Space Mono, monospace", fontSize: "0.52rem",
                         letterSpacing: "0.15em", textTransform: "uppercase", color: course.accent,
@@ -377,6 +491,8 @@ export default function LearnPage() {
 
         {/* ── GET CERTIFIED SECTION ── */}
         <section style={{ padding: "3rem 3rem 5rem", maxWidth: 1280, margin: "0 auto" }}>
+
+          {/* section header */}
           <div style={{
             display: "flex", alignItems: "flex-end", justifyContent: "space-between",
             flexWrap: "wrap", gap: "1rem", marginBottom: "2rem",
@@ -427,7 +543,7 @@ export default function LearnPage() {
                     background: hov ? "#0f1014" : "#09090b",
                     display: "flex", alignItems: "stretch",
                     transition: "background 0.15s", position: "relative",
-                    overflow: "hidden", minHeight: 140,
+                    overflow: "hidden", minHeight: 130,
                   }}>
                     {/* left accent bar */}
                     <div style={{
@@ -436,32 +552,47 @@ export default function LearnPage() {
                       transition: "width 0.2s", flexShrink: 0,
                     }} />
 
-                    {/* cert thumbnail */}
-                    <div style={{ width: 200, flexShrink: 0, overflow: "hidden", position: "relative" }}>
-                      <img
-                        src={cert.image}
-                        alt={cert.title}
-                        style={{
-                          width: "100%", height: "100%", objectFit: "cover", display: "block",
-                          transition: "transform 0.35s",
-                          transform: hov ? "scale(1.05)" : "scale(1)",
-                          filter: hov ? "brightness(0.8)" : "brightness(0.6)",
-                        }}
-                      />
-                      <div style={{
-                        position: "absolute", inset: 0,
-                        display: "flex", alignItems: "center", justifyContent: "center",
-                        fontSize: "2.5rem",
-                      }}>
-                        {cert.icon}
-                      </div>
+                    {/* thumbnail */}
+                    <div style={{ width: 180, flexShrink: 0, overflow: "hidden", position: "relative" }}>
+                      {cert.free ? (
+                        <div style={{
+                          width: "100%", height: "100%",
+                          background: `${cert.accent}15`,
+                          borderRight: `1px solid ${cert.accent}20`,
+                          display: "flex", alignItems: "center", justifyContent: "center",
+                          padding: "1.5rem", boxSizing: "border-box",
+                        }}>
+                          <img
+                            src={cert.image}
+                            alt={cert.issuer}
+                            style={{
+                              maxWidth: "100%", maxHeight: 55,
+                              objectFit: "contain",
+                              filter: "brightness(0) invert(1)",
+                              opacity: hov ? 1 : 0.65,
+                              transition: "opacity 0.2s",
+                            }}
+                          />
+                        </div>
+                      ) : (
+                        <img
+                          src={cert.image}
+                          alt={cert.title}
+                          style={{
+                            width: "100%", height: "100%", objectFit: "cover", display: "block",
+                            transition: "transform 0.35s",
+                            transform: hov ? "scale(1.05)" : "scale(1)",
+                            filter: hov ? "brightness(0.8)" : "brightness(0.55)",
+                          }}
+                        />
+                      )}
                     </div>
 
                     {/* text */}
-                    <div style={{ flex: 1, padding: "1.75rem 2rem", display: "flex", flexDirection: "column", justifyContent: "center", gap: "0.5rem" }}>
+                    <div style={{ flex: 1, padding: "1.5rem 2rem", display: "flex", flexDirection: "column", justifyContent: "center", gap: "0.4rem" }}>
                       <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", flexWrap: "wrap" }}>
                         <p style={{
-                          fontFamily: "Bebas Neue, sans-serif", fontSize: "1.5rem",
+                          fontFamily: "Bebas Neue, sans-serif", fontSize: "1.4rem",
                           letterSpacing: "0.04em", color: hov ? "#ede9dc" : "#dbd7ca",
                           lineHeight: 1, transition: "color 0.15s",
                         }}>
@@ -476,9 +607,22 @@ export default function LearnPage() {
                         }}>
                           {cert.issuer}
                         </span>
+                        {/* FREE badge */}
+                        {cert.free && (
+                          <span style={{
+                            fontFamily: "Space Mono, monospace", fontSize: "0.45rem",
+                            letterSpacing: "0.15em", textTransform: "uppercase",
+                            padding: "0.2rem 0.6rem",
+                            background: "#5dc94a",
+                            color: "#09090b",
+                            fontWeight: 700,
+                          }}>
+                            Free
+                          </span>
+                        )}
                       </div>
                       <p style={{
-                        fontFamily: "Space Mono, monospace", fontSize: "0.55rem",
+                        fontFamily: "Space Mono, monospace", fontSize: "0.54rem",
                         color: "#6b7a62", letterSpacing: "0.06em", lineHeight: 1.7, maxWidth: 500,
                       }}>
                         {cert.description}
@@ -488,15 +632,15 @@ export default function LearnPage() {
                     {/* CTA */}
                     <div style={{ display: "flex", alignItems: "center", padding: "0 2rem", flexShrink: 0 }}>
                       <div style={{
-                        fontFamily: "Space Mono, monospace", fontSize: "0.6rem",
+                        fontFamily: "Space Mono, monospace", fontSize: "0.58rem",
                         letterSpacing: "0.15em", textTransform: "uppercase",
-                        padding: "0.75rem 1.75rem", fontWeight: 700,
-                        border: `1px solid ${cert.accent}`,
-                        color: hov ? "#09090b" : cert.accent,
-                        background: hov ? cert.accent : "transparent",
+                        padding: "0.7rem 1.5rem", fontWeight: 700,
+                        border: `1px solid ${cert.free ? "#5dc94a" : cert.accent}`,
+                        color: hov ? "#09090b" : (cert.free ? "#5dc94a" : cert.accent),
+                        background: hov ? (cert.free ? "#5dc94a" : cert.accent) : "transparent",
                         transition: "all 0.2s", whiteSpace: "nowrap",
                       }}>
-                        Get Certified →
+                        {cert.free ? "Get for Free →" : "Get Certified →"}
                       </div>
                     </div>
                   </div>
