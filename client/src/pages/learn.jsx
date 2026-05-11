@@ -224,18 +224,18 @@ export default function LearnPage() {
 
       <Navbar />
 
-      <main style={{ background: "#09090b", minHeight: "100vh", paddingTop: "72px" }}>
+      <main style={{ background: "#09090b", minHeight: "100vh", paddingTop: "20px" }}>
 
         {/* ── HERO ── */}
-        <section style={{
-          padding: "4rem 3rem 3rem",
-          maxWidth: 1280,
-          margin: "0 auto",
-          display: "grid",
-          gridTemplateColumns: "1fr auto",
-          alignItems: "end",
-          gap: "2rem",
-        }}>
+       <section style={{
+  padding: "1.5rem 3rem 2rem",
+  maxWidth: 1280,
+  margin: "0 auto",
+  display: "grid",
+  gridTemplateColumns: "1fr auto",
+  alignItems: "start",
+  gap: "2rem",
+}}>
           <div>
             <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "1.25rem" }}>
               <div style={{ width: 6, height: 6, background: "#5dc94a", borderRadius: "50%" }} />
