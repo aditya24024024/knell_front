@@ -312,36 +312,29 @@ export default function HeroBanner() {
         <div className="flex items-center gap-3 mb-5" style={{ maxWidth: 500 }}>
           <button
             onClick={() => router.push("/learn")}
-            className="flex items-center gap-2 px-0 py-1 transition-all group"
+            className="flex items-center gap-2 transition-all"
             style={{
               background: "transparent",
-              border: "none",
+              border: "1px solid rgba(93,201,74,0.2)",
               cursor: "pointer",
               fontFamily: "Space Mono, monospace",
-              fontSize: "0.6rem",
-              letterSpacing: "0.12em",
+              fontSize: "0.68rem",
+              letterSpacing: "0.1em",
               textTransform: "uppercase",
-              color: "#6b7a62",
+              color: "#8fa886",
+              padding: "10px 16px",
             }}
-            onMouseEnter={(e) => (e.currentTarget.style.color = "#5dc94a")}
-            onMouseLeave={(e) => (e.currentTarget.style.color = "#6b7a62")}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.color = "#5dc94a";
+              e.currentTarget.style.borderColor = "rgba(93,201,74,0.5)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.color = "#8fa886";
+              e.currentTarget.style.borderColor = "rgba(93,201,74,0.2)";
+            }}
           >
-            <span
-              style={{
-                display: "inline-block",
-                width: 14,
-                height: 14,
-                border: "1px solid currentColor",
-                borderRadius: "50%",
-                textAlign: "center",
-                lineHeight: "12px",
-                fontSize: "0.55rem",
-                flexShrink: 0,
-              }}
-            >
-              ▶
-            </span>
-            Free creator resources on Knell Learn
+            <span style={{ fontSize: "0.6rem" }}>▶</span>
+            Knell Learn — courses to grow your freelance career
           </button>
         </div>
 
