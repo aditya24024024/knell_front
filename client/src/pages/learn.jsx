@@ -280,63 +280,7 @@ export default function LearnPage() {
         {/* divider */}
         <div style={{ borderTop: "1px solid rgba(93,201,74,0.12)", margin: "0 3rem" }} />
 
-        {/* ── UDEMY AFFILIATE BANNER ── */}
-        <section style={{ padding: "2.5rem 3rem", maxWidth: 1280, margin: "0 auto" }}>
-          <a href={UDEMY_GENERAL_LINK} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none", display: "block" }}>
-            <div
-              style={{
-                background: "linear-gradient(135deg, #1c1f16 0%, #111410 50%, #0f1209 100%)",
-                border: "1px solid rgba(93,201,74,0.25)",
-                padding: "2.5rem 3rem",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                flexWrap: "wrap",
-                gap: "2rem",
-                position: "relative",
-                overflow: "hidden",
-                cursor: "pointer",
-                transition: "border-color 0.2s",
-              }}
-              onMouseEnter={(e) => { e.currentTarget.style.borderColor = "rgba(93,201,74,0.6)"; }}
-              onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(93,201,74,0.25)"; }}
-            >
-              <div style={{
-                position: "absolute", top: "-60px", right: "-60px",
-                width: 280, height: 280,
-                background: "radial-gradient(circle, rgba(93,201,74,0.08) 0%, transparent 70%)",
-                pointerEvents: "none",
-              }} />
-              <div style={{ display: "flex", alignItems: "center", gap: "2rem", flexWrap: "wrap" }}>
-                <div style={{
-                  background: "#a435f0", padding: "0.6rem 1.4rem",
-                  display: "flex", alignItems: "center", flexShrink: 0,
-                }}>
-                  <span style={{ fontFamily: "Bebas Neue, sans-serif", fontSize: "1.4rem", color: "white", letterSpacing: "0.1em" }}>UDEMY</span>
-                </div>
-                <div>
-                  <p style={{
-                    fontFamily: "Bebas Neue, sans-serif",
-                    fontSize: "clamp(1.4rem, 3vw, 2.2rem)",
-                    color: "#ede9dc", letterSpacing: "0.04em", lineHeight: 1, marginBottom: "0.4rem",
-                  }}>
-                    EXPLORE ALL COURSES ON UDEMY
-                  </p>
-                  <p style={{ fontFamily: "Space Mono, monospace", fontSize: "0.58rem", color: "#6b7a62", letterSpacing: "0.1em" }}>
-                    210,000+ courses · Learn anything · Lifetime access
-                  </p>
-                </div>
-              </div>
-              <div style={{
-                fontFamily: "Space Mono, monospace", fontSize: "0.65rem", letterSpacing: "0.15em",
-                textTransform: "uppercase", background: "#5dc94a", color: "#09090b",
-                padding: "0.9rem 2.25rem", fontWeight: 700, flexShrink: 0,
-              }}>
-                Browse Udemy →
-              </div>
-            </div>
-          </a>
-        </section>
+        
 
         {/* ── COURSE GRID ── */}
         <section style={{ padding: "0 3rem 2rem", maxWidth: 1280, margin: "0 auto" }}>
@@ -490,7 +434,7 @@ export default function LearnPage() {
         </section>
 
         {/* ── GET CERTIFIED SECTION ── */}
-        <section style={{ padding: "3rem 3rem 5rem", maxWidth: 1280, margin: "0 auto" }}>
+        <section style={{ padding: "3rem 3rem 2.5rem", maxWidth: 1280, margin: "0 auto" }}>
 
           {/* section header */}
           <div style={{
@@ -648,6 +592,64 @@ export default function LearnPage() {
               );
             })}
           </div>
+        </section>
+
+        {/* ── UDEMY AFFILIATE BANNER ── */}
+        <section style={{ padding: "2.5rem 3rem", maxWidth: 1280, margin: "0 auto" }}>
+          <a href={UDEMY_GENERAL_LINK} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none", display: "block" }}>
+            <div
+              style={{
+                background: "linear-gradient(135deg, #1c1f16 0%, #111410 50%, #0f1209 100%)",
+                border: "1px solid rgba(93,201,74,0.25)",
+                padding: "2.5rem 3rem",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                flexWrap: "wrap",
+                gap: "2rem",
+                position: "relative",
+                overflow: "hidden",
+                cursor: "pointer",
+                transition: "border-color 0.2s",
+              }}
+              onMouseEnter={(e) => { e.currentTarget.style.borderColor = "rgba(93,201,74,0.6)"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(93,201,74,0.25)"; }}
+            >
+              <div style={{
+                position: "absolute", top: "-60px", right: "-60px",
+                width: 280, height: 280,
+                background: "radial-gradient(circle, rgba(93,201,74,0.08) 0%, transparent 70%)",
+                pointerEvents: "none",
+              }} />
+              <div style={{ display: "flex", alignItems: "center", gap: "2rem", flexWrap: "wrap" }}>
+                <div style={{
+                  background: "#a435f0", padding: "0.6rem 1.4rem",
+                  display: "flex", alignItems: "center", flexShrink: 0,
+                }}>
+                  <span style={{ fontFamily: "Bebas Neue, sans-serif", fontSize: "1.4rem", color: "white", letterSpacing: "0.1em" }}>UDEMY</span>
+                </div>
+                <div>
+                  <p style={{
+                    fontFamily: "Bebas Neue, sans-serif",
+                    fontSize: "clamp(1.4rem, 3vw, 2.2rem)",
+                    color: "#ede9dc", letterSpacing: "0.04em", lineHeight: 1, marginBottom: "0.4rem",
+                  }}>
+                    EXPLORE ALL COURSES ON UDEMY
+                  </p>
+                  <p style={{ fontFamily: "Space Mono, monospace", fontSize: "0.58rem", color: "#6b7a62", letterSpacing: "0.1em" }}>
+                    210,000+ courses · Learn anything · Lifetime access
+                  </p>
+                </div>
+              </div>
+              <div style={{
+                fontFamily: "Space Mono, monospace", fontSize: "0.65rem", letterSpacing: "0.15em",
+                textTransform: "uppercase", background: "#5dc94a", color: "#09090b",
+                padding: "0.9rem 2.25rem", fontWeight: 700, flexShrink: 0,
+              }}>
+                Browse Udemy →
+              </div>
+            </div>
+          </a>
         </section>
 
         {/* ── BOTTOM CTA ── */}
