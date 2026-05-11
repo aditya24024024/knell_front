@@ -272,7 +272,7 @@ export default function HeroBanner() {
 
         {/* Search bar */}
         <div
-          className="flex mb-5"
+          className="flex mb-3"
           style={{
             border: "1px solid rgba(93,201,74,0.3)",
             background: "#15171c",
@@ -305,6 +305,43 @@ export default function HeroBanner() {
             onMouseLeave={(e) => (e.currentTarget.style.background = "#3a8a2c")}
           >
             Find Gigs
+          </button>
+        </div>
+
+        {/* Learn CTA */}
+        <div className="flex items-center gap-3 mb-5" style={{ maxWidth: 500 }}>
+          <button
+            onClick={() => router.push("/learn")}
+            className="flex items-center gap-2 px-0 py-1 transition-all group"
+            style={{
+              background: "transparent",
+              border: "none",
+              cursor: "pointer",
+              fontFamily: "Space Mono, monospace",
+              fontSize: "0.6rem",
+              letterSpacing: "0.12em",
+              textTransform: "uppercase",
+              color: "#6b7a62",
+            }}
+            onMouseEnter={(e) => (e.currentTarget.style.color = "#5dc94a")}
+            onMouseLeave={(e) => (e.currentTarget.style.color = "#6b7a62")}
+          >
+            <span
+              style={{
+                display: "inline-block",
+                width: 14,
+                height: 14,
+                border: "1px solid currentColor",
+                borderRadius: "50%",
+                textAlign: "center",
+                lineHeight: "12px",
+                fontSize: "0.55rem",
+                flexShrink: 0,
+              }}
+            >
+              ▶
+            </span>
+            Free creator resources on Knell Learn
           </button>
         </div>
 
