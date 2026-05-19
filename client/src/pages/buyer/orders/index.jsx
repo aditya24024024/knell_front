@@ -3,6 +3,7 @@ import { GET_BUYER_ORDERS_ROUTE, ORDER_BUYER_COMPLETE_ROUTE } from "../../../uti
 import axios from "axios";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
+import { useCurrency } from '../../../hooks/useCurrency';
 
 const timeAgo = (date) => {
   const seconds = Math.floor((new Date() - new Date(date)) / 1000);
@@ -20,6 +21,7 @@ function BuyerOrders() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [hasFetched, setHasFetched] = useState(false);
+  const { format } = useCurrency();
 
   useEffect(() => {
     if (!userInfo || hasFetched) return;
@@ -70,7 +72,7 @@ function BuyerOrders() {
                   </p>
                   <span className="text-gray-500 text-sm">{timeAgo(order.createdAt)}</span>
                   <span className="text-sm text-gray-600">
-                    Price: ₹{order.price} | Delivery: {order.gig?.deliveryTime || "-"} days
+                    Price: {format(order.price)} | Delivery: {order.gig?.deliveryTime || "-"} days
                   </span>
                   {/* Status badge */}
                   <span className={`text-xs font-semibold mt-1 w-fit px-2 py-0.5 rounded-full ${

@@ -4,6 +4,7 @@ import axios from "axios";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 // import img from "../../../../public/user.png";
+import { useCurrency } from '../../../hooks/useCurrency';
 
 const timeAgo = (date) => {
   const seconds = Math.floor((new Date() - new Date(date)) / 1000);
@@ -19,6 +20,7 @@ const timeAgo = (date) => {
 function Orders() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { format } = useCurrency();
   const [{ userInfo }] = useStateProvider();
 
   useEffect(() => {
@@ -67,7 +69,7 @@ function Orders() {
                     Order for <b>{order.gig.title}</b>
                   </p>
                   <span className="text-sm text-gray-600">
-                    ₹{order.price} • {order.gig.category} • Delivery:{" "}
+                    {format(order.price)} • {order.gig.category} • Delivery:{" "}
                     {order.gig.deliveryTime} day(s)
                   </span>
                   <span className="text-gray-500 text-sm">

@@ -8,11 +8,13 @@ import { CREATE_ORDER } from '../../utils/constants';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { reducerCases } from '../../context/constants';
+import { useCurrency } from '../../hooks/useCurrency';
 
 const Pricing = () => {
   const [{ gigData, userInfo, showLoginModal, showSignupModal }, dispatch] = useStateProvider();
   const router = useRouter();
   const [requestSent, setRequestSent] = useState(false);
+  const { format } = useCurrency();
 
   const handleSignup = () => {
     if (showLoginModal) dispatch({ type: reducerCases.TOGGLE_LOGIN_MODAL, showLoginModal: false });
@@ -61,7 +63,6 @@ const Pricing = () => {
 
   if (!gigData) return null;
 
-  const currencySymbol = gigData.currency?.symbol || '₹';
   const isOwner = gigData.userId === userInfo?.id;
 
   return (
@@ -81,7 +82,7 @@ const Pricing = () => {
           </p>
           <div style={{ textAlign: "right" }}>
             <div style={{ fontFamily: "Bebas Neue, sans-serif", fontSize: "2rem", letterSpacing: "0.05em", color: "#ede9dc", lineHeight: 1 }}>
-              {currencySymbol}{gigData.price}
+              {format(gigData.price)}
             </div>
           </div>
         </div>
