@@ -3,11 +3,12 @@ import Image from 'next/image';
 import { FaStar } from 'react-icons/fa';
 import { useRouter } from 'next/router';
 import { optimizeImage } from '../../utils/cloudinary';
-
+import { useCurrency } from '../../hooks/useCurrency';
 const optimizeAvatar = (url) => optimizeImage(url, 'sm');
 
 const SearchGridItem = ({ gig }) => {
   const router = useRouter();
+  const { formatCurrency } = useCurrency();
 
   const calculateRatings = () => {
     const { reviews } = gig;
@@ -96,8 +97,8 @@ const SearchGridItem = ({ gig }) => {
             )}
           </div>
           <div style={{ fontFamily: "Bebas Neue, sans-serif", fontSize: "1rem", letterSpacing: "0.05em", color: "#ede9dc" }}>
-            <span style={{ fontFamily: "Space Mono, monospace", fontSize: "0.52rem", color: "#6b7a62", verticalAlign: "middle", marginRight: 2 }}>from {currencySymbol}</span>
-            {gig.price}
+            <span style={{ fontFamily: "Space Mono, monospace", fontSize: "0.52rem", color: "#6b7a62", verticalAlign: "middle", marginRight: 2 }}>from</span>
+{format(gig.price)}
           </div>
         </div>
       </div>
