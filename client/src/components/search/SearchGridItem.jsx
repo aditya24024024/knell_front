@@ -8,7 +8,7 @@ const optimizeAvatar = (url) => optimizeImage(url, 'sm');
 
 const SearchGridItem = ({ gig }) => {
   const router = useRouter();
-  const { formatCurrency } = useCurrency();
+  const { format } = useCurrency();
 
   const calculateRatings = () => {
     const { reviews } = gig;
@@ -18,7 +18,6 @@ const SearchGridItem = ({ gig }) => {
   };
 
   const rating = calculateRatings();
-  const currencySymbol = gig.currency?.symbol || '₹';
 
   return (
     <div
@@ -61,8 +60,8 @@ const SearchGridItem = ({ gig }) => {
           ) : (
             <div style={{ background: "#3a8a2c", width: 24, height: 24, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
               <span style={{ color: "#ede9dc", fontSize: "0.65rem", fontWeight: 700 }}>
-  {(gig.createdBy.fullName || gig.createdBy.username || "?")[0]?.toUpperCase()}
-</span>
+                {(gig.createdBy.fullName || gig.createdBy.username || "?")[0]?.toUpperCase()}
+              </span>
             </div>
           )}
           <span
@@ -98,7 +97,7 @@ const SearchGridItem = ({ gig }) => {
           </div>
           <div style={{ fontFamily: "Bebas Neue, sans-serif", fontSize: "1rem", letterSpacing: "0.05em", color: "#ede9dc" }}>
             <span style={{ fontFamily: "Space Mono, monospace", fontSize: "0.52rem", color: "#6b7a62", verticalAlign: "middle", marginRight: 2 }}>from</span>
-{formatCurrency(gig.price)}
+            {format(gig.price)}
           </div>
         </div>
       </div>
