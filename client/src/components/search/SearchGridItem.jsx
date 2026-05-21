@@ -98,7 +98,7 @@ const SearchGridItem = ({ gig }) => {
           </div>
           <div style={{ fontFamily: "Bebas Neue, sans-serif", fontSize: "1rem", letterSpacing: "0.05em", color: "#ede9dc" }}>
             <span style={{ fontFamily: "Space Mono, monospace", fontSize: "0.52rem", color: "#6b7a62", verticalAlign: "middle", marginRight: 2 }}>from</span>
-{format(gig.price)}
+{formatCurrency(gig.price)}
           </div>
         </div>
       </div>
