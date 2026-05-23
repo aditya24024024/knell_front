@@ -25,6 +25,13 @@ const DELIVERY_OPTIONS = [
   { label: "7 Days", value: 7 },
 ];
 
+const INDIAN_CITIES = [
+  "Delhi", "Mumbai", "Bangalore", "Hyderabad", "Chennai", "Kolkata",
+  "Pune", "Ahmedabad", "Jaipur", "Surat", "Lucknow", "Noida",
+  "Gurgaon", "Chandigarh", "Indore", "Bhopal", "Patna", "Nagpur",
+  "Vadodara", "Other",
+];
+
 const dropdownStyle = {
   position: "absolute", top: "calc(100% + 6px)", left: 0,
   background: "#111113", border: "1px solid rgba(93,201,74,0.25)",
@@ -66,13 +73,13 @@ const Search = () => {
   const [selectedCategory, setSelectedCategory] = useState("All Categories");
   const [selectedBudget, setSelectedBudget] = useState(BUDGET_OPTIONS[0]);
   const [selectedDelivery, setSelectedDelivery] = useState(DELIVERY_OPTIONS[0]);
+  const [selectedCity, setSelectedCity] = useState(null);
   const [nearMe, setNearMe] = useState(false);
   const [openDropdown, setOpenDropdown] = useState(null);
   const observerRef = useRef(null);
   const loaderRef = useRef(null);
   const dropdownRef = useRef(null);
 
-  // Fetch featured gigs once on mount
   useEffect(() => {
     axios.get(FEATURED_GIGS_ROUTE)
       .then(({ data }) => setFeaturedGigs(data.gigs || []))
@@ -92,12 +99,24 @@ const Search = () => {
     setSelectedCategory("All Categories");
     setSelectedBudget(BUDGET_OPTIONS[0]);
     setSelectedDelivery(DELIVERY_OPTIONS[0]);
+    setSelectedCity(null);
     setNearMe(false);
   }, [category, q]);
 
   useEffect(() => {
     setGigs([]); setPage(1); setHasMore(true);
-  }, [selectedCategory, selectedBudget, selectedDelivery, nearMe]);
+  }, [selectedCategory, selectedBudget, selectedDelivery, selectedCity, nearMe]);
+
+  const handleNearMe = () => {
+    setNearMe(!nearMe);
+    setSelectedCity(null);
+  };
+
+  const handleCitySelect = (city) => {
+    setSelectedCity(city);
+    setNearMe(false);
+    setOpenDropdown(null);
+  };
 
   useEffect(() => {
     const term = q || category;
@@ -114,6 +133,7 @@ const Search = () => {
         if (selectedBudget.max != null) params.set("maxPrice", selectedBudget.max);
         if (selectedDelivery.value != null) params.set("deliveryTime", selectedDelivery.value);
         if (nearMe && userInfo?.city) params.set("city", userInfo.city);
+        if (selectedCity) params.set("city", selectedCity);
         const { data: { gigs: newGigs } } = await axios.get(`${SEARCH_GIGS_ROUTE}?${params.toString()}`);
         if (page === 1) setGigs(newGigs);
         else setGigs(prev => [...prev, ...newGigs]);
@@ -122,7 +142,7 @@ const Search = () => {
       finally { setLoading(false); }
     };
     getData();
-  }, [category, q, page, selectedCategory, selectedBudget, selectedDelivery, nearMe, userInfo]);
+  }, [category, q, page, selectedCategory, selectedBudget, selectedDelivery, selectedCity, nearMe, userInfo]);
 
   const handleObserver = useCallback((entries) => {
     const target = entries[0];
@@ -140,6 +160,7 @@ const Search = () => {
     selectedBudget.label !== "Any Budget",
     selectedDelivery.label !== "Any Time",
     nearMe,
+    selectedCity !== null,
   ].filter(Boolean).length;
 
   const showEmptyState = !loading && gigs.length === 0 && (q || category);
@@ -164,6 +185,8 @@ const Search = () => {
 
           {/* Filters */}
           <div ref={dropdownRef} style={{ display: "flex", gap: "0.5rem", marginBottom: "1.5rem", flexWrap: "wrap", position: "relative" }}>
+
+            {/* Category */}
             <div style={{ position: "relative" }}>
               <FilterButton label={selectedCategory === "All Categories" ? "Category" : selectedCategory} isActive={openDropdown === "category"} onClick={() => setOpenDropdown(openDropdown === "category" ? null : "category")} />
               {openDropdown === "category" && (
@@ -175,6 +198,7 @@ const Search = () => {
               )}
             </div>
 
+            {/* Budget */}
             <div style={{ position: "relative" }}>
               <FilterButton label={selectedBudget.label === "Any Budget" ? "Budget" : selectedBudget.label} isActive={openDropdown === "budget"} onClick={() => setOpenDropdown(openDropdown === "budget" ? null : "budget")} />
               {openDropdown === "budget" && (
@@ -186,6 +210,7 @@ const Search = () => {
               )}
             </div>
 
+            {/* Delivery */}
             <div style={{ position: "relative" }}>
               <FilterButton label={selectedDelivery.label === "Any Time" ? "Delivery Time" : selectedDelivery.label} isActive={openDropdown === "delivery"} onClick={() => setOpenDropdown(openDropdown === "delivery" ? null : "delivery")} />
               {openDropdown === "delivery" && (
@@ -197,10 +222,27 @@ const Search = () => {
               )}
             </div>
 
-            {/* Near Me filter — only show if user is logged in and has a city set */}
+            {/* City */}
+            <div style={{ position: "relative" }}>
+              <FilterButton
+                label={selectedCity ? selectedCity : "City"}
+                isActive={openDropdown === "city"}
+                onClick={() => setOpenDropdown(openDropdown === "city" ? null : "city")}
+              />
+              {openDropdown === "city" && (
+                <div style={{ ...dropdownStyle, maxHeight: 260, overflowY: "auto" }}>
+                  <button style={dropdownItemStyle(selectedCity === null)} onClick={() => { setSelectedCity(null); setOpenDropdown(null); }}>Any City</button>
+                  {INDIAN_CITIES.map((city) => (
+                    <button key={city} style={dropdownItemStyle(selectedCity === city)} onClick={() => handleCitySelect(city)}>{city}</button>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Near Me — only if logged in with city */}
             {userInfo?.city && (
               <button
-                onClick={() => setNearMe(!nearMe)}
+                onClick={handleNearMe}
                 style={{
                   fontFamily: "Space Mono, monospace", fontSize: "0.62rem",
                   letterSpacing: "0.12em", textTransform: "uppercase",
@@ -214,9 +256,16 @@ const Search = () => {
               </button>
             )}
 
+            {/* Clear */}
             {activeFilterCount > 0 && (
               <button
-                onClick={() => { setSelectedCategory("All Categories"); setSelectedBudget(BUDGET_OPTIONS[0]); setSelectedDelivery(DELIVERY_OPTIONS[0]); setNearMe(false); }}
+                onClick={() => {
+                  setSelectedCategory("All Categories");
+                  setSelectedBudget(BUDGET_OPTIONS[0]);
+                  setSelectedDelivery(DELIVERY_OPTIONS[0]);
+                  setSelectedCity(null);
+                  setNearMe(false);
+                }}
                 style={{ fontFamily: "Space Mono, monospace", fontSize: "0.62rem", letterSpacing: "0.12em", textTransform: "uppercase", padding: "0.45rem 1rem", border: "1px solid rgba(255,80,80,0.3)", background: "transparent", color: "#ff6b6b", cursor: "pointer" }}
               >
                 Clear ({activeFilterCount})
