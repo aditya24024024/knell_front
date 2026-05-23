@@ -22,6 +22,13 @@ const labelStyle = {
 
 const MEET_LINK = "https://meet.google.com/xiy-zezv-hhw";
 
+const INDIAN_CITIES = [
+  "Delhi", "Mumbai", "Bangalore", "Hyderabad", "Chennai", "Kolkata",
+  "Pune", "Ahmedabad", "Jaipur", "Surat", "Lucknow", "Noida",
+  "Gurgaon", "Chandigarh", "Indore", "Bhopal", "Patna", "Nagpur",
+  "Vadodara", "Other",
+];
+
 const Profile = () => {
   const router = useRouter();
   const [{ userInfo }, dispatch] = useStateProvider();
@@ -35,7 +42,7 @@ const Profile = () => {
   const [links, setLinks] = useState([]);
   const [newLink, setNewLink] = useState("");
   const [data, setData] = useState({
-    username: "", fullName: "", description: "", mobile: "",
+    username: "", fullName: "", description: "", mobile: "", city: "",
   });
 
   useEffect(() => {
@@ -48,6 +55,7 @@ const Profile = () => {
           description: user?.description || "",
           fullName: user?.fullName || "",
           mobile: user?.mobile || "",
+          city: user?.city || "",
         });
         if (user?.image) setPreview(user.image);
         if (user?.links?.length) setLinks(user.links);
@@ -77,14 +85,14 @@ const Profile = () => {
     if (saving) return;
     setSaving(true);
     try {
-      if (!data.fullName?.trim()) { setErrorMessage("Full name is required");setSaving(false); return; }
-      if (!data.username?.trim()) { setErrorMessage("Username is required");setSaving(false); return; }
-      if (!data.mobile || data.mobile.trim().length < 10) { setErrorMessage("Please enter a valid 10-digit mobile number");setSaving(false); return; }
-      if (!data.description?.trim()) { setErrorMessage("Please add a description");setSaving(false); return; }
+      if (!data.fullName?.trim()) { setErrorMessage("Full name is required"); setSaving(false); return; }
+      if (!data.username?.trim()) { setErrorMessage("Username is required"); setSaving(false); return; }
+      if (!data.mobile || data.mobile.trim().length < 10) { setErrorMessage("Please enter a valid 10-digit mobile number"); setSaving(false); return; }
+      if (!data.description?.trim()) { setErrorMessage("Please add a description"); setSaving(false); return; }
       setErrorMessage("");
 
       const response = await axios.post(SET_USER_INFO, { ...data, links }, { withCredentials: true });
-      if (response?.data?.usernameError) { setErrorMessage("Enter a unique username"); setSaving(false);return; }
+      if (response?.data?.usernameError) { setErrorMessage("Enter a unique username"); setSaving(false); return; }
       if (response?.data?.emptyFieldError) { setErrorMessage("Please enter all required fields"); setSaving(false); return; }
 
       let imageName = "";
@@ -100,11 +108,9 @@ const Profile = () => {
       setTimeout(() => { router.push("/"); setTimeout(() => window.location.reload(), 1000); }, 1000);
     } catch (err) {
       toast.error("Some error occurred");
-    }
-    finally {
+    } finally {
       setSaving(false);
     }
-
   };
 
   const handleFile = (e) => {
@@ -207,6 +213,26 @@ const Profile = () => {
               <textarea name="description" value={data.description} onChange={handleChange} placeholder="Tell us about yourself" rows={4} style={{ ...inputStyle, resize: "vertical" }} />
             </div>
 
+            {/* City */}
+            <div style={{ width: "100%" }}>
+              <label style={labelStyle}>City</label>
+              <select
+                name="city"
+                value={data.city}
+                onChange={handleChange}
+                style={{
+                  ...inputStyle,
+                  color: data.city ? "#dbd7ca" : "#6b7a62",
+                  cursor: "pointer",
+                }}
+              >
+                <option value="">Select your city</option>
+                {INDIAN_CITIES.map((city) => (
+                  <option key={city} value={city}>{city}</option>
+                ))}
+              </select>
+            </div>
+
             {/* Links */}
             <div style={{ width: "100%" }}>
               <label style={labelStyle}>
@@ -273,12 +299,12 @@ const Profile = () => {
 
             {/* Submit */}
             <button onClick={setProfile} type="button" disabled={saving}
-  style={{ width: "100%", padding: "0.9rem", background: saving ? "#2a2d35" : "#3a8a2c", color: saving ? "#6b7a62" : "#ede9dc", border: "none", fontFamily: "Space Mono, monospace", fontSize: "0.72rem", letterSpacing: "0.12em", textTransform: "uppercase", cursor: saving ? "not-allowed" : "pointer", transition: "background 0.2s" }}
-  onMouseEnter={(e) => { if (!saving) e.currentTarget.style.background = "#4ea83d"; }}
-  onMouseLeave={(e) => { if (!saving) e.currentTarget.style.background = saving ? "#2a2d35" : "#3a8a2c"; }}
->
-  {saving ? "Saving..." : "Save Profile"}
-</button>
+              style={{ width: "100%", padding: "0.9rem", background: saving ? "#2a2d35" : "#3a8a2c", color: saving ? "#6b7a72" : "#ede9dc", border: "none", fontFamily: "Space Mono, monospace", fontSize: "0.72rem", letterSpacing: "0.12em", textTransform: "uppercase", cursor: saving ? "not-allowed" : "pointer", transition: "background 0.2s" }}
+              onMouseEnter={(e) => { if (!saving) e.currentTarget.style.background = "#4ea83d"; }}
+              onMouseLeave={(e) => { if (!saving) e.currentTarget.style.background = saving ? "#2a2d35" : "#3a8a2c"; }}
+            >
+              {saving ? "Saving..." : "Save Profile"}
+            </button>
           </div>
         </div>
       )}
