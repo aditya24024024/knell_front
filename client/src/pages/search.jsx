@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import axios from "axios";
 import { SEARCH_GIGS_ROUTE, FEATURED_GIGS_ROUTE } from '../utils/constants';
 import SearchGridItem from '../components/search/SearchGridItem';
+import { useStateProvider } from '../context/StateContext';
 
 const CATEGORIES = [
   "All Categories", "Dance Companion", "Editor", "Freelancer", "Gaming Companion",
@@ -55,18 +56,18 @@ const FilterButton = ({ label, isActive, onClick }) => (
 const Search = () => {
   const router = useRouter();
   const { category, q } = router.query;
+  const [{ userInfo }] = useStateProvider();
 
   const [gigs, setGigs] = useState([]);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(false);
-  const [featuredGigs, setFeaturedGigs] = useState([]); // NEW
-
+  const [featuredGigs, setFeaturedGigs] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("All Categories");
   const [selectedBudget, setSelectedBudget] = useState(BUDGET_OPTIONS[0]);
   const [selectedDelivery, setSelectedDelivery] = useState(DELIVERY_OPTIONS[0]);
+  const [nearMe, setNearMe] = useState(false);
   const [openDropdown, setOpenDropdown] = useState(null);
-
   const observerRef = useRef(null);
   const loaderRef = useRef(null);
   const dropdownRef = useRef(null);
@@ -91,11 +92,12 @@ const Search = () => {
     setSelectedCategory("All Categories");
     setSelectedBudget(BUDGET_OPTIONS[0]);
     setSelectedDelivery(DELIVERY_OPTIONS[0]);
+    setNearMe(false);
   }, [category, q]);
 
   useEffect(() => {
     setGigs([]); setPage(1); setHasMore(true);
-  }, [selectedCategory, selectedBudget, selectedDelivery]);
+  }, [selectedCategory, selectedBudget, selectedDelivery, nearMe]);
 
   useEffect(() => {
     const term = q || category;
@@ -111,7 +113,7 @@ const Search = () => {
         if (selectedBudget.min != null) params.set("minPrice", selectedBudget.min);
         if (selectedBudget.max != null) params.set("maxPrice", selectedBudget.max);
         if (selectedDelivery.value != null) params.set("deliveryTime", selectedDelivery.value);
-
+        if (nearMe && userInfo?.city) params.set("city", userInfo.city);
         const { data: { gigs: newGigs } } = await axios.get(`${SEARCH_GIGS_ROUTE}?${params.toString()}`);
         if (page === 1) setGigs(newGigs);
         else setGigs(prev => [...prev, ...newGigs]);
@@ -120,7 +122,7 @@ const Search = () => {
       finally { setLoading(false); }
     };
     getData();
-  }, [category, q, page, selectedCategory, selectedBudget, selectedDelivery]);
+  }, [category, q, page, selectedCategory, selectedBudget, selectedDelivery, nearMe, userInfo]);
 
   const handleObserver = useCallback((entries) => {
     const target = entries[0];
@@ -137,13 +139,13 @@ const Search = () => {
     selectedCategory !== "All Categories",
     selectedBudget.label !== "Any Budget",
     selectedDelivery.label !== "Any Time",
+    nearMe,
   ].filter(Boolean).length;
 
   const showEmptyState = !loading && gigs.length === 0 && (q || category);
 
   return (
     <div style={{ background: "#09090b", minHeight: "100vh", paddingTop: "6rem" }}>
-
       {(gigs.length > 0 || loading || activeFilterCount > 0) && (
         <div style={{ padding: "2rem 3rem" }}>
           {q && (
@@ -172,6 +174,7 @@ const Search = () => {
                 </div>
               )}
             </div>
+
             <div style={{ position: "relative" }}>
               <FilterButton label={selectedBudget.label === "Any Budget" ? "Budget" : selectedBudget.label} isActive={openDropdown === "budget"} onClick={() => setOpenDropdown(openDropdown === "budget" ? null : "budget")} />
               {openDropdown === "budget" && (
@@ -182,6 +185,7 @@ const Search = () => {
                 </div>
               )}
             </div>
+
             <div style={{ position: "relative" }}>
               <FilterButton label={selectedDelivery.label === "Any Time" ? "Delivery Time" : selectedDelivery.label} isActive={openDropdown === "delivery"} onClick={() => setOpenDropdown(openDropdown === "delivery" ? null : "delivery")} />
               {openDropdown === "delivery" && (
@@ -192,9 +196,29 @@ const Search = () => {
                 </div>
               )}
             </div>
+
+            {/* Near Me filter — only show if user is logged in and has a city set */}
+            {userInfo?.city && (
+              <button
+                onClick={() => setNearMe(!nearMe)}
+                style={{
+                  fontFamily: "Space Mono, monospace", fontSize: "0.62rem",
+                  letterSpacing: "0.12em", textTransform: "uppercase",
+                  padding: "0.45rem 1rem",
+                  border: `1px solid ${nearMe ? "#5dc94a" : "rgba(93,201,74,0.2)"}`,
+                  background: nearMe ? "rgba(93,201,74,0.08)" : "transparent",
+                  color: nearMe ? "#5dc94a" : "#6b7a62", cursor: "pointer",
+                }}
+              >
+                📍 {nearMe ? userInfo.city : "Near Me"}
+              </button>
+            )}
+
             {activeFilterCount > 0 && (
-              <button onClick={() => { setSelectedCategory("All Categories"); setSelectedBudget(BUDGET_OPTIONS[0]); setSelectedDelivery(DELIVERY_OPTIONS[0]); }}
-                style={{ fontFamily: "Space Mono, monospace", fontSize: "0.62rem", letterSpacing: "0.12em", textTransform: "uppercase", padding: "0.45rem 1rem", border: "1px solid rgba(255,80,80,0.3)", background: "transparent", color: "#ff6b6b", cursor: "pointer" }}>
+              <button
+                onClick={() => { setSelectedCategory("All Categories"); setSelectedBudget(BUDGET_OPTIONS[0]); setSelectedDelivery(DELIVERY_OPTIONS[0]); setNearMe(false); }}
+                style={{ fontFamily: "Space Mono, monospace", fontSize: "0.62rem", letterSpacing: "0.12em", textTransform: "uppercase", padding: "0.45rem 1rem", border: "1px solid rgba(255,80,80,0.3)", background: "transparent", color: "#ff6b6b", cursor: "pointer" }}
+              >
                 Clear ({activeFilterCount})
               </button>
             )}
@@ -230,8 +254,6 @@ const Search = () => {
       {/* Empty state with featured gigs */}
       {showEmptyState && (
         <div style={{ padding: "2rem 3rem" }}>
-
-          {/* No results message */}
           <div style={{ display: "flex", flexDirection: "column", alignItems: "center", padding: "4rem 0 3rem" }}>
             <div style={{ fontFamily: "Bebas Neue, sans-serif", fontSize: "4rem", color: "#1c1f27", letterSpacing: "0.05em", lineHeight: 1 }}>
               NO RESULTS
@@ -241,7 +263,6 @@ const Search = () => {
             </p>
           </div>
 
-          {/* Featured gigs below */}
           {featuredGigs.length > 0 && (
             <div>
               <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "1.5rem" }}>
@@ -257,7 +278,6 @@ const Search = () => {
           )}
         </div>
       )}
-
     </div>
   );
 };

@@ -26,15 +26,13 @@ const Profile = () => {
     fullName: "",
     description: "",
     mobileNumber: "",
+    city: "",
   });
 
   // Cleanup blob URLs
   useEffect(() => {
     return () => {
-      if (
-        typeof preview === "string" &&
-        preview.startsWith("blob:")
-      ) {
+      if (typeof preview === "string" && preview.startsWith("blob:")) {
         URL.revokeObjectURL(preview);
       }
     };
@@ -45,11 +43,7 @@ const Profile = () => {
       try {
         const {
           data: { user },
-        } = await axios.post(
-          GET_USER_INFO,
-          {},
-          { withCredentials: true }
-        );
+        } = await axios.post(GET_USER_INFO, {}, { withCredentials: true });
 
         dispatch({
           type: reducerCases.SET_USER,
@@ -64,6 +58,7 @@ const Profile = () => {
           description: user?.description || "",
           fullName: user?.fullName || "",
           mobileNumber: user?.mobileNumber || "",
+          city: user?.city || "",
         });
 
         if (user?.image) {
@@ -83,10 +78,7 @@ const Profile = () => {
   const setProfile = async () => {
     setErrorMessage("");
 
-    if (
-      data.mobileNumber &&
-      !phoneRegex.test(data.mobileNumber)
-    ) {
+    if (data.mobileNumber && !phoneRegex.test(data.mobileNumber)) {
       toast.error("Enter a valid Indian phone number");
       return;
     }
@@ -99,9 +91,7 @@ const Profile = () => {
       );
 
       if (response?.data?.emptyFieldError) {
-        setErrorMessage(
-          "Please enter all the required fields"
-        );
+        setErrorMessage("Please enter all the required fields");
         return;
       }
 
@@ -113,16 +103,10 @@ const Profile = () => {
 
         const {
           data: { img },
-        } = await axios.post(
-          SET_USER_IMAGE,
-          formData,
-          {
-            withCredentials: true,
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          }
-        );
+        } = await axios.post(SET_USER_IMAGE, formData, {
+          withCredentials: true,
+          headers: { "Content-Type": "multipart/form-data" },
+        });
 
         imageName = img;
       }
@@ -141,7 +125,6 @@ const Profile = () => {
       setTimeout(() => {
         router.push("/");
       }, 1000);
-
     } catch (err) {
       console.error(err);
       toast.error("Some error occurred");
@@ -150,19 +133,12 @@ const Profile = () => {
 
   const handleFile = (e) => {
     const file = e.target.files?.[0];
-
-    const validImageTypes = [
-      "image/jpeg",
-      "image/png",
-      "image/webp",
-    ];
+    const validImageTypes = ["image/jpeg", "image/png", "image/webp"];
 
     if (!file) return;
 
     if (!validImageTypes.includes(file.type)) {
-      toast.error(
-        "Only JPG, PNG, and WEBP images are allowed"
-      );
+      toast.error("Only JPG, PNG, and WEBP images are allowed");
       return;
     }
 
@@ -173,11 +149,7 @@ const Profile = () => {
 
     setImage(file);
 
-    // cleanup previous blob
-    if (
-      typeof preview === "string" &&
-      preview.startsWith("blob:")
-    ) {
+    if (typeof preview === "string" && preview.startsWith("blob:")) {
       URL.revokeObjectURL(preview);
     }
 
@@ -185,10 +157,7 @@ const Profile = () => {
   };
 
   const handleChange = (e) => {
-    setData({
-      ...data,
-      [e.target.name]: e.target.value,
-    });
+    setData({ ...data, [e.target.name]: e.target.value });
   };
 
   if (!isLoaded) {
@@ -223,19 +192,13 @@ const Profile = () => {
       }}
     >
       {/* Header */}
-      <div
-        style={{
-          textAlign: "center",
-          marginBottom: "0.5rem",
-        }}
-      >
+      <div style={{ textAlign: "center", marginBottom: "0.5rem" }}>
         <div
           style={{
             display: "inline-flex",
             alignItems: "center",
             gap: "0.6rem",
-            border:
-              "1px solid rgba(93,201,74,0.25)",
+            border: "1px solid rgba(93,201,74,0.25)",
             padding: "0.35rem 0.9rem",
             marginBottom: "1.25rem",
           }}
@@ -248,7 +211,6 @@ const Profile = () => {
               borderRadius: "50%",
             }}
           />
-
           <span
             style={{
               fontFamily: "Space Mono, monospace",
@@ -275,15 +237,8 @@ const Profile = () => {
           COMPLETE YOUR PROFILE
         </h2>
 
-        <p
-          style={{
-            color: "#6b7a62",
-            fontSize: "0.85rem",
-            fontWeight: 300,
-          }}
-        >
-          Set up your profile to start hiring or
-          selling on Knell
+        <p style={{ color: "#6b7a62", fontSize: "0.85rem", fontWeight: 300 }}>
+          Set up your profile to start hiring or selling on Knell
         </p>
       </div>
 
@@ -295,8 +250,7 @@ const Profile = () => {
             fontSize: "0.65rem",
             letterSpacing: "0.1em",
             color: "#5dc94a",
-            border:
-              "1px solid rgba(93,201,74,0.25)",
+            border: "1px solid rgba(93,201,74,0.25)",
             padding: "0.4rem 1rem",
           }}
         >
@@ -309,8 +263,7 @@ const Profile = () => {
             fontSize: "0.65rem",
             letterSpacing: "0.1em",
             color: "#e8b84b",
-            border:
-              "1px solid rgba(232,184,75,0.25)",
+            border: "1px solid rgba(232,184,75,0.25)",
             padding: "0.4rem 1rem",
           }}
         >
@@ -370,24 +323,16 @@ const Profile = () => {
               height: 120,
               borderRadius: "50%",
               overflow: "hidden",
-              border:
-                "2px solid rgba(93,201,74,0.3)",
+              border: "2px solid rgba(93,201,74,0.3)",
               cursor: "pointer",
             }}
-            onMouseEnter={() =>
-              setImageHover(true)
-            }
-            onMouseLeave={() =>
-              setImageHover(false)
-            }
+            onMouseEnter={() => setImageHover(true)}
+            onMouseLeave={() => setImageHover(false)}
           >
             {preview ? (
               <img
                 src={
-                  typeof preview === "string" &&
-                  preview.includes(
-                    "res.cloudinary.com"
-                  )
+                  typeof preview === "string" && preview.includes("res.cloudinary.com")
                     ? optimizeImage(preview, "sm")
                     : preview
                 }
@@ -410,15 +355,8 @@ const Profile = () => {
                   justifyContent: "center",
                 }}
               >
-                <span
-                  style={{
-                    color: "#ede9dc",
-                    fontSize: "2.5rem",
-                    fontWeight: 700,
-                  }}
-                >
-                  {userInfo?.email?.[0]?.toUpperCase() ||
-                    "U"}
+                <span style={{ color: "#ede9dc", fontSize: "2.5rem", fontWeight: 700 }}>
+                  {userInfo?.email?.[0]?.toUpperCase() || "U"}
                 </span>
               </div>
             )}
@@ -427,8 +365,7 @@ const Profile = () => {
               style={{
                 position: "absolute",
                 inset: 0,
-                background:
-                  "rgba(0,0,0,0.6)",
+                background: "rgba(0,0,0,0.6)",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
@@ -438,12 +375,7 @@ const Profile = () => {
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                style={{
-                  width: 32,
-                  height: 32,
-                  color: "white",
-                  position: "absolute",
-                }}
+                style={{ width: 32, height: 32, color: "white", position: "absolute" }}
                 viewBox="0 0 20 20"
                 fill="currentColor"
               >
@@ -475,8 +407,7 @@ const Profile = () => {
           <label
             style={{
               display: "block",
-              fontFamily:
-                "Space Mono, monospace",
+              fontFamily: "Space Mono, monospace",
               fontSize: "0.62rem",
               letterSpacing: "0.15em",
               textTransform: "uppercase",
@@ -497,8 +428,7 @@ const Profile = () => {
               width: "100%",
               padding: "0.85rem 1rem",
               background: "#15171c",
-              border:
-                "1px solid rgba(93,201,74,0.2)",
+              border: "1px solid rgba(93,201,74,0.2)",
               color: "#dbd7ca",
               fontFamily: "Inter, sans-serif",
               fontSize: "0.9rem",
@@ -512,8 +442,7 @@ const Profile = () => {
           <label
             style={{
               display: "block",
-              fontFamily:
-                "Space Mono, monospace",
+              fontFamily: "Space Mono, monospace",
               fontSize: "0.62rem",
               letterSpacing: "0.15em",
               textTransform: "uppercase",
@@ -534,8 +463,7 @@ const Profile = () => {
               width: "100%",
               padding: "0.85rem 1rem",
               background: "#15171c",
-              border:
-                "1px solid rgba(93,201,74,0.2)",
+              border: "1px solid rgba(93,201,74,0.2)",
               color: "#dbd7ca",
               fontFamily: "Inter, sans-serif",
               fontSize: "0.9rem",
@@ -545,21 +473,72 @@ const Profile = () => {
           />
         </div>
 
+        {/* City */}
+        <div style={{ width: "100%" }}>
+          <label
+            style={{
+              display: "block",
+              fontFamily: "Space Mono, monospace",
+              fontSize: "0.62rem",
+              letterSpacing: "0.15em",
+              textTransform: "uppercase",
+              color: "#6b7a62",
+              marginBottom: "0.5rem",
+            }}
+          >
+            City
+          </label>
+
+          <select
+            name="city"
+            value={data.city}
+            onChange={handleChange}
+            style={{
+              width: "100%",
+              padding: "0.85rem 1rem",
+              background: "#15171c",
+              border: "1px solid rgba(93,201,74,0.2)",
+              color: data.city ? "#dbd7ca" : "#6b7a62",
+              fontFamily: "Inter, sans-serif",
+              fontSize: "0.9rem",
+              outline: "none",
+              cursor: "pointer",
+            }}
+          >
+            <option value="">Select your city</option>
+            <option value="Delhi">Delhi</option>
+            <option value="Mumbai">Mumbai</option>
+            <option value="Bangalore">Bangalore</option>
+            <option value="Hyderabad">Hyderabad</option>
+            <option value="Chennai">Chennai</option>
+            <option value="Kolkata">Kolkata</option>
+            <option value="Pune">Pune</option>
+            <option value="Ahmedabad">Ahmedabad</option>
+            <option value="Jaipur">Jaipur</option>
+            <option value="Surat">Surat</option>
+            <option value="Lucknow">Lucknow</option>
+            <option value="Noida">Noida</option>
+            <option value="Gurgaon">Gurgaon</option>
+            <option value="Chandigarh">Chandigarh</option>
+            <option value="Indore">Indore</option>
+            <option value="Bhopal">Bhopal</option>
+            <option value="Patna">Patna</option>
+            <option value="Nagpur">Nagpur</option>
+            <option value="Vadodara">Vadodara</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+
         {/* Verification */}
         {!userInfo?.isSocialLogin && (
           <button
-            onClick={() =>
-              setShowVerificationTab(
-                !showVerificationTab
-              )
-            }
+            onClick={() => setShowVerificationTab(!showVerificationTab)}
             style={{
               color: "#5dc94a",
               background: "none",
               border: "none",
               cursor: "pointer",
-              fontFamily:
-                "Space Mono, monospace",
+              fontFamily: "Space Mono, monospace",
               fontSize: "0.62rem",
               letterSpacing: "0.1em",
               textDecoration: "underline",
@@ -574,15 +553,13 @@ const Profile = () => {
             style={{
               width: "100%",
               padding: "1.25rem",
-              border:
-                "1px solid rgba(93,201,74,0.2)",
+              border: "1px solid rgba(93,201,74,0.2)",
               background: "#0f1014",
             }}
           >
             <h3
               style={{
-                fontFamily:
-                  "Bebas Neue, sans-serif",
+                fontFamily: "Bebas Neue, sans-serif",
                 fontSize: "1.2rem",
                 color: "#5dc94a",
                 letterSpacing: "0.05em",
@@ -592,9 +569,7 @@ const Profile = () => {
               Account Verification
             </h3>
 
-            {!phoneRegex.test(
-              data.mobileNumber
-            ) ? (
+            {!phoneRegex.test(data.mobileNumber) ? (
               <>
                 <p
                   style={{
@@ -604,9 +579,7 @@ const Profile = () => {
                     marginBottom: "1rem",
                   }}
                 >
-                  Enter your phone number to
-                  proceed to the verification
-                  session.
+                  Enter your phone number to proceed to the verification session.
                 </p>
 
                 <input
@@ -620,24 +593,16 @@ const Profile = () => {
                     padding: "0.85rem 1rem",
                     marginBottom: "0.75rem",
                     background: "#15171c",
-                    border:
-                      "1px solid rgba(93,201,74,0.2)",
+                    border: "1px solid rgba(93,201,74,0.2)",
                     color: "#dbd7ca",
-                    fontFamily:
-                      "Inter, sans-serif",
+                    fontFamily: "Inter, sans-serif",
                     fontSize: "0.9rem",
                     outline: "none",
                   }}
                 />
 
-                <p
-                  style={{
-                    color: "#6b7a62",
-                    fontSize: "0.72rem",
-                  }}
-                >
-                  Your number will only be used
-                  for verification purposes.
+                <p style={{ color: "#6b7a62", fontSize: "0.72rem" }}>
+                  Your number will only be used for verification purposes.
                 </p>
               </>
             ) : (
@@ -650,9 +615,7 @@ const Profile = () => {
                     marginBottom: "1rem",
                   }}
                 >
-                  Join the live verification
-                  session on Google Meet. Admins
-                  are available 24/7.
+                  Join the live verification session on Google Meet. Admins are available 24/7.
                 </p>
 
                 <a
@@ -665,8 +628,7 @@ const Profile = () => {
                     color: "#ede9dc",
                     padding: "0.6rem 1.25rem",
                     textDecoration: "none",
-                    fontFamily:
-                      "Space Mono, monospace",
+                    fontFamily: "Space Mono, monospace",
                     fontSize: "0.65rem",
                     letterSpacing: "0.1em",
                     textTransform: "uppercase",
@@ -675,15 +637,8 @@ const Profile = () => {
                   Join Verification Meet
                 </a>
 
-                <p
-                  style={{
-                    color: "#6b7a62",
-                    fontSize: "0.75rem",
-                    marginTop: "0.75rem",
-                  }}
-                >
-                  You will be approved manually
-                  by an admin after the session.
+                <p style={{ color: "#6b7a62", fontSize: "0.75rem", marginTop: "0.75rem" }}>
+                  You will be approved manually by an admin after the session.
                 </p>
               </>
             )}

@@ -29,6 +29,14 @@ const S = {
   username: { fontFamily: "Space Mono, monospace", fontSize: "0.72rem", letterSpacing: "0.1em", color: "#5dc94a", cursor: "pointer" },
   fullName: { fontWeight: 600, color: "#dbd7ca", fontSize: "0.95rem" },
   border: "1px solid rgba(93,201,74,0.12)",
+  cityBadge: {
+    fontFamily: "Space Mono, monospace",
+    fontSize: "0.6rem",
+    letterSpacing: "0.1em",
+    color: "#6b7a62",
+    border: "1px solid rgba(93,201,74,0.15)",
+    padding: "0.2rem 0.5rem",
+  },
 };
 
 const Details = () => {
@@ -74,12 +82,15 @@ const Details = () => {
           <span style={S.fullName}>{gigData.createdBy.fullName}</span>
           <span style={S.username}>@{gigData.createdBy.username}</span>
         </div>
-        <div style={{ display: "flex", alignItems: "center", gap: "0.25rem", marginLeft: "auto" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "0.25rem", marginLeft: "auto", flexWrap: "wrap", justifyContent: "flex-end" }}>
           {[1,2,3,4,5].map((star) => (
             <FaStar key={star} style={{ color: Math.ceil(averageRatings) >= star ? "#e8b84b" : "#2a2d35" }} />
           ))}
           <span style={{ color: "#e8b84b", marginLeft: "0.25rem", fontSize: "0.85rem" }}>{averageRatings}</span>
           <span style={{ color: "#6b7a62", fontSize: "0.8rem" }}>({gigData.reviews.length})</span>
+          {gigData.createdBy.city && (
+            <span style={S.cityBadge}>📍 {gigData.createdBy.city}</span>
+          )}
         </div>
       </div>
 
@@ -150,9 +161,12 @@ const Details = () => {
             </div>
           )}
           <div style={{ display: "flex", flexDirection: "column", gap: "0.35rem" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", flexWrap: "wrap" }}>
               <span style={S.fullName}>{gigData.createdBy.fullName}</span>
               <span style={S.username}>@{gigData.createdBy.username}</span>
+              {gigData.createdBy.city && (
+                <span style={S.cityBadge}>📍 {gigData.createdBy.city}</span>
+              )}
             </div>
             <p style={S.text}>{gigData.createdBy.description}</p>
             <div style={{ display: "flex", alignItems: "center", gap: "0.25rem", marginTop: "0.25rem" }}>
