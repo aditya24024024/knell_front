@@ -11,6 +11,11 @@ const CATEGORIES = [
   "Pub Crawler", "Shopper", "Social Companion", "Travel Companion", "Tutor/Counselor", "Videographer",
 ];
 
+const SORT_OPTIONS = [
+  { label: "Top Rated", value: "rating" },
+  { label: "Newest", value: "newest" },
+];
+
 const BUDGET_OPTIONS = [
   { label: "Any Budget", min: null, max: null },
   { label: "Under ₹500", min: null, max: 500 },
@@ -71,6 +76,7 @@ const Search = () => {
   const [loading, setLoading] = useState(false);
   const [featuredGigs, setFeaturedGigs] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("All Categories");
+  const [selectedSort, setSelectedSort] = useState(SORT_OPTIONS[0]);
   const [selectedBudget, setSelectedBudget] = useState(BUDGET_OPTIONS[0]);
   const [selectedDelivery, setSelectedDelivery] = useState(DELIVERY_OPTIONS[0]);
   const [selectedCity, setSelectedCity] = useState(null);
@@ -97,6 +103,7 @@ const Search = () => {
   useEffect(() => {
     setGigs([]); setPage(1); setHasMore(true);
     setSelectedCategory("All Categories");
+    setSelectedSort(SORT_OPTIONS[0]);
     setSelectedBudget(BUDGET_OPTIONS[0]);
     setSelectedDelivery(DELIVERY_OPTIONS[0]);
     setSelectedCity(null);
@@ -105,7 +112,7 @@ const Search = () => {
 
   useEffect(() => {
     setGigs([]); setPage(1); setHasMore(true);
-  }, [selectedCategory, selectedBudget, selectedDelivery, selectedCity, nearMe]);
+  }, [selectedCategory, selectedSort, selectedBudget, selectedDelivery, selectedCity, nearMe]);
 
   const handleNearMe = () => {
     setNearMe(!nearMe);
@@ -129,6 +136,7 @@ const Search = () => {
         params.set("category", selectedCategory !== "All Categories" ? selectedCategory : (category || q || ""));
         params.set("page", page);
         params.set("limit", 10);
+        params.set("sortBy", selectedSort.value);
         if (selectedBudget.min != null) params.set("minPrice", selectedBudget.min);
         if (selectedBudget.max != null) params.set("maxPrice", selectedBudget.max);
         if (selectedDelivery.value != null) params.set("deliveryTime", selectedDelivery.value);
@@ -142,7 +150,7 @@ const Search = () => {
       finally { setLoading(false); }
     };
     getData();
-  }, [category, q, page, selectedCategory, selectedBudget, selectedDelivery, selectedCity, nearMe, userInfo]);
+  }, [category, q, page, selectedCategory, selectedSort, selectedBudget, selectedDelivery, selectedCity, nearMe, userInfo]);
 
   const handleObserver = useCallback((entries) => {
     const target = entries[0];
@@ -157,6 +165,7 @@ const Search = () => {
 
   const activeFilterCount = [
     selectedCategory !== "All Categories",
+    selectedSort.value !== "rating",
     selectedBudget.label !== "Any Budget",
     selectedDelivery.label !== "Any Time",
     nearMe,
@@ -185,6 +194,28 @@ const Search = () => {
 
           {/* Filters */}
           <div ref={dropdownRef} style={{ display: "flex", gap: "0.5rem", marginBottom: "1.5rem", flexWrap: "wrap", position: "relative" }}>
+
+            {/* Sort By — first */}
+            <div style={{ position: "relative" }}>
+              <FilterButton
+                label={selectedSort.value === "rating" ? "Sort By" : selectedSort.label}
+                isActive={openDropdown === "sort"}
+                onClick={() => setOpenDropdown(openDropdown === "sort" ? null : "sort")}
+              />
+              {openDropdown === "sort" && (
+                <div style={dropdownStyle}>
+                  {SORT_OPTIONS.map((opt) => (
+                    <button
+                      key={opt.value}
+                      style={dropdownItemStyle(selectedSort.value === opt.value)}
+                      onClick={() => { setSelectedSort(opt); setOpenDropdown(null); }}
+                    >
+                      {opt.label}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
 
             {/* Category */}
             <div style={{ position: "relative" }}>
@@ -261,6 +292,7 @@ const Search = () => {
               <button
                 onClick={() => {
                   setSelectedCategory("All Categories");
+                  setSelectedSort(SORT_OPTIONS[0]);
                   setSelectedBudget(BUDGET_OPTIONS[0]);
                   setSelectedDelivery(DELIVERY_OPTIONS[0]);
                   setSelectedCity(null);
