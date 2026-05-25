@@ -76,7 +76,7 @@ const Search = () => {
   const [loading, setLoading] = useState(false);
   const [featuredGigs, setFeaturedGigs] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("All Categories");
-  const [selectedSort, setSelectedSort] = useState(SORT_OPTIONS[0]);
+  const [selectedSort, setSelectedSort] = useState(SORT_OPTIONS[1]);
   const [selectedBudget, setSelectedBudget] = useState(BUDGET_OPTIONS[0]);
   const [selectedDelivery, setSelectedDelivery] = useState(DELIVERY_OPTIONS[0]);
   const [selectedCity, setSelectedCity] = useState(null);
@@ -103,7 +103,7 @@ const Search = () => {
   useEffect(() => {
     setGigs([]); setPage(1); setHasMore(true);
     setSelectedCategory("All Categories");
-    setSelectedSort(SORT_OPTIONS[0]);
+    setSelectedSort(SORT_OPTIONS[1]);
     setSelectedBudget(BUDGET_OPTIONS[0]);
     setSelectedDelivery(DELIVERY_OPTIONS[0]);
     setSelectedCity(null);
@@ -165,7 +165,7 @@ const Search = () => {
 
   const activeFilterCount = [
     selectedCategory !== "All Categories",
-    selectedSort.value !== "rating",
+    selectedSort.value !== "newest",
     selectedBudget.label !== "Any Budget",
     selectedDelivery.label !== "Any Time",
     nearMe,
@@ -195,28 +195,56 @@ const Search = () => {
           {/* Filters */}
           <div ref={dropdownRef} style={{ display: "flex", gap: "0.5rem", marginBottom: "1.5rem", flexWrap: "wrap", position: "relative" }}>
 
-            {/* Sort By — first */}
-            <div style={{ position: "relative" }}>
-              <FilterButton
-                label={selectedSort.value === "rating" ? "Sort By" : selectedSort.label}
-                isActive={openDropdown === "sort"}
-                onClick={() => setOpenDropdown(openDropdown === "sort" ? null : "sort")}
-              />
-              {openDropdown === "sort" && (
-                <div style={dropdownStyle}>
-                  {SORT_OPTIONS.map((opt) => (
-                    <button
-                      key={opt.value}
-                      style={dropdownItemStyle(selectedSort.value === opt.value)}
-                      onClick={() => { setSelectedSort(opt); setOpenDropdown(null); }}
-                    >
-                      {opt.label}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
+         {/* Sort By — first */}
+<div style={{ position: "relative" }}>
+  <FilterButton
+    label={
+      selectedSort.value === "newest"
+        ? "Sort By"
+        : selectedSort.label
+    }
+    isActive={
+      openDropdown === "sort" ||
+      selectedSort.value !== "newest"
+    }
+    onClick={() =>
+      setOpenDropdown(openDropdown === "sort" ? null : "sort")
+    }
+  />
 
+  {openDropdown === "sort" && (
+    <div style={dropdownStyle}>
+      {SORT_OPTIONS.map((opt) => (
+        <button
+          key={opt.value}
+          style={{
+            ...dropdownItemStyle(selectedSort.value === opt.value),
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+          onClick={() => {
+            setSelectedSort(opt);
+            setOpenDropdown(null);
+          }}
+        >
+          <span>{opt.label}</span>
+
+          {selectedSort.value === opt.value && (
+            <span
+              style={{
+                color: "#5dc94a",
+                fontSize: "0.7rem",
+              }}
+            >
+              ✓
+            </span>
+          )}
+        </button>
+      ))}
+    </div>
+  )}
+</div>
             {/* Category */}
             <div style={{ position: "relative" }}>
               <FilterButton label={selectedCategory === "All Categories" ? "Category" : selectedCategory} isActive={openDropdown === "category"} onClick={() => setOpenDropdown(openDropdown === "category" ? null : "category")} />
@@ -292,7 +320,7 @@ const Search = () => {
               <button
                 onClick={() => {
                   setSelectedCategory("All Categories");
-                  setSelectedSort(SORT_OPTIONS[0]);
+                  setSelectedSort(SORT_OPTIONS[1]);
                   setSelectedBudget(BUDGET_OPTIONS[0]);
                   setSelectedDelivery(DELIVERY_OPTIONS[0]);
                   setSelectedCity(null);
