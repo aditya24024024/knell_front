@@ -19,27 +19,54 @@ function MessageContainer() {
   const [messages, setMessages] = useState([]);
   const lastSentRef = useRef(0);
 
+ const renderMessageText = (text) => {
+  const urlRegex = /(https?:\/\/[^\s]+)/g;
+  const parts = text.split(urlRegex);
+
+  return parts.map((part, i) => {
+    const isUrl = /^https?:\/\/[^\s]+$/i.test(part);
+
+    return isUrl ? (
+      <a
+        key={i}
+        href={part}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="underline break-all opacity-90 hover:opacity-100"
+      >
+        {part}
+      </a>
+    ) : (
+      part
+    );
+  });
+};
+  const containsPhoneNumber = (text) => {
+  const phoneRegex = /(\+?\d[\s_.-]?){9,13}\d/g;
+  return phoneRegex.test(text);
+};
+  const containsUPI = (text) => {
+    const upiRegex = /[a-zA-Z0-9.\-_]{2,}@[a-zA-Z]{2,}/g;
+    return upiRegex.test(text);
+  };
+
   useEffect(() => {
-    // Initialize socket connection
-            if (!userInfo?.id) return;
+    if (!userInfo?.id) return;
     socket = io(HOST, {
       withCredentials: true,
     });
 
     if (userInfo?.id) {
-          // console.log("Joining socket room with ID:", userInfo.id);
-      socket.emit("join", userInfo.id); // Join the user's room
+      socket.emit("join", userInfo.id);
     }
 
-    // Cleanup on component unmount
     return () => {
-          // console.log("Disconnecting socket room with ID:", userInfo.id);
       socket.disconnect();
     };
   }, [userInfo]);
 
   useEffect(() => {
-             if (!socket || !orderId || !userInfo?.id) return;
+    if (!socket || !orderId || !userInfo?.id) return;
     const getMessages = async () => {
       const {
         data: { messages: dataMessages, recipentId: recipent },
@@ -70,7 +97,10 @@ function MessageContainer() {
   }, [orderId]);
 
   const handleKeyDown = (event) => {
-    if (event.key === "Enter") sendMessage();
+    if (event.key === "Enter" && !event.shiftKey) {
+  event.preventDefault();
+  sendMessage();
+}
   };
 
   const formatTime = (timestamp) => {
@@ -85,41 +115,54 @@ function MessageContainer() {
   };
 
   const sendMessage = async () => {
-     const now = Date.now();
+  const trimmed = messageText.trim();
 
-  // block if user sends too fast
+  if (!trimmed.length) return;
+
+  const now = Date.now();
+
   if (now - lastSentRef.current < 2000) {
     console.warn("You're sending messages too quickly!");
     return;
   }
 
-  // ✅ Set timestamp immediately to prevent race condition
+  if (containsPhoneNumber(trimmed)) {
+    alert("Phone numbers aren't allowed in messages. Please keep transactions on Knell.");
+    return;
+  }
+
+  if (containsUPI(trimmed)) {
+    alert("UPI IDs aren't allowed in messages. Please keep payments on Knell.");
+    return;
+  }
+
   lastSentRef.current = now;
 
-  if (messageText.trim().length) {
-    try {
-      const response = await axios.post(
-        `${ADD_MESSAGE}/${orderId}`,
-        { message: messageText, recipentId },
-        { withCredentials: true }
-      );
+  try {
+    const response = await axios.post(
+      `${ADD_MESSAGE}/${orderId}`,
+      { message: trimmed, recipentId },
+      { withCredentials: true }
+    );
 
-      if (response.status === 201) {
-        setMessages((prev) => [...prev, response.data.message]);
-        setMessageText("");
-      }
-    } catch (err) {
-      console.error(err);
-      // optional: rollback timestamp if request fails
-      lastSentRef.current = 0;
+    if (response.status === 201) {
+      setMessages((prev) => [...prev, response.data.message]);
+      setMessageText("");
     }
+  } catch (err) {
+    console.error(err);
+    lastSentRef.current = 0;
   }
-  };
-
+};
   return (
     <div className="h-[calc(100vh-5rem)] w-full px-2 sm:px-4 md:px-8 pt-4 sm:pt-10">
       <div className="flex justify-center items-center h-full">
         <div className="bg-white dark:bg-gray-800 shadow-lg border w-full max-w-5xl rounded-lg flex flex-col px-3 py-4 sm:px-6 sm:py-6">
+
+          {/* File sharing banner */}
+          <div className="mb-3 px-3 py-2 rounded-lg bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-700 text-xs text-yellow-800 dark:text-yellow-300">
+            📁 Share raw files and deliverables via <span className="font-semibold">Google Drive</span> or <span className="font-semibold">WeTransfer</span> links. Phone numbers and off-platform payments are not allowed.
+          </div>
 
           {/* Messages */}
           <div className="flex-1 overflow-y-auto space-y-4 pr-2 mb-4 scrollbar-thin scrollbar-thumb-gray-300 max-h-[65vh] sm:max-h-[70vh]">
@@ -139,7 +182,9 @@ function MessageContainer() {
                       : "bg-gray-100 dark:bg-gray-700 dark:text-white text-gray-800"
                   }`}
                 >
-                  <p>{message.text}</p>
+               <p className="break-words">
+  {renderMessageText(message.text)}
+</p>
                   <div className="text-xs text-gray-600 dark:text-gray-300 mt-1 flex items-center gap-1">
                     <span>{formatTime(message.createdAt)}</span>
                     {message.senderId === userInfo.id && message.isRead && (
@@ -169,6 +214,7 @@ function MessageContainer() {
               <FaRegPaperPlane />
             </button>
           </div>
+
         </div>
       </div>
     </div>
