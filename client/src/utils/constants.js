@@ -49,7 +49,7 @@ export const GET_UNREAD_MESSAGES = `${MESSAGES_ROUTES}/unread-messages`;
 export const MARK_AS_READ_ROUTE = `${MESSAGES_ROUTES}/mark-as-read`;
 
 export const GET_SELLER_DASHBOARD_DATA = `${DASHBOARD_DATA_ROUTES}/seller`;
-export const GET_SELLER_WALLET_ROUTE = "/api/wallet/get-seller-wallet";
+export const GET_SELLER_WALLET_ROUTE = `${API_URL}/seller/wallet`;
 export const ADD_BANK_DETAILS_ROUTE = `${API_URL}/seller/wallet/bank`;
 export const WITHDRAW_AMOUNT_ROUTE = `${API_URL}/seller/wallet/withdraw`;
 
