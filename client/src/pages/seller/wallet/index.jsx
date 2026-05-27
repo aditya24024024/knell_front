@@ -63,6 +63,7 @@ function Wallet() {
   };
 
   const handleWithdraw = async () => {
+    console.log("withdraw hit", withdrawAmount, wallet?.razorpayFundAccountId, wallet?.balance);
     const amount = parseInt(withdrawAmount);
     if (!amount || amount < 1) {
       setWithdrawError("Enter a valid amount");
