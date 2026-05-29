@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import Link from "next/link";
 import { useRouter } from 'next/router';
 import { useCookies } from 'react-cookie';
 import axios from 'axios';
-import { GET_USER_INFO } from '../utils/constants';
+import { GET_USER_INFO, HOST } from '../utils/constants';
 import { IoSearchOutline } from "react-icons/io5";
 import Image from 'next/image';
 import { reducerCases } from '../context/constants';
@@ -15,6 +15,9 @@ import UsernameWrapper from './UsernameWrapper'
 import TermsAndConditionsModal from './TermsAndConditionsModal';
 import { optimizeImage } from '../utils/cloudinary';
 
+import { io } from "socket.io-client";
+
+
 const Navbar = () => {
   const [cookies] = useCookies()
   const router = useRouter()
@@ -23,6 +26,44 @@ const Navbar = () => {
   const [searchData, setSearchData] = useState("")
 
   const [{ showLoginModal, showSignupModal, isSeller, userInfo, hamburger, otpmodal, showTermsModal, resetPass }, dispatch] = useStateProvider();
+
+  const [unreadCount, setUnreadCount] = useState(0);
+const [toast, setToast] = useState(null);
+const navSocketRef = useRef(null);
+const toastTimer = useRef(null);
+
+useEffect(() => {
+  if (!userInfo?.id) return;
+
+  axios.get(`${HOST}/api/messages/unread-messages`, { withCredentials: true })
+    .then(({ data }) => setUnreadCount(data.messages.length))
+    .catch(() => {});
+
+  const s = io(HOST, { withCredentials: true });
+  navSocketRef.current = s;
+  s.emit("join", userInfo.id);
+
+  s.on("newMessage", (msg) => {
+    setUnreadCount((prev) => prev + 1);
+    const currentPath = window.location.pathname;
+    if (!currentPath.includes(`/orders/${msg.orderId}`)) {
+      setToast(msg);
+      clearTimeout(toastTimer.current);
+      toastTimer.current = setTimeout(() => setToast(null), 4000);
+    }
+  });
+
+  return () => {
+    s.disconnect();
+    clearTimeout(toastTimer.current);
+  };
+}, [userInfo?.id]);
+
+useEffect(() => {
+  if (router.pathname.includes("/messages") || router.pathname.includes("/orders")) {
+    setUnreadCount(0);
+  }
+}, [router.pathname]);
 
   const handleLogin = () => {
     if (showSignupModal) dispatch({ type: reducerCases.TOGGLE_SIGNUP_MODAL, showSignupModal: false });
@@ -234,8 +275,21 @@ const Navbar = () => {
                 {isSeller && (
                   <li className="cursor-pointer" style={{ color: "#5dc94a" }} onClick={() => router.push("/seller/gigs/create")}>Create Gig</li>
                 )}
-                <li className="cursor-pointer" style={{ color: "#5dc94a" }} onClick={handleOrdersNavigate}>Orders</li>
-                <li className="cursor-pointer" style={{ color: "#9ca3af" }} onClick={() => router.push("/learn")}>Learn</li>
+                <li className="cursor-pointer relative" style={{ color: "#5dc94a" }} onClick={handleOrdersNavigate}>
+  Orders
+  {unreadCount > 0 && (
+    <span style={{
+      position: "absolute", top: -6, right: -10,
+      background: "#5dc94a", color: "#09090b",
+      fontSize: "0.6rem", fontWeight: 700,
+      borderRadius: "9999px", minWidth: 16, height: 16,
+      display: "flex", alignItems: "center", justifyContent: "center",
+      padding: "0 4px",
+    }}>
+      {unreadCount > 9 ? "9+" : unreadCount}
+    </span>
+  )}
+</li>
                 <li className="cursor-pointer" style={{ color: "#9ca3af" }} onClick={handleModeSwitch}>
                   {isSeller ? "Switch To Buyer" : "Switch To Seller"}
                 </li>
@@ -258,10 +312,8 @@ const Navbar = () => {
               style={{ background: "#0f1014", borderTop: "1px solid rgba(93,201,74,0.15)" }}>
               {!userInfo ? (
                 <>
-                  <a href="https://www.instagram.com/knell.co.in/" target="_blank" rel="noopener noreferrer"
-                    onClick={closeHamburger} style={{ color: "#9ca3af" }}>Explore</a>
                   <a href="/learn" onClick={closeHamburger} style={{ color: "#9ca3af" }}>Learn</a>
-                  {links.filter(({ linkName }) => linkName !== "Explore" && linkName !== "Learn").map(({ linkName, handler }) => (
+                  {links.filter(({ linkName }) => linkName !== "Explore").map(({ linkName, handler }) => (
                     <button key={linkName} onClick={() => { handler(); closeHamburger(); }}
                       className="text-left" style={{ color: "#9ca3af", background: "none", border: "none", cursor: "pointer" }}>
                       {linkName}
@@ -274,8 +326,18 @@ const Navbar = () => {
                   {isAdminUser && <button onClick={adminusers} className="text-left" style={{ color: "#5dc94a" }}>All Users</button>}
                   {isAdminUser && <button onClick={adminorders} className="text-left" style={{ color: "#5dc94a" }}>All Orders</button>}
                   {isSeller && <button onClick={() => { router.push("/seller/gigs/create"); closeHamburger(); }} className="text-left" style={{ color: "#5dc94a" }}>Create Gig</button>}
-                  <button onClick={handleOrdersNavigate} className="text-left" style={{ color: "#9ca3af" }}>Orders</button>
-                  <button onClick={() => { closeHamburger(); router.push("/learn"); }} className="text-left" style={{ color: "#9ca3af" }}>Learn</button>
+                 <button onClick={handleOrdersNavigate} className="text-left" style={{ color: "#9ca3af" }}>
+  Orders
+  {unreadCount > 0 && (
+    <span style={{
+      marginLeft: 8, background: "#5dc94a", color: "#09090b",
+      fontSize: "0.6rem", fontWeight: 700,
+      borderRadius: "9999px", padding: "2px 6px",
+    }}>
+      {unreadCount > 9 ? "9+" : unreadCount}
+    </span>
+  )}
+</button>
                   <button onClick={handleModeSwitch} className="text-left" style={{ color: "#9ca3af" }}>{isSeller ? "Switch To Buyer" : "Switch To Seller"}</button>
                   <button onClick={() => { closeHamburger(); router.push("/profile/" + userInfo?.username); }} className="text-left" style={{ color: "#9ca3af" }}>Profile</button>
                   <button onClick={() => router.push("/logout")} className="text-left" style={{ color: "#6b7a62" }}>Logout</button>
@@ -285,6 +347,36 @@ const Navbar = () => {
           )}
         </nav>
       )}
+
+      {toast && (
+  <div
+    onClick={() => { router.push(`/orders/${toast.orderId}/messages`); setToast(null); }}
+    style={{
+      position: "fixed", bottom: 24, right: 24,
+      background: "#15171c", border: "1px solid rgba(93,201,74,0.3)",
+      borderRadius: 8, padding: "12px 16px", zIndex: 9999,
+      cursor: "pointer", display: "flex", alignItems: "center",
+      gap: 10, boxShadow: "0 4px 24px rgba(0,0,0,0.4)",
+      maxWidth: 300, animation: "slideIn 0.2s ease",
+    }}
+  >
+    <span style={{ fontSize: 20 }}>💬</span>
+    <div>
+      <p style={{ color: "#5dc94a", fontSize: "0.75rem", fontWeight: 700, margin: 0 }}>New Message</p>
+      <p style={{ color: "#9ca3af", fontSize: "0.8rem", margin: 0 }}>You have a new message</p>
+    </div>
+    <button
+      onClick={(e) => { e.stopPropagation(); setToast(null); }}
+      style={{ marginLeft: "auto", background: "none", border: "none", color: "#6b7a62", cursor: "pointer", fontSize: 16 }}
+    >×</button>
+  </div>
+)}
+<style>{`
+  @keyframes slideIn {
+    from { transform: translateY(16px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+`}</style>
     </>
   );
 };
