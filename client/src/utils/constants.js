@@ -62,3 +62,4 @@ export const SEND_FORGOT_OTP = `${MAIL_ROUTES}/send-forgot-otp`;
 
 export const FEATURED_GIGS_ROUTE = `${GIG_ROUTES}/featured`;
 export const GOOGLE_AUTH_ROUTE = `${AUTH_ROUTES}/google-auth`;
+export const GET_OR_CREATE_INQUIRY = `${MESSAGES_ROUTES}/inquiry`;

@@ -9,6 +9,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { reducerCases } from '../../context/constants';
 import { useCurrency } from '../../hooks/useCurrency';
+import ChatWidget from './ChatWidget';
 
 const Pricing = () => {
   const [{ gigData, userInfo, showLoginModal, showSignupModal }, dispatch] = useStateProvider();
@@ -151,6 +152,7 @@ const Pricing = () => {
             {" "}to request this service
           </p>
         )}
+        {!isOwner && <ChatWidget gigData={gigData} />}
       </div>
     </div>
   );
