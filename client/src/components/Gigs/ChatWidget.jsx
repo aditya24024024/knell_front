@@ -227,9 +227,9 @@ const ChatWidget = ({ gigData }) => {
                 fontFamily: "Space Mono, monospace", letterSpacing: "0.05em",
                 overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
               }}>{seller?.fullName}</div>
-              <div style={{ fontSize: "0.65rem", color: "#5dc94a", fontFamily: "Space Mono, monospace", letterSpacing: "0.08em" }}>
-                ● ONLINE
-              </div>
+              <div style={{ fontSize: "0.65rem", color: "#6b7a62", fontFamily: "Space Mono, monospace", letterSpacing: "0.08em" }}>
+  @{seller?.username}
+</div>
             </div>
 
             <div style={{ display: "flex", gap: "0.4rem", flexShrink: 0 }}>
