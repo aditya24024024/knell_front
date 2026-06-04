@@ -83,9 +83,9 @@ const Search = () => {
   const [nearMe, setNearMe] = useState(false);
   const [openDropdown, setOpenDropdown] = useState(null);
   const observerRef = useRef(null);
-  const loaderRef = useRef(null);
-  const dropdownRef = useRef(null);
-
+const loaderRef = useRef(null);
+const dropdownRef = useRef(null);
+const lastSearchRef = useRef("");
   useEffect(() => {
     axios.get(FEATURED_GIGS_ROUTE)
       .then(({ data }) => setFeaturedGigs(data.gigs || []))
@@ -99,8 +99,13 @@ const Search = () => {
     document.addEventListener("mousedown", handler);
     return () => document.removeEventListener("mousedown", handler);
   }, []);
+useEffect(() => {
+  const currentSearch = `${category || ""}-${q || ""}`;
 
-  useEffect(() => {
+  if (lastSearchRef.current === currentSearch) return;
+
+  lastSearchRef.current = currentSearch;
+
   setGigs([]);
   setPage(1);
   setHasMore(true);
@@ -112,7 +117,6 @@ const Search = () => {
   setSelectedCity(null);
   setNearMe(false);
 }, [category, q]);
-
 useEffect(() => {
   setGigs([]);
   setHasMore(true);
