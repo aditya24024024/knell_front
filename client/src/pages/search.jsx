@@ -144,6 +144,7 @@ useEffect(() => {
         params.set("page", page);
         params.set("limit", 10);
         params.set("sortBy", selectedSort.value);
+        console.log("SEARCH URL:", `${SEARCH_GIGS_ROUTE}?${params.toString()}`);
         if (selectedBudget.min != null) params.set("minPrice", selectedBudget.min);
         if (selectedBudget.max != null) params.set("maxPrice", selectedBudget.max);
         if (selectedDelivery.value != null) params.set("deliveryTime", selectedDelivery.value);
@@ -238,10 +239,13 @@ useEffect(() => {
             alignItems: "center",
             justifyContent: "space-between",
           }}
-          onClick={() => {
-            setSelectedSort(opt);
-            setOpenDropdown(null);
-          }}
+         onClick={() => {
+  setGigs([]);
+  setPage(1);
+  setHasMore(true);
+  setSelectedSort(opt);
+  setOpenDropdown(null);
+}}
         >
           <span>{opt.label}</span>
 
