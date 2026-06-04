@@ -172,11 +172,18 @@ useEffect(() => {
     getData();
   }, [category, q, page, selectedCategory, selectedSort, selectedBudget, selectedDelivery, selectedCity, nearMe, userInfo]);
 
-  const handleObserver = useCallback((entries) => {
-    const target = entries[0];
-    if (target.isIntersecting && hasMore && !loading) setPage(prev => prev + 1);
-  }, [hasMore, loading]);
+ const handleObserver = useCallback((entries) => {
+  const target = entries[0];
 
+  if (
+    target.isIntersecting &&
+    hasMore &&
+    !loading &&
+    gigs.length >= 10
+  ) {
+    setPage(prev => prev + 1);
+  }
+}, [hasMore, loading, gigs.length]);
   useEffect(() => {
     observerRef.current = new IntersectionObserver(handleObserver, { threshold: 0.5 });
     if (loaderRef.current) observerRef.current.observe(loaderRef.current);
