@@ -101,19 +101,26 @@ const Search = () => {
   }, []);
 
   useEffect(() => {
-    setGigs([]); setPage(1); setHasMore(true);
-    setSelectedCategory("All Categories");
-    setSelectedSort(SORT_OPTIONS[1]);
-    setSelectedBudget(BUDGET_OPTIONS[0]);
-    setSelectedDelivery(DELIVERY_OPTIONS[0]);
-    setSelectedCity(null);
-    setNearMe(false);
-  }, [category, q]);
+  setGigs([]);
+  setPage(1);
+  setHasMore(true);
 
-  useEffect(() => {
-    setGigs([]); setPage(1); setHasMore(true);
-  }, [selectedCategory, selectedSort, selectedBudget, selectedDelivery, selectedCity, nearMe]);
+  setSelectedCategory("All Categories");
+  setSelectedSort(SORT_OPTIONS[1]);
+  setSelectedBudget(BUDGET_OPTIONS[0]);
+  setSelectedDelivery(DELIVERY_OPTIONS[0]);
+  setSelectedCity(null);
+  setNearMe(false);
+}, [category, q]);
 
+useEffect(() => {
+  setGigs([]);
+  setHasMore(true);
+
+  if (page !== 1) {
+    setPage(1);
+  }
+}, [selectedCategory, selectedSort, selectedBudget, selectedDelivery, selectedCity, nearMe]);
   const handleNearMe = () => {
     setNearMe(!nearMe);
     setSelectedCity(null);
@@ -143,8 +150,16 @@ const Search = () => {
         if (nearMe && userInfo?.city) params.set("city", userInfo.city);
         if (selectedCity) params.set("city", selectedCity);
         const { data: { gigs: newGigs } } = await axios.get(`${SEARCH_GIGS_ROUTE}?${params.toString()}`);
-        if (page === 1) setGigs(newGigs);
-        else setGigs(prev => [...prev, ...newGigs]);
+       setGigs(prev => {
+  if (page === 1) return newGigs;
+
+  const existingIds = new Set(prev.map(g => g.id));
+
+  return [
+    ...prev,
+    ...newGigs.filter(g => !existingIds.has(g.id))
+  ];
+});
         setHasMore(newGigs.length === 10);
       } catch (err) {}
       finally { setLoading(false); }
