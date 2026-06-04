@@ -148,7 +148,6 @@ useEffect(() => {
         params.set("page", page);
         params.set("limit", 10);
         params.set("sortBy", selectedSort.value);
-        console.log("SEARCH URL:", `${SEARCH_GIGS_ROUTE}?${params.toString()}`);
         if (selectedBudget.min != null) params.set("minPrice", selectedBudget.min);
         if (selectedBudget.max != null) params.set("maxPrice", selectedBudget.max);
         if (selectedDelivery.value != null) params.set("deliveryTime", selectedDelivery.value);
