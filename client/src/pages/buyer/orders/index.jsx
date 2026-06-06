@@ -1,5 +1,5 @@
 import { useStateProvider } from "../../../context/StateContext";
-import { GET_BUYER_ORDERS_ROUTE, ORDER_BUYER_COMPLETE_ROUTE } from "../../../utils/constants";
+import { GET_BUYER_ORDERS_ROUTE, ORDER_BUYER_COMPLETE_ROUTE, CREATE_ORDER, GET_PAYMENT_DETAILS_ROUTE } from "../../../utils/constants";
 import axios from "axios";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
@@ -44,7 +44,57 @@ function BuyerOrders() {
     try {
       await axios.put(ORDER_BUYER_COMPLETE_ROUTE, { orderId }, { withCredentials: true });
       setTimeout(() => window.location.reload(), 300);
-    } catch (err) {}
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const loadRazorpay = () =>
+    new Promise((resolve) => {
+      if (typeof window !== "undefined" && window.Razorpay) return resolve(true);
+      const script = document.createElement("script");
+      script.src = "https://checkout.razorpay.com/v1/checkout.js";
+      script.onload = () => resolve(true);
+      script.onerror = () => resolve(false);
+      document.body.appendChild(script);
+    });
+
+  const completePayment = async (orderId) => {
+    try {
+      const isLoaded = await loadRazorpay();
+      if (!isLoaded) { alert("Razorpay SDK failed to load"); return; }
+
+      const { data } = await axios.get(`${GET_PAYMENT_DETAILS_ROUTE}/${orderId}`, { withCredentials: true });
+
+      const options = {
+        key: data.key,
+        amount: data.amount,
+        currency: data.currency,
+        name: "Knell",
+        description: data.gigTitle,
+        order_id: data.orderId,
+        handler: async (response) => {
+          try {
+            await axios.post(CREATE_ORDER, {
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_signature: response.razorpay_signature,
+            }, { withCredentials: true });
+            window.location.reload();
+          } catch {
+            alert("Payment verification failed");
+          }
+        },
+        theme: { color: "#3a8a2c" },
+        modal: { ondismiss: () => {} },
+      };
+
+      const razorpay = new window.Razorpay(options);
+      razorpay.open();
+    } catch (err) {
+      console.error(err);
+      alert("Could not load payment details. Please try again.");
+    }
   };
 
   return (
@@ -66,7 +116,10 @@ function BuyerOrders() {
                 <div className="flex flex-col">
                   <p className="font-semibold">
                     You ordered <b>{order.gig?.title || "Unknown Gig"}</b> from{" "}
-                    <Link href={`/profile/${order.gig?.createdBy?.username || ""}`} className="text-green-600">
+                    <Link
+                      href={order.gig?.createdBy?.username ? `/profile/${order.gig.createdBy.username}` : "#"}
+                      className="text-green-600"
+                    >
                       {order.gig?.createdBy?.username || "Unknown"}
                     </Link>
                   </p>
@@ -89,18 +142,24 @@ function BuyerOrders() {
               </div>
 
               <div className="flex gap-2 flex-wrap justify-end items-center">
-                <Link href={`/gig/${order.gig?.id}`} className="px-4 py-2 text-sm bg-blue-100 hover:bg-blue-200 rounded-lg text-blue-800">
-                  View Gig
-                </Link>
+                {order.gig?.id && (
+                  <Link href={`/gig/${order.gig.id}`} className="px-4 py-2 text-sm bg-blue-100 hover:bg-blue-200 rounded-lg text-blue-800">
+                    View Gig
+                  </Link>
+                )}
                 {order.status !== 'Pending' && (
-  <Link href={`/buyer/orders/messages/${order.id}`} className="px-4 py-2 text-sm bg-yellow-100 hover:bg-yellow-200 rounded-lg text-yellow-800">
-    Message
-  </Link>
-)}
-{order.status === 'Pending' && (
-  <span className="text-sm text-gray-400 italic">Complete payment to message</span>
-)}
-                {/* Mark Complete button — only shown when seller has delivered */}
+                  <Link href={`/buyer/orders/messages/${order.id}`} className="px-4 py-2 text-sm bg-yellow-100 hover:bg-yellow-200 rounded-lg text-yellow-800">
+                    Message
+                  </Link>
+                )}
+                {order.status === 'Pending' && (
+                  <button
+                    onClick={() => completePayment(order.id)}
+                    className="px-4 py-2 text-sm bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg font-semibold"
+                  >
+                    💳 Complete Payment
+                  </button>
+                )}
                 {order.status === 'Delivered' && (
                   <button
                     onClick={() => markComplete(order.id)}

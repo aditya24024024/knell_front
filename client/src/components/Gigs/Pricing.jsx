@@ -57,9 +57,22 @@ const Pricing = () => {
       const razorpay = new window.Razorpay(options);
       razorpay.open();
     } catch (err) {
-      console.error(err);
-      toast.error("Order creation failed. Please try again.");
+  console.error(err);
+  const status = err?.response?.status;
+  const data = err?.response?.data;
+
+  if (status === 409) {
+    if (data?.status === "Pending") {
+      toast.warning("⚠️ You have an unpaid order for this gig. Complete payment from your orders.", { autoClose: 3500 });
+    } else {
+      toast.info("You already have an active order for this gig.");
     }
+    setTimeout(() => router.push("/buyer/orders"), 1500);
+    return;
+  }
+
+  toast.error("Order creation failed. Please try again.");
+}
   };
 
   if (!gigData) return null;
