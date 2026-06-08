@@ -9,8 +9,6 @@ import { optimizeImage } from "../../utils/cloudinary";
 
 let socket;
 
-const INQUIRY_MESSAGE_LIMIT = 10;
-
 const formatTime = (ts) => {
   const d = new Date(ts);
   let h = d.getHours(), m = d.getMinutes();
@@ -59,6 +57,7 @@ const ChatWidget = ({ gigData }) => {
   const [messages, setMessages] = useState([]);
   const [text, setText] = useState("");
   const [messageCount, setMessageCount] = useState(0);
+  const [messageLimit, setMessageLimit] = useState(3);
   const messagesEndRef = useRef(null);
   const lastSentRef = useRef(0);
   const seller = gigData?.createdBy;
@@ -109,6 +108,7 @@ const ChatWidget = ({ gigData }) => {
       );
       setMessages(msgRes.data.messages);
       setMessageCount(msgRes.data.messageCount || msgRes.data.messages.length);
+      setMessageLimit(msgRes.data.messageLimit || 3);
       setIsOpen(true);
       setIsMinimized(false);
     } catch (err) {
@@ -165,8 +165,8 @@ const ChatWidget = ({ gigData }) => {
 
   const initials = seller?.fullName?.[0]?.toUpperCase() || seller?.email?.[0]?.toUpperCase() || "S";
   const firstName = seller?.fullName?.split(" ")[0] || "Seller";
-  const remaining = INQUIRY_MESSAGE_LIMIT - messageCount;
-  const limitWarning = remaining <= 3 && remaining > 0;
+  const remaining = messageLimit - messageCount;
+  const limitWarning = remaining <= 1 && remaining > 0;
   const limitReached = remaining <= 0;
 
   return (
@@ -228,8 +228,8 @@ const ChatWidget = ({ gigData }) => {
                 overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
               }}>{seller?.fullName}</div>
               <div style={{ fontSize: "0.65rem", color: "#6b7a62", fontFamily: "Space Mono, monospace", letterSpacing: "0.08em" }}>
-  @{seller?.username}
-</div>
+                @{seller?.username}
+              </div>
             </div>
 
             <div style={{ display: "flex", gap: "0.4rem", flexShrink: 0 }}>
@@ -286,7 +286,7 @@ const ChatWidget = ({ gigData }) => {
                   PRE-ORDER INQUIRY · {gigData.title}
                 </span>
                 <span style={{ color: limitReached ? "#ef4444" : limitWarning ? "#e8b84b" : "#6b7a62", flexShrink: 0 }}>
-                  {limitReached ? "LIMIT REACHED" : `${remaining}/${INQUIRY_MESSAGE_LIMIT} LEFT`}
+                  {limitReached ? "LIMIT REACHED" : `${remaining}/${messageLimit} LEFT`}
                 </span>
               </div>
 
