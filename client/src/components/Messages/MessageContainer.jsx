@@ -17,34 +17,36 @@ function MessageContainer() {
   const [recipentId, setRecipentId] = useState(undefined);
   const [messageText, setMessageText] = useState("");
   const [messages, setMessages] = useState([]);
+  const [isSending, setIsSending] = useState(false); // added
   const lastSentRef = useRef(0);
 
- const renderMessageText = (text) => {
-  const urlRegex = /(https?:\/\/[^\s]+)/g;
-  const parts = text.split(urlRegex);
+  const renderMessageText = (text) => {
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+    const parts = text.split(urlRegex);
 
-  return parts.map((part, i) => {
-    const isUrl = /^https?:\/\/[^\s]+$/i.test(part);
+    return parts.map((part, i) => {
+      const isUrl = /^https?:\/\/[^\s]+$/i.test(part);
+      return isUrl ? (
+  <a
+    key={i}
+    href={part}
+    target="_blank"
+    rel="noopener noreferrer"
+    className="underline break-all opacity-90 hover:opacity-100"
+  >
+    {part}
+  </a>
+) : (
+  part
+);
+    });
+  };
 
-    return isUrl ? (
-      <a
-        key={i}
-        href={part}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="underline break-all opacity-90 hover:opacity-100"
-      >
-        {part}
-      </a>
-    ) : (
-      part
-    );
-  });
-};
   const containsPhoneNumber = (text) => {
-  const phoneRegex = /(\+?\d[\s_.-]?){9,13}\d/g;
-  return phoneRegex.test(text);
-};
+    const phoneRegex = /(\+?\d[\s_.-]?){9,13}\d/g;
+    return phoneRegex.test(text);
+  };
+
   const containsUPI = (text) => {
     const upiRegex = /[a-zA-Z0-9.\-_]{2,}@[a-zA-Z]{2,}/g;
     return upiRegex.test(text);
@@ -52,17 +54,9 @@ function MessageContainer() {
 
   useEffect(() => {
     if (!userInfo?.id) return;
-    socket = io(HOST, {
-      withCredentials: true,
-    });
-
-    if (userInfo?.id) {
-      socket.emit("join", userInfo.id);
-    }
-
-    return () => {
-      socket.disconnect();
-    };
+    socket = io(HOST, { withCredentials: true });
+    if (userInfo?.id) socket.emit("join", userInfo.id);
+    return () => { socket.disconnect(); };
   }, [userInfo]);
 
   useEffect(() => {
@@ -70,37 +64,28 @@ function MessageContainer() {
     const getMessages = async () => {
       const {
         data: { messages: dataMessages, recipentId: recipent },
-      } = await axios.get(`${GET_MESSAGES}/${orderId}`, {
-        withCredentials: true,
-      });
+      } = await axios.get(`${GET_MESSAGES}/${orderId}`, { withCredentials: true });
       setMessages(dataMessages);
       setRecipentId(recipent);
     };
-
-    if (orderId && userInfo) {
-      getMessages();
-    }
+    if (orderId && userInfo) getMessages();
   }, [orderId, userInfo]);
 
   useEffect(() => {
     if (!socket) return;
-
     socket.on("newMessage", (newMessage) => {
       if (newMessage.orderId === parseInt(orderId)) {
         setMessages((prev) => [...prev, newMessage]);
       }
     });
-
-    return () => {
-      socket.off("newMessage");
-    };
+    return () => { socket.off("newMessage"); };
   }, [orderId]);
 
   const handleKeyDown = (event) => {
     if (event.key === "Enter" && !event.shiftKey) {
-  event.preventDefault();
-  sendMessage();
-}
+      event.preventDefault();
+      if (!isSending) sendMessage();
+    }
   };
 
   const formatTime = (timestamp) => {
@@ -115,45 +100,48 @@ function MessageContainer() {
   };
 
   const sendMessage = async () => {
-  const trimmed = messageText.trim();
+    const trimmed = messageText.trim();
+    if (!trimmed.length) return;
+    if (isSending) return; // guard
 
-  if (!trimmed.length) return;
-
-  const now = Date.now();
-
-  if (now - lastSentRef.current < 2000) {
-    console.warn("You're sending messages too quickly!");
-    return;
-  }
-
-  if (containsPhoneNumber(trimmed)) {
-    alert("Phone numbers aren't allowed in messages. Please keep transactions on Knell.");
-    return;
-  }
-
-  if (containsUPI(trimmed)) {
-    alert("UPI IDs aren't allowed in messages. Please keep payments on Knell.");
-    return;
-  }
-
-  lastSentRef.current = now;
-
-  try {
-    const response = await axios.post(
-      `${ADD_MESSAGE}/${orderId}`,
-      { message: trimmed, recipentId },
-      { withCredentials: true }
-    );
-
-    if (response.status === 201) {
-      setMessages((prev) => [...prev, response.data.message]);
-      setMessageText("");
+    const now = Date.now();
+    if (now - lastSentRef.current < 2000) {
+      console.warn("You're sending messages too quickly!");
+      return;
     }
-  } catch (err) {
-    console.error(err);
-    lastSentRef.current = 0;
-  }
-};
+
+    if (containsPhoneNumber(trimmed)) {
+      alert("Phone numbers aren't allowed in messages. Please keep transactions on Knell.");
+      return;
+    }
+
+    if (containsUPI(trimmed)) {
+      alert("UPI IDs aren't allowed in messages. Please keep payments on Knell.");
+      return;
+    }
+
+    lastSentRef.current = now;
+    setIsSending(true); // lock
+
+    try {
+      const response = await axios.post(
+        `${ADD_MESSAGE}/${orderId}`,
+        { message: trimmed, recipentId },
+        { withCredentials: true }
+      );
+
+      if (response.status === 201) {
+        setMessages((prev) => [...prev, response.data.message]);
+        setMessageText("");
+      }
+    } catch (err) {
+      console.error(err);
+      lastSentRef.current = 0;
+    } finally {
+      setIsSending(false); // unlock always
+    }
+  };
+
   return (
     <div className="h-[calc(100vh-5rem)] w-full px-2 sm:px-4 md:px-8 pt-4 sm:pt-10">
       <div className="flex justify-center items-center h-full">
@@ -170,9 +158,7 @@ function MessageContainer() {
               <div
                 key={message.id}
                 className={`flex ${
-                  message.senderId === userInfo.id
-                    ? "justify-end"
-                    : "justify-start"
+                  message.senderId === userInfo.id ? "justify-end" : "justify-start"
                 }`}
               >
                 <div
@@ -182,9 +168,7 @@ function MessageContainer() {
                       : "bg-gray-100 dark:bg-gray-700 dark:text-white text-gray-800"
                   }`}
                 >
-               <p className="break-words">
-  {renderMessageText(message.text)}
-</p>
+                  <p className="break-words">{renderMessageText(message.text)}</p>
                   <div className="text-xs text-gray-600 dark:text-gray-300 mt-1 flex items-center gap-1">
                     <span>{formatTime(message.createdAt)}</span>
                     {message.senderId === userInfo.id && message.isRead && (
@@ -205,11 +189,17 @@ function MessageContainer() {
               value={messageText}
               onChange={(e) => setMessageText(e.target.value)}
               onKeyDown={handleKeyDown}
+              disabled={isSending}
             />
             <button
               type="button"
-              className="bg-[#1DBF73] hover:bg-[#17a863] text-white rounded-full p-3 transition duration-200"
+              className={`text-white rounded-full p-3 transition duration-200 ${
+                isSending
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : "bg-[#1DBF73] hover:bg-[#17a863]"
+              }`}
               onClick={sendMessage}
+              disabled={isSending}
             >
               <FaRegPaperPlane />
             </button>
