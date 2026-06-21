@@ -97,11 +97,12 @@ useEffect(() => {
   }
 
   const links = [
-    { linkName: "Explore", handler: "https://www.instagram.com/knell.co.in/", type: "link" },
-    { linkName: "Learn", handler: "/learn", type: "link" },
-    { linkName: "Log In", handler: handleLogin, type: "button" },
-    { linkName: "Join", handler: handleSignup, type: "button2" },
-  ];
+  { linkName: "Explore", handler: "https://www.instagram.com/knell.co.in/", type: "link" },
+  { linkName: "Learn", handler: "/learn", type: "link" },
+  { linkName: "Edit", handler: "/edit", type: "link" },
+  { linkName: "Log In", handler: handleLogin, type: "button" },
+  { linkName: "Join", handler: handleSignup, type: "button2" },
+];
 
   const admin = () => { closeHamburger(); router.push("/admin"); }
   const adminorders = () => { closeHamburger(); router.push("/adminorders"); }
@@ -273,6 +274,7 @@ useEffect(() => {
                 {isAdminUser && <li className="cursor-pointer font-medium" style={{ color: "#5dc94a" }} onClick={adminusers}>All Users</li>}
                 {isAdminUser && <li className="cursor-pointer font-medium" style={{ color: "#5dc94a" }} onClick={adminorders}>All Orders</li>}
                 <li className="cursor-pointer" style={{ color: "#9ca3af" }} onClick={() => router.push("/learn")}>Learn</li>
+               <li className="cursor-pointer" style={{ color: "#9ca3af" }} onClick={() => router.push("/edit")}>Edit</li>
                 {isSeller && (
                   <li className="cursor-pointer" style={{ color: "#5dc94a" }} onClick={() => router.push("/seller/gigs/create")}>Create Gig</li>
                 )}
@@ -327,6 +329,7 @@ useEffect(() => {
                   {isAdminUser && <button onClick={adminusers} className="text-left" style={{ color: "#5dc94a" }}>All Users</button>}
                   {isAdminUser && <button onClick={adminorders} className="text-left" style={{ color: "#5dc94a" }}>All Orders</button>}
                   <button onClick={() => { router.push("/learn"); closeHamburger(); }} className="text-left" style={{ color: "#9ca3af", background: "none", border: "none", cursor: "pointer" }}>Learn</button>
+                  <button onClick={() => { router.push("/edit"); closeHamburger(); }} className="text-left" style={{ color: "#9ca3af", background: "none", border: "none", cursor: "pointer" }}>Edit</button>
                   {isSeller && <button onClick={() => { router.push("/seller/gigs/create"); closeHamburger(); }} className="text-left" style={{ color: "#5dc94a" }}>Create Gig</button>}
                  <button onClick={handleOrdersNavigate} className="text-left" style={{ color: "#9ca3af" }}>
   Orders
