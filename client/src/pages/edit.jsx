@@ -13,29 +13,29 @@ const DEMO_EDITS = [
   {
     id: 1,
     label: "Reel Edit",
-    thumb: null, // e.g. "https://res.cloudinary.com/.../thumb1.jpg"
-    video: null, // e.g. "https://res.cloudinary.com/.../edit1.mp4"
+    embedUrl: "https://www.instagram.com/reel/DPBnfvSEnHh/embed",
+    type: "instagram",
     accent: "#5dc94a",
   },
   {
     id: 2,
     label: "Highlight Cut",
-    thumb: null,
-    video: null,
+    embedUrl: null,
+    type: null,
     accent: "#f0c94a",
   },
   {
     id: 3,
     label: "Talking Head",
-    thumb: null,
-    video: null,
+    embedUrl: "https://www.instagram.com/p/DYOroiixoGC/embed",
+    type: "instagram",
     accent: "#6b7aff",
   },
   {
     id: 4,
     label: "Story Edit",
-    thumb: null,
-    video: null,
+    embedUrl: null,
+    type: null,
     accent: "#ff6b6b",
   },
 ];
@@ -147,7 +147,7 @@ export default function EditPage() {
             style={{
               fontFamily: "Space Mono, monospace",
               fontSize: "0.65rem",
-              color: "#6b7a62",
+              color: "#9ca3af",
               letterSpacing: "0.08em",
               lineHeight: 1.8,
               maxWidth: 280,
@@ -382,70 +382,76 @@ export default function EditPage() {
 
                   {/* media area, 9:16-ish */}
                   <div
-                    style={{
-                      width: "100%",
-                      aspectRatio: "9 / 12",
-                      background: "#0c0d10",
-                      position: "relative",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                    }}
-                  >
-                    {hasVideo ? (
-                      <video
-                        src={demo.video}
-                        poster={demo.thumb || undefined}
-                        controls
-                        style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                      />
-                    ) : (
-                      <div
-                        style={{
-                          display: "flex",
-                          flexDirection: "column",
-                          alignItems: "center",
-                          gap: "0.6rem",
-                          padding: "1rem",
-                        }}
-                      >
-                        <div
-                          style={{
-                            width: 38,
-                            height: 38,
-                            borderRadius: "50%",
-                            border: `1px solid ${demo.accent}55`,
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                          }}
-                        >
-                          <div
-                            style={{
-                              width: 0,
-                              height: 0,
-                              borderTop: "7px solid transparent",
-                              borderBottom: "7px solid transparent",
-                              borderLeft: `10px solid ${demo.accent}aa`,
-                              marginLeft: "2px",
-                            }}
-                          />
-                        </div>
-                        <span
-                          style={{
-                            fontFamily: "Space Mono, monospace",
-                            fontSize: "0.48rem",
-                            letterSpacing: "0.1em",
-                            textTransform: "uppercase",
-                            color: "#3d4438",
-                            textAlign: "center",
-                          }}
-                        >
-                          Demo coming soon
-                        </span>
-                      </div>
-                    )}
-                  </div>
+  style={{
+    width: "100%",
+    aspectRatio: "9 / 16",
+    background: "#0c0d10",
+    position: "relative",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    overflow: "hidden",
+  }}
+>
+  {demo.embedUrl ? (
+    <iframe
+      src={demo.embedUrl}
+      style={{
+        width: "100%",
+        height: "100%",
+        border: "none",
+      }}
+      allow="autoplay; encrypted-media"
+      allowFullScreen
+      scrolling="no"
+    />
+  ) : (
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        gap: "0.6rem",
+        padding: "1rem",
+      }}
+    >
+      <div
+        style={{
+          width: 38,
+          height: 38,
+          borderRadius: "50%",
+          border: `1px solid ${demo.accent}55`,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <div
+          style={{
+            width: 0,
+            height: 0,
+            borderTop: "7px solid transparent",
+            borderBottom: "7px solid transparent",
+            borderLeft: `10px solid ${demo.accent}aa`,
+            marginLeft: "2px",
+          }}
+        />
+      </div>
+      <span
+        style={{
+          fontFamily: "Space Mono, monospace",
+          fontSize: "0.48rem",
+          letterSpacing: "0.1em",
+          textTransform: "uppercase",
+          color: "#3d4438",
+          textAlign: "center",
+        }}
+      >
+        Demo coming soon
+      </span>
+    </div>
+  )}
+</div>
 
                   {/* label */}
                   <div
@@ -548,15 +554,15 @@ export default function EditPage() {
                     {item.label}
                   </p>
                   <p
-                    style={{
-                      fontFamily: "Bebas Neue, sans-serif",
-                      fontSize: "1.1rem",
-                      letterSpacing: "0.02em",
-                      color: hov ? "#ede9dc" : "#dbd7ca",
-                      lineHeight: 1.2,
-                      transition: "color 0.15s",
-                    }}
-                  >
+  style={{
+    fontFamily: "Bebas Neue, sans-serif",
+    fontSize: "1.25rem", // was 1.1rem
+    letterSpacing: "0.02em",
+    color: hov ? "#ffffff" : "#ede9dc", // was #dbd7ca
+    lineHeight: 1.2,
+    transition: "color 0.15s",
+  }}
+>
                     {item.value}
                   </p>
                 </div>
@@ -615,14 +621,14 @@ export default function EditPage() {
                   {step.title}
                 </p>
                 <p
-                  style={{
-                    fontFamily: "Space Mono, monospace",
-                    fontSize: "0.58rem",
-                    color: "#6b7a62",
-                    letterSpacing: "0.05em",
-                    lineHeight: 1.7,
-                  }}
-                >
+  style={{
+    fontFamily: "Space Mono, monospace",
+    fontSize: "0.65rem", // was 0.58rem
+    color: "#9ca3af", // was #6b7a62
+    letterSpacing: "0.05em",
+    lineHeight: 1.7,
+  }}
+>
                   {step.body}
                 </p>
               </div>
@@ -740,6 +746,12 @@ export default function EditPage() {
             </form>
           )}
         </section>
+        <style>{`
+  input::placeholder {
+    color: #6b7a62;
+    opacity: 1;
+  }
+`}</style>
       </main>
     </>
   );
@@ -755,7 +767,7 @@ function FormField({ label, ...props }) {
           fontSize: "0.52rem",
           letterSpacing: "0.15em",
           textTransform: "uppercase",
-          color: "#6b7a62",
+          color: "#9ca3af",
         }}
       >
         {label}
