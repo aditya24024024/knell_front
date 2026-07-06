@@ -70,7 +70,7 @@ const ChatWidget = ({ gigData }) => {
     return () => socket?.disconnect();
   }, [userInfo?.id]);
 
-  // Listen for incoming messages
+  // Listen for incoming messages 
   useEffect(() => {
     if (!socket || !orderId) return;
     const handler = (msg) => {
