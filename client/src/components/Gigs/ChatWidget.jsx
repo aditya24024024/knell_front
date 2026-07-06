@@ -68,7 +68,7 @@ const ChatWidget = ({ gigData }) => {
     socket = io(HOST, { withCredentials: true });
     socket.emit("join", userInfo.id);
     return () => socket?.disconnect();
-  }, [userInfo]);
+  }, [userInfo?.id]);
 
   // Listen for incoming messages
   useEffect(() => {

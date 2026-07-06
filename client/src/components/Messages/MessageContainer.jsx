@@ -57,9 +57,9 @@ function MessageContainer() {
     socket = io(HOST, { withCredentials: true });
     if (userInfo?.id) socket.emit("join", userInfo.id);
     return () => { socket.disconnect(); };
-  }, [userInfo]);
+  }, [userInfo?.id]);
 
-  useEffect(() => {
+  useEffect(() => { 
     if (!socket || !orderId || !userInfo?.id) return;
     const getMessages = async () => {
       const {
