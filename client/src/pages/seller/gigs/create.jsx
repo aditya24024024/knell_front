@@ -8,6 +8,7 @@ import axios from 'axios';
 import { ADD_GIG_ROUTE } from '../../../utils/constants';
 import { useRouter } from 'next/router';
 import { useStateProvider } from '../../../context/StateContext';
+import CertificationPromptCard from '../../../components/CertificationPromptCard';
 
 const inputStyle = {
   display: "block", width: "100%", padding: "0.85rem 1rem",
@@ -209,6 +210,9 @@ const CreateGig = () => {
             </p>
             <input name="video" type="url" placeholder="https://youtube.com/watch?v=..." value={data.video} onChange={handleChange} style={inputStyle} />
           </div>
+
+           {/* Certification prompt */}
+          <CertificationPromptCard context="create" />
 
           {/* Submit */}
           <div style={{ paddingTop: "1rem" }}>

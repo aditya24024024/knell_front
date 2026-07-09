@@ -6,6 +6,7 @@ import axios from 'axios';
 import { EDIT_GIG_DATA, GET_GIG_DATA } from '../../../utils/constants';
 import { useRouter } from 'next/router';
 import { toast } from 'react-toastify';
+import CertificationPromptCard from '../../../components/CertificationPromptCard';
 
 const inputStyle = {
   display: "block", width: "100%", padding: "0.85rem 1rem",
@@ -186,6 +187,10 @@ const Editgig = () => {
             <p style={{ color: "#6b7a62", fontSize: "0.78rem", marginBottom: "0.5rem" }}>Paste a YouTube or Google Drive link</p>
             <input type="url" name="video" value={data.video} onChange={handleChange} style={inputStyle} placeholder="https://youtube.com/watch?v=..." />
           </div>
+
+          {/* Certification prompt */}
+          <CertificationPromptCard context="edit" />
+
 
           {/* Actions */}
           <div style={{ display: "flex", gap: "1rem", paddingTop: "1rem" }}>
